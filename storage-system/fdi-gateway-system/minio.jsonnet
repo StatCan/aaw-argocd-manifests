@@ -15,6 +15,10 @@ local values = |||
     gateway:
       enabled: true
       type: azure
+      auth:
+        azure:
+          storageAccountName: ${AZURE_STORAGE_ACCOUNT} 
+          storageAccountKey: ${AZURE_STORAGE_KEY}
       updateStrategy:
         type: RollingUpdate
         rollingUpdate:
@@ -26,12 +30,6 @@ local values = |||
       #   maxReplicas: "4"
       #   targetCPU: "60"
       #   targetMemory: "60"
-      auth:
-        azure:
-          storageAccountNameExistingSecret: "azure-blob-storage"
-          storageAccountNameExistingSecretKey: "storageAccountName"
-          storageAccountKeyExistingSecret: "azure-blob-storage"
-          storageAccountKeyExistingSecretKey: "storageAccountKey"
     extraEnv:
       - name: MINIO_ETCD_ENDPOINTS
         value: http://minio-gateway-etcd:2379/
@@ -52,6 +50,8 @@ local values = |||
       - -c
       - |
         echo '#!/bin/sh' > /custom/minio.sh
+        echo 'sleep 90'
+        echo 'source /custom/creds.env'
         echo 'echo "Waiting for sidecar..."' >> /custom/minio.sh
         echo 'while ! curl -s -f http://127.0.0.1:15020/healthz/ready; do sleep 1; done' >> /custom/minio.sh
         echo 'echo "Sidecar is ready."' >> /custom/minio.sh
@@ -60,6 +60,28 @@ local values = |||
         chmod 555 /custom/minio.sh
         chown nobody:nobody /custom/minio.sh
         echo "Wrote the minio.sh script to shared volume."
+      volumeMounts:
+      - mountPath: /custom
+        name: minio-sh
+    sidecars: 
+    - name: get-az-sa-creds
+      image: mcr.microsoft.com/azure-cli:latest
+      env: 
+      - name: STORAGE_ACCOUNT_NAME
+        valueFrom:
+          secretKeyRef:
+            name: azure-blob-storage
+            key: storageAccountName 
+      command: ["bin/bash", "-c"]
+      args: [
+        "az login --identity;
+        AZURE_STORAGE_KEY=$(az storage account keys list -n $STORAGE_ACCOUNT_NAME --query [0].value -o tsv)
+        AZURE_STORAGE_ACCOUNT=$STORAGE_ACCOUNT_NAME
+        echo "AZURE_STORAGE_KEY=$AZURE_STORAGE_KEY" > /custom/creds.env
+        echo "AZURE_STORAGE_ACCOUNT=$AZURE_STORAGE_ACCOUNT" >> /custom/creds.env
+        while true; do echo 'test'; sleep 600; done
+        "
+      ]
       volumeMounts:
       - mountPath: /custom
         name: minio-sh
