@@ -1,10 +1,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: minio-gateway-premium-system
+namespace: minio-gateway-premium-oidc-system
 
 commonLabels:
   node.statcan.gc.ca/purpose: system
 
 resources:
-  - ../kustomize-gateway/overlays/gateway-rw/
+  - ../kustomize-gateway/overlays/gateway-oidc/

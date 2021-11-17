@@ -4,7 +4,6 @@ kind: Kustomization
 namespace: minio-gateway-standard-system
 
 commonLabels:
-  instance: minio-gateway
   node.statcan.gc.ca/purpose: system
 
 resources:
