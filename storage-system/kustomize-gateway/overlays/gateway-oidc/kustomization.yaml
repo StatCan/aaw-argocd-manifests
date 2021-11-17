@@ -7,65 +7,65 @@ resources:
   - roles-and-bindings.yaml
 
 configMapGenerator:
-- files:
-  - policy.rego
-  name: minio-gateway-opa
+  - files:
+      - policy.rego
+    name: minio-gateway-opa
 
 # Add Kubeflow OPA Sync
 patchesJson6902:
-- target:
-    group: apps
-    version: v1
-    kind: Deployment
-    name: minio-gateway-opa
-  patch: |-
-    - op: add
-      path: "/spec/template/spec/containers"
-      value:
-        image: k8scc01covidacr.azurecr.io/kubeflow-opa-sync:latest
-        imagePullPolicy: Always
-        name: kubeflow-opa-sync
-        resources:
-          limits:
-            cpu: 100m
-            memory: 200Mi
-          requests:
-            cpu: 100m
-            memory: 200Mi
-        securityContext: {}
-    - op: add
-      path: "/spec/template/spec/serviceAccountName"
-      value: kubeflow-opa-sync
-    - op: add
-      path: "/spec/template/spec/automountServiceAccountToken"
-      value: true
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: minio-gateway-opa
+    patch: |-
+      - op: add
+        path: "/spec/template/spec/containers/-"
+        value:
+          image: k8scc01covidacr.azurecr.io/kubeflow-opa-sync:latest
+          imagePullPolicy: Always
+          name: kubeflow-opa-sync
+          resources:
+            limits:
+              cpu: 100m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 200Mi
+          securityContext: {}
+      - op: add
+        path: "/spec/template/spec/serviceAccountName"
+        value: kubeflow-opa-sync
+      - op: add
+        path: "/spec/template/spec/automountServiceAccountToken"
+        value: true
 
 # Create a cluster role prefixed by the namespace,
 # so that it's unique
 replacements:
-- source:
-    kind: ServiceAccount
-    name: kubeflow-opa-sync
-    fieldPath: metadata.namespace
-  targets:
-  - select:
-      kind: ClusterRoleBindings
-      name: minio-kubeflow-opa-sync
-    fieldPaths:
-    - subjects.[0].namespace
-  - select:
-      kind: ClusterRole
-      name: minio-kubeflow-opa-sync
-    fieldPaths:
-    - metadata.name
-    options:
-      delimiter: '-'
-      index: 0
-  - select:
-      kind: ClusterRoleBinding
-      name: minio-kubeflow-opa-sync
-    fieldPaths:
-    - metadata.name
-    options:
-      delimiter: '-'
-      index: 0
+  - source:
+      kind: ServiceAccount
+      name: kubeflow-opa-sync
+      fieldPath: metadata.namespace
+    targets:
+      - select:
+          kind: ClusterRoleBindings
+          name: minio-kubeflow-opa-sync
+        fieldPaths:
+          - subjects.[0].namespace
+      - select:
+          kind: ClusterRole
+          name: minio-kubeflow-opa-sync
+        fieldPaths:
+          - metadata.name
+        options:
+          delimiter: "-"
+          index: 0
+      - select:
+          kind: ClusterRoleBinding
+          name: minio-kubeflow-opa-sync
+        fieldPaths:
+          - metadata.name
+        options:
+          delimiter: "-"
+          index: 0
