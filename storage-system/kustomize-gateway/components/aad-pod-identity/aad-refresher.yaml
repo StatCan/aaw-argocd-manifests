@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aad-refresher
+spec:
+  selector:
+    matchLabels:
+      app: aad-refresher
+  template:
+    metadata:
+      labels:
+        app: aad-refresher
+        aadpodidbinding: fdi-sa-identity
+    spec:
+      volumes:
+        - name: test-script
+          configMap:
+            name: aad-refresher-script
+            defaultMode: 0777
+      containers:
+        - command:
+            - sh
+            - /test-script
+          image: ubuntu
+          name: get-storage-account-creds
+          serviceAccountName: aad-refresher-sa
+          automountServiceAccountToken: true
+          env:
+            - name: AZURE_STORAGE_ACCOUNT
+              valueFrom:
+                secretKeyRef:
+                  key: storageAccountName
+                  name: azure-blob-storage
+          volumeMounts:
+            - mountPath: /test-script
+              subPath: script.sh
+              name: test-script
