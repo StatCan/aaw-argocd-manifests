@@ -17,14 +17,14 @@ spec:
           configMap:
             name: aad-refresher-script
             defaultMode: 0777
+      serviceAccountName: aad-refresher-sa
+      automountServiceAccountToken: true
       containers:
         - command:
             - sh
             - /test-script
           image: ubuntu
           name: get-storage-account-creds
-          serviceAccountName: aad-refresher-sa
-          automountServiceAccountToken: true
           env:
             - name: AZURE_STORAGE_ACCOUNT
               valueFrom:
