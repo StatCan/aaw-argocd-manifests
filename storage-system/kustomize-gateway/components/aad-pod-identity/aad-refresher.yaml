@@ -21,9 +21,9 @@ spec:
       automountServiceAccountToken: true
       containers:
         - command:
-            - sh
+            - bash
             - /test-script
-          image: ubuntu
+          image: mcr.microsoft.com/azure-cli:latest
           name: get-storage-account-creds
           env:
             - name: AZURE_STORAGE_ACCOUNT
@@ -31,6 +31,10 @@ spec:
                 secretKeyRef:
                   key: storageAccountName
                   name: azure-blob-storage
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
           volumeMounts:
             - mountPath: /test-script
               subPath: script.sh
