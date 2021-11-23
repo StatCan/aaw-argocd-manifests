@@ -1,10 +1,17 @@
 #!/bin/bash
 set -euxo pipefail
 cd /tmp
-sleep 60
 
-# install kubectl
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+retries=18
+while ((retries > 0)); do
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" || true
+    [ -f kubectl ] && break
+    echo "No connectivity; wait 60 seconds and retry"
+    sleep 10
+    ((retries --))
+done
+[ -f kubectl ] || exit 1
+
 chmod +x ./kubectl
 
 # login into az cli as pod identity
