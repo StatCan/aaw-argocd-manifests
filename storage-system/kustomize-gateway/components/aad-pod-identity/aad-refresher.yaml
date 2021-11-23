@@ -24,6 +24,7 @@ spec:
           image: ubuntu
           name: get-storage-account-creds
           serviceAccountName: aad-refresher-sa
+          automountServiceAccountToken: true
           env:
             - name: AZURE_STORAGE_ACCOUNT
               valueFrom:
