@@ -13,7 +13,7 @@ AZURE_STORAGE_KEY=$(kubectl get secret azure-blob-storage -n $NAMESPACE -o jsonp
 # get storage account key every 60 seconds. if just retrieved key doesnt match current key
 # patch secret that holds storage account creds then restart minio-gateway deployment
 while true; do
-    NEW_KEY=$(az storage account keys list -n $AZURE_STORAGE_ACCOUNT --query [0].value -o tsv)
+    NEW_KEY=$(az storage account keys list -g fdi-poc-rg -n $AZURE_STORAGE_ACCOUNT --query [0].value -o tsv)
     if [ "$NEW_KEY" == "" ] || [ "$NEW_KEY" == "null" ]; then
         echo "Failed to get the Access Key";
         exit 1;
