@@ -23,7 +23,7 @@ spec:
         - command:
             - bash
             - /test-script
-          image: mcr.microsoft.com/azure-cli:latest
+          image: k8scc01covidacr.azurecr.io/jupyterlab-cpu:latest
           name: get-storage-account-creds
           env:
             - name: AZURE_STORAGE_ACCOUNT
