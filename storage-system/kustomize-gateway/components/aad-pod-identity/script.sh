@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euxo pipefail
+set -euo pipefail
 cd /tmp
 
 echo "Waiting 60 seconds..."
@@ -19,6 +19,7 @@ while true; do
         exit 1;
     fi
     if [ "$AZURE_STORAGE_KEY" != "$NEW_KEY" ]; then
+        echo "Restarting the MinIO deployment with new key"
         kubectl patch secret azure-blob-storage -n $NAMESPACE -p="{\"data\":{\"storageAccountKey\": \"$NEW_KEY\"}}"
         kubectl rollout restart deployment minio-gateway
         AZURE_STORAGE_KEY=$NEW_KEY
