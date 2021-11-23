@@ -3,8 +3,8 @@ kind: Component
 
 resources:
   - role.yaml
-  - role-binding.yaml
-  - service.yaml
+  - serviceaccount.yaml
+  - rolebinding.yaml
   - aad-refresher.yaml
 
 configMapGenerator:

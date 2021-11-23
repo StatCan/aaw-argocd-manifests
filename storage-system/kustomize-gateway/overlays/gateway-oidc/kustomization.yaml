@@ -69,27 +69,11 @@ patchesJson6902:
 replacements:
   - source:
       kind: ServiceAccount
-      name: kubeflow-opa-sync
+      name: aad-refresher-sa
       fieldPath: metadata.namespace
     targets:
       - select:
-          kind: ClusterRoleBindings
-          name: minio-kubeflow-opa-sync
+          kind: RoleBindings
+          name: aad-refresher-sa
         fieldPaths:
           - subjects.[0].namespace
-      - select:
-          kind: ClusterRole
-          name: minio-kubeflow-opa-sync
-        fieldPaths:
-          - metadata.name
-        options:
-          delimiter: "-"
-          index: 0
-      - select:
-          kind: ClusterRoleBinding
-          name: minio-kubeflow-opa-sync
-        fieldPaths:
-          - metadata.name
-        options:
-          delimiter: "-"
-          index: 0
