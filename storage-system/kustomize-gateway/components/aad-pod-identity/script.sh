@@ -6,7 +6,7 @@ echo "Waiting 60 seconds..."
 sleep 60
 
 # login into az cli as pod identity
-az login --identity
+az login --identity --allow-no-subscriptions
 
 AZURE_STORAGE_KEY=$(kubectl get secret azure-blob-storage -n $NAMESPACE -o jsonpath="{.data.storageAccountKey}")
 
