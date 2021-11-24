@@ -17,7 +17,7 @@ spec:
       values: |
         image:
           repository: k8scc01covidacr.azurecr.io/profiles-controller
-          tag: b37908165f521882abc77126e81befcffdfd3853
+          tag: 59e89d7728ecc2d31e0b81c7286b410012139612
         components:
           rbac:
             supportGroups:
