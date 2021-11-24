@@ -19,6 +19,7 @@ rl_permissions := {
               {"action": "admin:GetPolicy"},
               {"action": "admin:AttachUserOrGroupPolicy"},
               {"action": "admin:ListUserPolicies"},
+              {"action": "admin:CreateUser"},
               {"action": "admin:EnableUser"},
               {"action": "admin:DisableUser"},
               {"action": "s3:PutObject"},
