@@ -39,7 +39,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: rg
-                  name: rg-secret
+                  name: azure-blob-storage
           volumeMounts:
             - mountPath: /test-script
               subPath: script.sh
