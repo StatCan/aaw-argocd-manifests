@@ -23,7 +23,7 @@ spec:
         app.kubernetes.io/name: profiles-controller
         app.kubernetes.io/instance: profiles-controller
     spec:
-      serviceAccountName: profiles-controller
+      serviceAccountName: profile-configurator
       securityContext: {}
       containers:
         - name: profiles-controller
@@ -35,4 +35,6 @@ spec:
           env:
             - name: MINIO_INSTANCES
               value: minio_standard,minio_protected_b,minio_gateway_standard,minio_gateway_standard_ro,minio_gateway_premium,minio_gateway_premium_ro,fdi_gateway
+            - name: VAULT_AGENT_ADDR
+              value: http://127.0.0.1:8100
           resources: {}
