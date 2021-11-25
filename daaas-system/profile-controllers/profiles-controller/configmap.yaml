@@ -1,0 +1,36 @@
+# Source: profiles-controller/templates/configmap-vaultagent.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ConfigMap
+metadata:
+  name: profiles-controller-vault-agent-config
+  labels:
+    helm.sh/chart: profiles-controller-0.1.8
+    app.kubernetes.io/name: profiles-controller
+    app.kubernetes.io/instance: profiles-controller
+data:
+  config.hcl: |2
+    "auto_auth" = {
+      "method" = {
+        "config" = {
+          "role" = "profile-configurator"
+        }
+        "type" = "kubernetes"
+        "mount_path" = "auth/aaw-dev-cc-00"
+      }
+    }
+
+    "exit_after_auth" = false
+    "pid_file" = "/home/vault/.pid"
+
+    cache {
+      "use_auto_auth_token" = "force"
+    }
+
+    listener "tcp" {
+      address = "127.0.0.1:8100"
+      "tls_disable" = true
+    }
+
+    "vault" = {
+      "address" = "http://vault.vault-system:8200"
+    }

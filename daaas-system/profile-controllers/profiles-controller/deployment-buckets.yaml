@@ -1,0 +1,38 @@
+# Source: profiles-controller/templates/deployment-buckets.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: profiles-controller-buckets
+  labels:
+    helm.sh/chart: profiles-controller-0.1.8
+    app.kubernetes.io/name: profiles-controller
+    app.kubernetes.io/instance: profiles-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: profiles-controller
+      app.kubernetes.io/instance: profiles-controller
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: true
+        vault.hashicorp.com/agent-configmap: profiles-controller-vault-agent-config
+        vault.hashicorp.com/agent-pre-populate: false
+      labels:
+        app.kubernetes.io/name: profiles-controller
+        app.kubernetes.io/instance: profiles-controller
+    spec:
+      serviceAccountName: profiles-controller
+      securityContext: {}
+      containers:
+        - name: profiles-controller
+          securityContext: {}
+          image: k8scc01covidacr.azurecr.io/profiles-controller:2667203c04de3ba23c6b978ab24f7fa45f3b9369
+          imagePullPolicy: IfNotPresent
+          args:
+            - buckets
+          env:
+            - name: MINIO_INSTANCES
+              value: minio_standard,minio_protected_b,minio_gateway_standard,minio_gateway_standard_ro,minio_gateway_premium,minio_gateway_premium_ro,fdi_gateway
+          resources: {}
