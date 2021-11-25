@@ -28,7 +28,7 @@ spec:
       containers:
         - name: profiles-controller
           securityContext: {}
-          image: k8scc01covidacr.azurecr.io/profiles-controller:2667203c04de3ba23c6b978ab24f7fa45f3b9369
+          image: k8scc01covidacr.azurecr.io/profiles-controller:3989df47071aa03c695de1acfa0cfcdb8b063d05
           imagePullPolicy: IfNotPresent
           args:
             - buckets
