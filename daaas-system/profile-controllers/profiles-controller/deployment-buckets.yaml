@@ -34,7 +34,7 @@ spec:
             - buckets
           env:
             - name: MINIO_INSTANCES
-              value: minio_standard,minio_protected_b,minio_gateway_standard,minio_gateway_premium,fdi_gateway
+              value: minio_standard,minio_protected_b,minio_gateway_standard,minio_gateway_premium
             - name: VAULT_AGENT_ADDR
               value: http://127.0.0.1:8100
           resources: {}
