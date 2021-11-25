@@ -16,9 +16,9 @@ spec:
   template:
     metadata:
       annotations:
-        vault.hashicorp.com/agent-inject: true
+        vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/agent-configmap: profiles-controller-vault-agent-config
-        vault.hashicorp.com/agent-pre-populate: false
+        vault.hashicorp.com/agent-pre-populate: 'false'
       labels:
         app.kubernetes.io/name: profiles-controller
         app.kubernetes.io/instance: profiles-controller
