@@ -40,6 +40,11 @@ spec:
                 secretKeyRef:
                   key: rg
                   name: azure-blob-storage
+            - name: SUBSCRIPTION
+              valueFrom:
+                secretKeyRef:
+                  key: subscription
+                  name: azure-blob-storage
           volumeMounts:
             - mountPath: /test-script
               subPath: script.sh

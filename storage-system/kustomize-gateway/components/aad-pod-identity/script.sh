@@ -7,7 +7,7 @@ sleep 60
 
 # login into az cli as pod identity
 az login --identity 
-az account set --subscription "vdl"
+az account set --subscription $SUBSCRIPTION
 
 AZURE_STORAGE_KEY=$(kubectl get secret azure-blob-storage -n $NAMESPACE -o jsonpath="{.data.storageAccountKey}")
 
