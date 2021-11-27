@@ -23,7 +23,7 @@ spec:
         app.kubernetes.io/name: profiles-controller
         app.kubernetes.io/instance: profiles-controller
     spec:
-      serviceAccountName: profile-configurator
+      serviceAccountName: profiles-controller
       securityContext: {}
       containers:
         - name: profiles-controller
