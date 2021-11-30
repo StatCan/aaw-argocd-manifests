@@ -11,21 +11,21 @@
       
       
       
-        <link rel="canonical" href="https://statcan.github.io/aaw-argocd-manifests/daaas-system/profile-controllers/">
+        <link rel="canonical" href="https://statcan.github.io/aaw-argocd-manifests/daaas-system/serving/inferenceservices-controller/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.6">
     
     
       
-        <title>Profiles Controller - AAW ArgoCD Manifests</title>
+        <title>inferenceservices-controller - AAW ArgoCD Manifests</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.a57b2b03.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.a57b2b03.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.3f5d1f46.min.css">
         
       
     
@@ -57,12 +57,17 @@
     <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
   
     
-    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    <script>function __prefix(e){return new URL("../../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#inferenceservices-controller" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -73,7 +78,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="AAW ArgoCD Manifests" class="md-header__button md-logo" aria-label="AAW ArgoCD Manifests" data-md-component="logo">
+    <a href="../../.." title="AAW ArgoCD Manifests" class="md-header__button md-logo" aria-label="AAW ArgoCD Manifests" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
@@ -92,7 +97,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Profiles Controller
+              inferenceservices-controller
             
           </span>
         </div>
@@ -160,7 +165,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="AAW ArgoCD Manifests" class="md-nav__button md-logo" aria-label="AAW ArgoCD Manifests" data-md-component="logo">
+    <a href="../../.." title="AAW ArgoCD Manifests" class="md-nav__button md-logo" aria-label="AAW ArgoCD Manifests" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
@@ -179,7 +184,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         Home
       </a>
     </li>
@@ -240,7 +245,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../architecture/00-introduction/" class="md-nav__link">
+      <a href="../../../architecture/00-introduction/" class="md-nav__link">
         Securing Advanced Analytics Workspaces
       </a>
     </li>
@@ -254,7 +259,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../architecture/01-limitations/" class="md-nav__link">
+      <a href="../../../architecture/01-limitations/" class="md-nav__link">
         Limitations
       </a>
     </li>
@@ -268,7 +273,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../architecture/02-azure/" class="md-nav__link">
+      <a href="../../../architecture/02-azure/" class="md-nav__link">
         Azure Resources
       </a>
     </li>
@@ -282,7 +287,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../architecture/03-classification/" class="md-nav__link">
+      <a href="../../../architecture/03-classification/" class="md-nav__link">
         Classification
       </a>
     </li>
@@ -296,7 +301,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../architecture/04-storage/" class="md-nav__link">
+      <a href="../../../architecture/04-storage/" class="md-nav__link">
         Storage
       </a>
     </li>
@@ -310,7 +315,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../architecture/05-network/" class="md-nav__link">
+      <a href="../../../architecture/05-network/" class="md-nav__link">
         Network
       </a>
     </li>
@@ -324,7 +329,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../architecture/06-kubernetes/" class="md-nav__link">
+      <a href="../../../architecture/06-kubernetes/" class="md-nav__link">
         Kubernetes
       </a>
     </li>
@@ -338,7 +343,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../architecture/07-kubeflow/" class="md-nav__link">
+      <a href="../../../architecture/07-kubeflow/" class="md-nav__link">
         Kubeflow
       </a>
     </li>
@@ -352,7 +357,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../architecture/08-appendix-a/" class="md-nav__link">
+      <a href="../../../architecture/08-appendix-a/" class="md-nav__link">
         Appendix A: Non-security recommendations
       </a>
     </li>
@@ -433,7 +438,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../namespace-controller/">Namespace controller</a>
+          <a href="../../namespace-controller/">Namespace controller</a>
           
         </div>
       
@@ -477,7 +482,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../network-policies/">Network policies</a>
+          <a href="../../network-policies/">Network policies</a>
           
         </div>
       
@@ -527,7 +532,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../notebook-controllers/">Notebook controllers</a>
+          <a href="../../notebook-controllers/">Notebook controllers</a>
           
             <label for="__nav_3_3">
               <span class="md-nav__icon md-icon"></span>
@@ -568,7 +573,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../notebook-controllers/goofys-injector/">Goofys injector</a>
+          <a href="../../notebook-controllers/goofys-injector/">Goofys injector</a>
           
         </div>
       
@@ -612,7 +617,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../notebook-controllers/minio-credential-injector/">Minio credential injector</a>
+          <a href="../../notebook-controllers/minio-credential-injector/">Minio credential injector</a>
           
         </div>
       
@@ -656,7 +661,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../notebook-controllers/notebook-auth-policy-checker/">Notebook auth policy checker</a>
+          <a href="../../notebook-controllers/notebook-auth-policy-checker/">Notebook auth policy checker</a>
           
         </div>
       
@@ -688,14 +693,12 @@
               
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4" type="checkbox" id="__nav_3_4" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4" data-md-state="indeterminate" type="checkbox" id="__nav_3_4" checked>
       
       
       
@@ -712,8 +715,8 @@
       
         
         
-        <div class="md-nav__link md-nav__link--index md-nav__link--active">
-          <a href="./">Profile controllers</a>
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../profile-controllers/">Profile controllers</a>
           
             <label for="__nav_3_4">
               <span class="md-nav__icon md-icon"></span>
@@ -754,7 +757,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="kubeflow-controller/">Kubeflow controller</a>
+          <a href="../../profile-controllers/kubeflow-controller/">Kubeflow controller</a>
           
         </div>
       
@@ -798,7 +801,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="profiles-controller/">Profiles controller</a>
+          <a href="../../profile-controllers/profiles-controller/">Profiles controller</a>
           
         </div>
       
@@ -830,12 +833,14 @@
               
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_5" data-md-state="indeterminate" type="checkbox" id="__nav_3_5" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_5" type="checkbox" id="__nav_3_5" checked>
       
       
       
@@ -860,12 +865,14 @@
               
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_5_1" data-md-state="indeterminate" type="checkbox" id="__nav_3_5_1" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_5_1" type="checkbox" id="__nav_3_5_1" checked>
       
       
       
@@ -878,8 +885,8 @@
       
         
         
-        <div class="md-nav__link md-nav__link--index ">
-          <a href="../serving/inferenceservices-controller/">Inferenceservices controller</a>
+        <div class="md-nav__link md-nav__link--index md-nav__link--active">
+          <a href="./">Inferenceservices controller</a>
           
         </div>
       
@@ -930,7 +937,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../workflows-cronjob/">Workflows cronjob</a>
+          <a href="../../workflows-cronjob/">Workflows cronjob</a>
           
         </div>
       
@@ -1016,7 +1023,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../statcan-system/gatekeeper/">Gatekeeper</a>
+          <a href="../../../statcan-system/gatekeeper/">Gatekeeper</a>
           
         </div>
       
@@ -1060,7 +1067,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../statcan-system/sidecar-terminator/">Sidecar terminator</a>
+          <a href="../../../statcan-system/sidecar-terminator/">Sidecar terminator</a>
           
         </div>
       
@@ -1104,7 +1111,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../statcan-system/toleration-injector/">Toleration injector</a>
+          <a href="../../../statcan-system/toleration-injector/">Toleration injector</a>
           
         </div>
       
@@ -1190,7 +1197,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../storage-system/kustomize-gateway/">Kustomize gateway</a>
+          <a href="../../../storage-system/kustomize-gateway/">Kustomize gateway</a>
           
             <label for="__nav_5_1">
               <span class="md-nav__icon md-icon"></span>
@@ -1231,7 +1238,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../storage-system/kustomize-gateway/base/">Base</a>
+          <a href="../../../storage-system/kustomize-gateway/base/">Base</a>
           
         </div>
       
@@ -1305,7 +1312,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../storage-system/kustomize-gateway/overlays/gateway-bundle/">Gateway bundle</a>
+          <a href="../../../storage-system/kustomize-gateway/overlays/gateway-bundle/">Gateway bundle</a>
           
         </div>
       
@@ -1353,16 +1360,52 @@
               </div>
             
             
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#where-does-it-come-from" class="md-nav__link">
+    Where does it come from?
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content" data-md-component="content">
             <article class="md-content__inner md-typeset">
               
                 
                 
-                  <h1>Profiles Controller</h1>
-                
-                <p>The <a href="https://github.com/StatCan/aaw-kubeflow-controller"><code>kubeflow-controller</code></a> was our original mechanism for adding per-profile resources across namespaces. We regret its original design, as it became a large, monolithic system, which made it progressively harder to test and develop.</p>
-<p>We are moving to a refactored design, the <a href="https://github.com/StatCan/aaw-kubeflow-profiles-controller"><code>profiles-controller</code></a>, which factors the controllers into separate modules which execute independently. The monolithic <code>kubeflow-controller</code> will eventually be removed.</p>
+                <h1 id="inferenceservices-controller">inferenceservices-controller</h1>
+<h2 id="where-does-it-come-from">Where does it come from?</h2>
+<p><code>inferenceservices-controller</code> is synced from
+https://github.com/kubernetes/kubernetes/blob/master/staging/src/k8s.io/sample-controller.
+Code changes are made in that location, merged into k8s.io/kubernetes and
+later synced here.</p>
                 
                   
                 
@@ -1384,7 +1427,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../notebook-controllers/notebook-auth-policy-checker/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Blocking Upload and Download" rel="prev">
+        <a href="../../profile-controllers/profiles-controller/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Index" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1393,20 +1436,20 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Blocking Upload and Download
+              Index
             </div>
           </div>
         </a>
       
       
         
-        <a href="kubeflow-controller/" class="md-footer__link md-footer__link--next" aria-label="Next: Index" rel="next">
+        <a href="../../workflows-cronjob/" class="md-footer__link md-footer__link--next" aria-label="Next: Cleanup old workflows" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Index
+              Cleanup old workflows
             </div>
           </div>
           <div class="md-footer__button md-icon">
@@ -1441,10 +1484,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.expand", "navigation.indexes"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.fcfe8b6d.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.expand", "navigation.indexes"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.fcfe8b6d.min.js", "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.b1047164.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.b1047164.min.js"></script>
       
     
   </body>
