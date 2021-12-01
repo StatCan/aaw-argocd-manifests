@@ -11,7 +11,11 @@ local instances = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
 else
 {
     "instances.json": |||
-    {"name": "minio_standard", "short": "standard", "classification": "unclassified", "externalUrl": "https://minio-standard.aaw-dev.cloud.statcan.ca:443"}
+    {"name": "minio_gateway_standard", "short": "standard", "classification": "unclassified", "externalUrl": "https://minio-gateway-standard-system-boathouse.aaw-dev.cloud.statcan.ca:443"}
+    {"name": "minio_gateway_premium", "short": "standard", "classification": "unclassified", "externalUrl": "https://minio-gateway-premium-system-boathouse.aaw-dev.cloud.statcan.ca:443"}
+    {"name": "minio_gateway_standard_ro", "short": "standard", "classification": "protected-b", "externalUrl": "https://minio-gateway-standard-ro-system-boathouse.aaw-dev.cloud.statcan.ca:443"}
+    {"name": "minio_gateway_premium_ro", "short": "standard", "classification": "protected-b", "externalUrl": "https://minio-gateway-premium-ro-system-boathouse.aaw-dev.cloud.statcan.ca:443"}
+    {"name": "fdi_gateway", "short": "standard", "classification": "unclassified", "externalUrl": "https://fdi-gateway-system-boathouse.aaw-dev.cloud.statcan.ca:443"}
 |||
 };
 
