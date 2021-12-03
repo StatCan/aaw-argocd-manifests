@@ -1457,11 +1457,16 @@
 <li>
 <p>The Vault versions need the following configurations changes:</p>
 </li>
+<li>Instantiate a gateway via the terraform module.</li>
 <li>Add to the <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/minio-credential-injector/instances.jsonnet">MinIO Credential injector</a></li>
 <li>Add to the <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/goofys-injector/instances.jsonnet">Goofys injector</a></li>
 <li>Add to the <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/2d827fe546d37fed36bf0974f383b47fe2eff211/daaas-system/kubeflow-controller/deployment.jsonnet#L6-L18">Kubeflow Controller</a> (in the future, the profiles-controller).</li>
-<li>Grant Vault access by configuring the terraform for Vault which creates the necessary <code>mounts</code> and <code>roles</code>. At the moment this is done from within the terraform module that deploys these ArgoCD <code>Application</code>s.</li>
+<li>Grant Vault access by configuring the terraform for Vault which creates the necessary <code>config</code>, <code>mounts</code> and <code>roles</code> for each MinIO instance. At the moment this is done from within the terraform module that deploys these ArgoCD <code>Application</code>s. </li>
+<li>Configure the Vault roles for <code>profile-configurator</code> and <code>boathouse</code> to allow them to interact with the MinIO instances. This is in the dedicated <code>vault</code> terraform repo.</li>
 </ul>
+<h2 id="special-note-on-boathouse">Special note on Boathouse</h2>
+<p>At the moment Boathouse can only connect to external URLs (ingresses) because the CSI driver is not within the cluster and cannot use cluster DNS or kube-proxy.</p>
+<p>As a result, the current workaround is to have dedicated <code>{instance}-boathouse.{domain}</code> ingresses for boathouse to connect to, and then these ingresses will be restricted to only communicate with the Boathouse service. At the moment the ingress is not locked down, but the proposed solution is to have the ingresses live on a private ingressgateway with a fixed IP, and then configure a firewall to allo communication only to/from that ingressgateway and boathouse.</p>
                 
               
               
