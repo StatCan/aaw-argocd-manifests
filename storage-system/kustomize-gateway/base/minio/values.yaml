@@ -58,7 +58,7 @@ initContainers:
     name: minio-sh
 image:
   registry: k8scc01covidacr.azurecr.io
-  repository: minio
+  repository: minio/minio
   tag: cdb08ebe
   # registry: docker.io
   # repository: bitnami/minio
