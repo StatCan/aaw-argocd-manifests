@@ -1,0 +1,30 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: minio-gateway-premium-oidc-system
+
+commonLabels:
+  node.statcan.gc.ca/purpose: system
+  system: minio-gateway-premium-system
+
+resources:
+  - ../kustomize-gateway/overlays/gateway-oidc/
+
+patches:
+- target:
+    kind: ClusterRoleBinding
+    name: kubeflow-opa-sync
+  patch: |-
+    - op: replace
+      path: /subjects/0/namespace
+      value: minio-gateway-premium-oidc-system
+    - op: replace
+      path: /roleRef/name
+      value: minio-gateway-premium-oidc-system-kubeflow-opa-sync
+- target:
+    kind: (ClusterRole|ClusterRoleBinding)
+    name: kubeflow-opa-sync
+  patch: |-
+    - op: replace
+      path: /metadata/name
+      value: minio-gateway-premium-oidc-system-kubeflow-opa-sync
