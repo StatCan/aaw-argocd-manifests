@@ -1,3 +1,5 @@
+# Notes & Warnings
+
 NOTE!!! Tolerations and nodeSelector are not respected from the values.yaml files.
 
 All tolerations are set to `[]` in the kustomization.yaml file.

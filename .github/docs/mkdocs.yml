@@ -1,0 +1,16 @@
+site_name: AAW ArgoCD Manifests
+site_url: https://statcan.github.io/aaw-argocd-manifests
+site_description: Deployment manifests for the AAW
+copyright: Copyright &copy; 2021 Statistics Canada
+
+theme:
+  name: material
+  features:
+    - navigation.expand
+    - navigation.indexes
+
+markdown_extensions:
+  - attr_list
+
+plugins:
+  - search

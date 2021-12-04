@@ -2,59 +2,6 @@
 
 ## AAW ArgoCD Manifests
 
-The manifests to deploy the AAW. To deploy this, pick a target branch (i.e. `dev` or `master`) and then deploy this application
-
-```yaml
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: aaw-statcan-system
-  namespace: statcan-system
-spec:
-  project: platform
-  destination:
-    namespace: statcan-system
-    name: in-cluster
-  source:
-    repoURL: 'https://github.com/StatCan/aaw-argocd-manifests'
-    path: statcan-system
-    targetRevision: dev
-    directory:
-      recurse: false
-      jsonnet: 
-        extVars:
-        - name: argocd_namespace
-          value: statcan-system
-        - name: namespace
-          value: statcan-system
-        - name: url
-          value: https://github.com/StatCan/aaw-argocd-manifests.git
-        - name: targetRevision
-          value: master
-        - name: folder
-          value: storage-system
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-```
-
-This deploys **just** the `statcan-system`. This will deploy a flat folder using jsonnet, and you can use the "Application of Applications" pattern to hierarchically group the applications. The recommended structure is:
-
-```yaml
-statcan-system/
-   - application-a.yaml
-   - application-b.yaml
-   - folder-x
-   - folder-y
-   - applications.jsonnet
-   - applications.libsonnet
-   - Makefile
-```
-
-Where the `Makefile` and `applications.jsonnet` file are symlinks to those found in the root of this repo. The applications here are deployed immediately, the `applications.jsonnet` file will create an `Application` for each folder. The libsonnet file is just the list of directories (you can generate it from the Makefile). The purpose of the `extVars` variables in the original Application is so that these subapplications have the variables they need to know their context.
-
-You can deploy this top-level application either manually, or with your favorite deployment system (e.g. terraform)
 
 ### How to Contribute
 
