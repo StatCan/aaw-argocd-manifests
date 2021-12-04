@@ -1,0 +1,17 @@
+# This is need for Azure AD auth
+# Outbound connections are restricted at the Azure firewall
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-minio-to-internet
+spec:
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    ports:
+      - port: 443
+        protocol: TCP
+  podSelector: {}
+  policyTypes:
+  - Egress

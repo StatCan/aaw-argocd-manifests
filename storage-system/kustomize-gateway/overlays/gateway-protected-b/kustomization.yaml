@@ -6,9 +6,7 @@ resources:
   - ../../base/
 
 commonLabels:
-  someName: someValue
-  owner: alice
-  app: bingo
+  data.statcan.gc.ca/classification: protected-b
 
 #patchesStrategicMerge:
 #- cluster-role.yaml
@@ -19,6 +17,3 @@ configMapGenerator:
 - files:
   - policy.rego
   name: minio-gateway-opa
-
-components:
-  - ../../components/protected-b

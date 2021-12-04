@@ -4,17 +4,20 @@ kind: Component
 commonLabels:
   data.statcan.gc.ca/classification: protected-b
 
-patchesJson6902:
-- target:
-    group: apps
-    version: v1
-    kind: (Deployment|StatefulSet)
-    name: minio-gateway.*
-  patch: |-
-    - op: add
-      path: "/spec/template/spec/tolerations/-"
-      value:
-        effect: NoSchedule
-        key: data.statcan.gc.ca/classification
-        operator: Equal
-        value: protected-b
+resources:
+  - networkpolicy.yaml
+
+#patchesJson6902:
+#- target:
+#    group: apps
+#    version: v1
+#    kind: (Deployment|StatefulSet)
+#    name: minio-gateway.*
+#  patch: |-
+#    - op: add
+#      path: "/spec/template/spec/tolerations/-"
+#      value:
+#        effect: NoSchedule
+#        key: data.statcan.gc.ca/classification
+#        operator: Equal
+#        value: protected-b

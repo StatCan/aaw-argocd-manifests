@@ -9,4 +9,57 @@ helmChartInflationGenerator:
   chartRepoUrl: https://charts.bitnami.com/bitnami
   chartVersion: 6.2.9
   releaseName: minio-gateway-etcd
+  helmBin: /home/argocd/custom-tools/helm-wrapper
   values: values.yaml
+
+# NOTE: We're not using the headless service
+patchesStrategicMerge:
+- |-
+   apiVersion: apps/v1
+   kind: StatefulSet
+   metadata:
+     name: minio-gateway-etcd
+   spec:
+     template:
+       spec:
+         containers:
+           - name: etcd
+             env:
+             - name: ETCD_ADVERTISE_CLIENT_URLS
+               value: http://minio-gateway-etcd-headless:2379
+             - name: ETCD_INITIAL_ADVERTISE_PEER_URLS
+               value: http://minio-gateway-etcd-headless:2380
+
+# replicas:
+# - name: minio-gateway-etcd
+#   count: 3
+#
+# # NOTE: We're not using the headless service
+# patchesStrategicMerge:
+# - |-
+#    apiVersion: apps/v1
+#    kind: StatefulSet
+#    metadata:
+#      name: minio-gateway-etcd
+#    spec:
+#      template:
+#        spec:
+#          containers:
+#            - name: etcd
+#              env:
+#              - name: MY_POD_NAME
+#                valueFrom:
+#                  fieldRef:
+#                    fieldPath: metadata.name
+#              - name: MY_POD_NAMESPACE
+#                valueFrom:
+#                  fieldRef:
+#                    fieldPath: metadata.namespace
+#              - name: ETCD_ADVERTISE_CLIENT_URLS
+#                value: http://$(MY_POD_NAME).minio-gateway-etcd-headless.$(MY_POD_NAMESPACE).svc.cluster.local:2379
+#              - name: ETCD_INITIAL_ADVERTISE_PEER_URLS
+#                value: http://$(MY_POD_NAME).minio-gateway-etcd-headless.$(MY_POD_NAMESPACE).svc.cluster.local:2380
+#              - name: ETCD_INITIAL_CLUSTER
+#                value: minio-gateway-etcd-0=http://minio-gateway-etcd-0.minio-gateway-etcd-headless.$(MY_POD_NAMESPACE).svc.cluster.local:2380,minio-gateway-etcd-1=http://minio-gateway-etcd-1.minio-gateway-etcd-headless.$(MY_POD_NAMESPACE).svc.cluster.local:2380,minio-gateway-etcd-2=http://minio-gateway-etcd-2.minio-gateway-etcd-headless.$(MY_POD_NAMESPACE).svc.cluster.local:2380
+#              - name: ETCD_CLUSTER_DOMAIN
+#                value: minio-gateway-etcd-headless.$(MY_POD_NAMESPACE).svc.cluster.local

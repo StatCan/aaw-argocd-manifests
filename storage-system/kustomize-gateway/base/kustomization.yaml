@@ -12,6 +12,7 @@ resources:
   - minio/
   - etcd/
   - opa/
+  - networkpolicies/
 
 
 ## using a valueFrom instead of value

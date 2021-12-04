@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: minio-gateway-opa
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: minio-gateway-opa

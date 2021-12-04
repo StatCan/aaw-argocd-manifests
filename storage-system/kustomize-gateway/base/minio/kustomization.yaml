@@ -9,4 +9,5 @@ helmChartInflationGenerator:
   chartRepoUrl: https://charts.bitnami.com/bitnami
   chartVersion: 7.2.0
   releaseName: minio-gateway
+  helmBin: /home/argocd/custom-tools/helm-wrapper
   values: values.yaml

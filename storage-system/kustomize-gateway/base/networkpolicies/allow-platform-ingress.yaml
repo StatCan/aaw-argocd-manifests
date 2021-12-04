@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-from-daaas-system
+spec:
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          namespace.statcan.gc.ca/purpose: daaas
+  podSelector:
+    matchLabels:
+      # This matches minio, not etcd or opa
+      app.kubernetes.io/instance: minio-gateway
+  policyTypes:
+  - Ingress

@@ -5,79 +5,87 @@ kind: Kustomization
 resources:
   - ../../base/
 
+components:
+  - ../../components/aad-pod-identity
+
 # Add Kubeflow OPA Sync
 patchesJson6902:
-- target:
-    group: apps
-    version: v1
-    kind: Deployment
-    name: minio-gateway
-  patch: |-
-    - op: replace
-      path: "/spec/template/spec/containers/0/args"
-      value:
-      - "run"
-      - "--ignore=.*"
-      - "--server"
-      - "--set=services.default.url=https://$(BUNDLE_STORAGE_ACCOUNT).blob.core.windows.net"
-      - "--set=services.default.headers.x-ms-version=$(AZURE_STORAGE_SERVICE_VERSION)"
-      - "--set=services.default.credentials.oauth2.token_url=https://login.microsoftonline.com/$(TENANT_ID)/oauth2/v2.0/token"
-      - "--set=services.default.credentials.oauth2.client_id=$(CLIENT_ID)"
-      - "--set=services.default.credentials.oauth2.client_secret=$(CLIENT_SECRET)"
-      - "--set=services.default.credentials.oauth2.scopes[0]=https://storage.azure.com/.default"
-      - "--set=bundles.default.resource=$(BUNDLE_FILE_PATH)"
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: minio-gateway-opa
+    patch: |-
+      - op: replace
+        path: "/spec/template/spec/containers/0/args"
+        value:
+        - "run"
+        - "--ignore=.*"
+        - "--server"
+        - "--set=services.default.url=https://$(BUNDLE_STORAGE_ACCOUNT).blob.core.windows.net"
+        - "--set=services.default.headers.x-ms-version=$(AZURE_STORAGE_SERVICE_VERSION)"
+        - "--set=services.default.credentials.oauth2.token_url=https://login.microsoftonline.com/$(TENANT_ID)/oauth2/v2.0/token"
+        - "--set=services.default.credentials.oauth2.client_id=$(CLIENT_ID)"
+        - "--set=services.default.credentials.oauth2.client_secret=$(CLIENT_SECRET)"
+        - "--set=services.default.credentials.oauth2.scopes[0]=https://storage.azure.com/.default"
+        - "--set=bundles.default.resource=$(BUNDLE_FILE_PATH)"
 
-    - op: add
-      path: "/spec/template/spec/containers/0/env/-"
-      value:
-      - name: BUNDLE_STORAGE_ACCOUNT
-        valueFrom:
-          secretKeyRef:
-            key: bundle-storage-account
-            name: bundle-secret
+      - op: add
+        path: "/spec/template/spec/containers/0/env/-"
+        value:
+          name: BUNDLE_STORAGE_ACCOUNT
+          valueFrom:
+            secretKeyRef:
+              key: bundle-storage-account
+              name: bundle-secret
 
-    - op: add
-      path: "/spec/template/spec/containers/0/env/-"
-      value:
-      - name: AZURE_STORAGE_SERVICE_VERSION
-        valueFrom:
-          secretKeyRef:
-            key: azure-storage-service-version
-            name: bundle-secret
+      - op: add
+        path: "/spec/template/spec/containers/0/env/-"
+        value:
+          name: AZURE_STORAGE_SERVICE_VERSION
+          valueFrom:
+            secretKeyRef:
+              key: azure-storage-service-version
+              name: bundle-secret
 
-    - op: add
-      path: "/spec/template/spec/containers/0/env/-"
-      value:
-      - name: TENANT_ID
-        valueFrom:
-          secretKeyRef:
-            key: tenant_id
-            name: bundle-secret
+      - op: add
+        path: "/spec/template/spec/containers/0/env/-"
+        value:
+          name: TENANT_ID
+          valueFrom:
+            secretKeyRef:
+              key: tenant_id
+              name: bundle-secret
 
-    - op: add
-      path: "/spec/template/spec/containers/0/env/-"
-      value:
-      - name: CLIENT_ID
-        valueFrom:
-          secretKeyRef:
-            key: client_id
-            name: bundle-secret
+      - op: add
+        path: "/spec/template/spec/containers/0/env/-"
+        value:
+          name: CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              key: client_id
+              name: bundle-secret
 
-    - op: add
-      path: "/spec/template/spec/containers/0/env/-"
-      value:
-      - name: CLIENT_SECRET
-        valueFrom:
-          secretKeyRef:
-            key: client_secret
-            name: bundle-secret
+      - op: add
+        path: "/spec/template/spec/containers/0/env/-"
+        value:
+          name: CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: client_secret
+              name: bundle-secret
 
-    - op: add
-      path: "/spec/template/spec/containers/0/env/-"
-      value:
-      - name: BUNDLE_FILE_PATH
-        valueFrom:
-          secretKeyRef:
-            key: bundle_file_path
-            name: bundle-secret
+      - op: add
+        path: "/spec/template/spec/containers/0/env/-"
+        value:
+          name: BUNDLE_FILE_PATH
+          valueFrom:
+            secretKeyRef:
+              key: bundle_file_path
+              name: bundle-secret
 
+      - op: remove
+        path: "/spec/template/spec/volumes/0"
+
+      - op: remove
+        path: "/spec/template/spec/containers/0/volumeMounts/0"

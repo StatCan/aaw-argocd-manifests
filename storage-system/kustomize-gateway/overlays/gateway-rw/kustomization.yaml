@@ -5,30 +5,7 @@ kind: Kustomization
 resources:
   - ../../base/
 
-commonLabels:
-  someName: someValue
-  owner: alice
-  app: bingo
-
-#patchesStrategicMerge:
-#- cluster-role.yaml
-#- deployment.yaml
-#- deployment_patch.yaml
-
 configMapGenerator:
 - files:
   - policy.rego
   name: minio-gateway-opa
-
-
-## using a valueFrom instead of value
-#patches:
-#- target:
-#    kind: Deployment
-#    name: jupyter-web-app-deployment
-#  patch: |-
-#    - op: remove
-#      path: /spec/template/spec/containers/0/env/1/value
-#    - op: remove
-#      path: /spec/template/spec/containers/0/env/2/value
-#
