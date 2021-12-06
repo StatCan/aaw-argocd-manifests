@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kubeflow-profiles
+  namespace: daaas-system
+spec:
+  project: default
+  destination:
+    namespace: daaas-system
+    name: in-cluster
+  source:
+    repoURL: 'https://github.com/StatCan/aaw-kubeflow-profiles.git'
+    path: .
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
