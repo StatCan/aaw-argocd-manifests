@@ -55,7 +55,7 @@ local values = |||
         - 468415c1-d3c2-4c7c-a69d-38f3ce11d351
 
     buckets:
-      instances: %(buckets)s
+      instances: %(instances)s
 ||| % {mount_path: vars.vault_path, instances: vars.buckets};
 
 
