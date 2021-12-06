@@ -19,6 +19,9 @@ spec:
     - /metadata/resourceVersion
     - /metadata/uid
     - /metadata/selfLink
+    - /metadata/finalizers
+    - /metadata/generation
+    - /metadata/labels
     - /spec/resourceQuotaSpec
   syncPolicy:
     automated:
