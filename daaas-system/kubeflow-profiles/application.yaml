@@ -12,6 +12,17 @@ spec:
     repoURL: 'https://github.com/StatCan/aaw-kubeflow-profiles.git'
     path: .
     targetRevision: main
+  ignoreDifferences:
+  - group: kubeflow.org
+    kind: Profile
+    jsonPointers:
+    - /metadata/resourceVersion
+    - /metadata/uid
+    - /metadata/selfLink
+    - /metadata/finalizers
+    - /metadata/generation
+    - /metadata/labels
+    - /spec/resourceQuotaSpec
   syncPolicy:
     automated:
       prune: true
