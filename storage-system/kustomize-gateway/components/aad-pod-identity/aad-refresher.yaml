@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aad-refresher
+spec:
+  selector:
+    matchLabels:
+      app: aad-refresher
+  template:
+    metadata:
+      labels:
+        app: aad-refresher
+        aadpodidbinding: fdi-sa-identity
+    spec:
+      volumes:
+        - name: test-script
+          configMap:
+            name: aad-refresher-script
+            defaultMode: 0777
+      serviceAccountName: aad-refresher-sa
+      automountServiceAccountToken: true
+      containers:
+        - command:
+            - bash
+            - /test-script
+          image: k8scc01covidacr.azurecr.io/jupyterlab-cpu:latest
+          name: get-storage-account-creds
+          env:
+            - name: AZURE_STORAGE_ACCOUNT
+              valueFrom:
+                secretKeyRef:
+                  key: storageAccountName
+                  name: azure-blob-storage
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: RESOURCE_GROUP
+              valueFrom:
+                secretKeyRef:
+                  key: rg
+                  name: azure-blob-storage
+            - name: SUBSCRIPTION
+              valueFrom:
+                secretKeyRef:
+                  key: subscription
+                  name: azure-blob-storage
+          volumeMounts:
+            - mountPath: /test-script
+              subPath: script.sh
+              name: test-script

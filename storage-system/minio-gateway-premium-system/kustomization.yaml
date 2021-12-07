@@ -4,8 +4,11 @@ kind: Kustomization
 namespace: minio-gateway-premium-system
 
 commonLabels:
-  instance: minio-gateway
   node.statcan.gc.ca/purpose: system
+  system: minio-gateway-premium-system
 
 resources:
   - ../kustomize-gateway/overlays/gateway-rw/
+
+components:
+  - ../kustomize-gateway/components/unclassified/

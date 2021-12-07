@@ -2,12 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 # namespace: minio-gateway-standard-ro-system
 
-commonLabels:
-  system: minio-gateway-standard-system
-  # Pick which one!
-  # data.statcan.gc.ca/classification: protected-b
-  # data.statcan.gc.ca/classification: protected-b
-
 resources:
   - ../../base/
 
@@ -15,7 +9,3 @@ configMapGenerator:
 - files:
   - policy.rego
   name: minio-gateway-opa
-
-components:
-  - ../../components/protected-b
-  - ../../components/storage-pool

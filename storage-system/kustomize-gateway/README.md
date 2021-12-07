@@ -49,7 +49,15 @@ Notable aspects of the design:
 - By Design, tokens cannot be used from outside the cluster by users. Outside-of-cluster traffic is only possible through OIDC.
 
 - The Vault versions need the following configurations changes:
+  + Instantiate a gateway via the terraform module.
   + Add to the [MinIO Credential injector](https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/minio-credential-injector/instances.jsonnet)
   + Add to the [Goofys injector](https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/goofys-injector/instances.jsonnet)
   + Add to the [Kubeflow Controller](https://github.com/StatCan/aaw-argocd-manifests/blob/2d827fe546d37fed36bf0974f383b47fe2eff211/daaas-system/kubeflow-controller/deployment.jsonnet#L6-L18) (in the future, the profiles-controller).
-  + Grant Vault access by configuring the terraform for Vault which creates the necessary `mounts` and `roles`. At the moment this is done from within the terraform module that deploys these ArgoCD `Application`s.
+  + Grant Vault access by configuring the terraform for Vault which creates the necessary `config`, `mounts` and `roles` for each MinIO instance. At the moment this is done from within the terraform module that deploys these ArgoCD `Application`s. 
+  + Configure the Vault roles for `profile-configurator` and `boathouse` to allow them to interact with the MinIO instances. This is in the dedicated `vault` terraform repo.
+
+## Special note on Boathouse
+
+At the moment Boathouse can only connect to external URLs (ingresses) because the CSI driver is not within the cluster and cannot use cluster DNS or kube-proxy.
+
+As a result, the current workaround is to have dedicated `{instance}-boathouse.{domain}` ingresses for boathouse to connect to, and then these ingresses will be restricted to only communicate with the Boathouse service. At the moment the ingress is not locked down, but the proposed solution is to have the ingresses live on a private ingressgateway with a fixed IP, and then configure a firewall to allo communication only to/from that ingressgateway and boathouse.

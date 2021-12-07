@@ -1,0 +1,30 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+resources:
+  - role.yaml
+  - serviceaccount.yaml
+  - rolebinding.yaml
+  - aad-refresher.yaml
+
+configMapGenerator:
+  - name: aad-refresher-script
+    files:
+      - script.sh
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+## Create a cluster role prefixed by the namespace,
+## so that it's unique
+#replacements:
+#  - source:
+#      kind: ServiceAccount
+#      name: aad-refresher-sa
+#      fieldPath: metadata.namespace
+#    targets:
+#      - select:
+#          kind: RoleBindings
+#          name: aad-refresher-sa
+#        fieldPaths:
+#          - subjects.[0].namespace

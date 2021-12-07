@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: minio-kubeflow-opa-sync
+  name: kubeflow-opa-sync
 rules:
 - apiGroups:
   - rbac.authorization.k8s.io
@@ -23,7 +23,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: minio-kubeflow-opa-sync
+  name: kubeflow-opa-sync
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -31,10 +31,8 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: kubeflow-opa-sync
-    namespace: minio-gateway-system
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: kubeflow-opa-sync
-  namespace: minio-gateway-system

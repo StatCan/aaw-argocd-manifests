@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: aad-refresher-role
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: ["azure-blob-storage"]
+    verbs: ["get", "patch"]
+  - apiGroups: ["apps", "extensions"]
+    resources: ["deployments"]
+    resourceNames: ["minio-gateway"]
+    verbs: ["get", "patch"]
