@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: allow-postgresql-geomatics
+  namespace: daaas-system
+spec:
+  exportTo:
+    - .
+  hosts:
+    - daaasgeomatics.postgres.database.azure.com
+  ports:
+    - name: tcp-pgsql
+      number: 5432
+      protocol: TCP
+  resolution: DNS
