@@ -7,7 +7,7 @@ local vars = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
       {
          vault_path: "auth/" + std.extVar('targetRevision'),
          oidc_accessor: "auth_oidc_8a2fe3d8",
-         minio_instances: "minio_standard_tenant_1,minio_premium_tenant_1"
+         minio_instances: "minio_standard_tenant_1,minio_premium_tenant_1,fdi_gateway_unclassified"
       }
     else
       {
