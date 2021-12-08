@@ -13,7 +13,6 @@ else
     "instances.json": |||
     {"name": "minio_gateway_standard", "short": "standard", "classification": "unclassified", "externalUrl": "https://minio-gateway-standard-system-boathouse.aaw-dev.cloud.statcan.ca:443"}
     {"name": "minio_gateway_standard_ro", "short": "standard-ro", "classification": "protected-b", "externalUrl": "https://minio-gateway-standard-ro-system-boathouse.aaw-dev.cloud.statcan.ca:443"}
-    {"name": "fdi_gateway_unclassified", "short": "fdi-gateway-external", "classification": "unclassified", "externalUrl": "https://fdi-gateway-external-system-boathouse.aaw-dev.cloud.statcan.ca:443"}
 |||
 };
 
