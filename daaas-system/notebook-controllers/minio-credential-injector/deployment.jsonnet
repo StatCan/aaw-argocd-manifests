@@ -1,4 +1,4 @@
-local image = "k8scc01covidacr.azurecr.io/minio-credential-injector:294522420811ecdf3cc0ccdd66b55bf29fd0ef27";
+local image = "k8scc01covidacr.azurecr.io/minio-credential-injector:4e6f7e5555a31937a7590009b70ae197f52d6ee9";
 
 # Only have dev and prod at the moment
 assert std.member(["aaw-dev-cc-00", "aaw-prod-cc-00", "master"], std.extVar('targetRevision'));
