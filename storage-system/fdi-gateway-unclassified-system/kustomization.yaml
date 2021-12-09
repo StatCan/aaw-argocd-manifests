@@ -12,3 +12,4 @@ resources:
 
 components:
   - ../kustomize-gateway/components/unclassified/
+

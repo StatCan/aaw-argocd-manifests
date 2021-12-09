@@ -28,3 +28,4 @@ patches:
     - op: replace
       path: /metadata/name
       value: minio-gateway-premium-oidc-system-kubeflow-opa-sync
+
