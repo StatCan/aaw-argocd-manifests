@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: inferenceservices-controller
+  namespace: daaas-system
+spec:
+  project: platform
+  destination:
+    namespace: daaas-system
+    name: in-cluster
+  source:
+    repoURL: 'https://statcan.github.io/charts'
+    chart: inferenceservices-controller
+    targetRevision: 0.0.1
+    helm:
+      releaseName: inferenceservices-controller
+      values: |
+        image:
+          repository: k8scc01covidacr.azurecr.io/inferenceservices-controller
+          tag: 2c5bad4ee8e8a2af2ba615949ac8ddd1fd5c5d00
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
