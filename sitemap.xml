@@ -96,6 +96,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://statcan.github.io/aaw-argocd-manifests/daaas-system/serving/inferenceservices-controller/</loc>
+         <lastmod>2021-12-09</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/daaas-system/workflows-cronjob/</loc>
          <lastmod>2021-12-09</lastmod>
          <changefreq>daily</changefreq>
