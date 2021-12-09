@@ -12,3 +12,14 @@ resources:
 
 components:
   - ../kustomize-gateway/components/protected-b/
+
+patchesJson6902:
+- target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: minio-gateway
+  patch: |-
+    - op: add
+      path: "/spec/replicas/"
+      value: 1
