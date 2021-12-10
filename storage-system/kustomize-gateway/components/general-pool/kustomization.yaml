@@ -9,7 +9,7 @@ patchesJson6902:
   patch: |-
     - op: add
       path: "/spec/template/spec/nodeSelector/agentpool"
-      value: system
+      value: general
     - op: add
       path: "/spec/template/spec/tolerations/-"
       value:
