@@ -70,11 +70,11 @@ ingress:
   hostname: storage-system.aaw.cloud.statcan.ca
 resources:
   limits:
-    cpu: "4"
-    memory: 16Gi
+    cpu: "1"
+    memory: 4Gi
   requests:
-    cpu: "4"
-    memory: 16Gi
+    cpu: "1"
+    memory: 4Gi
 # nodeSelector:
 #   agentpool: storage
 # affinity:
