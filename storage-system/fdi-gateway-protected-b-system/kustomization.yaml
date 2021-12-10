@@ -12,4 +12,4 @@ resources:
 
 components:
   - ../kustomize-gateway/components/protected-b/
-
+  - ../kustomize-gateway/components/system-pool/
