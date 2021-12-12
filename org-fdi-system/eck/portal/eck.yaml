@@ -32,8 +32,9 @@ spec:
               memory: 8Gi
               cpu: 1
           env:
+          # The log4j2 option is a mitigation for CVE-2021-44228
           - name: ES_JAVA_OPTS
-            value: "-Xms4g -Xmx4g"
+            value: "-Xms4g -Xmx4g ‐Dlog4j2.formatMsgNoLookups=True"
     volumeClaimTemplates:
       - metadata:
           name: elasticsearch-data
