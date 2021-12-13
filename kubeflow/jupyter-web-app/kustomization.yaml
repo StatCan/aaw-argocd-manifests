@@ -1,0 +1,34 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+patchesStrategicMerge:
+- cluster-role.yaml
+- deployment.yaml
+- deployment_patch.yaml
+
+# using a valueFrom instead of value
+patches:
+- target:
+    kind: Deployment
+    name: jupyter-web-app-deployment
+  patch: |-
+    - op: remove
+      path: /spec/template/spec/containers/0/env/1/value
+    - op: remove
+      path: /spec/template/spec/containers/0/env/2/value
+
+resources:
+- github.com/kubeflow/kubeflow/components/crud-web-apps/jupyter/manifests/overlays/istio?ref=8901e3af3b83f599b89562162cdb2854f57082d3 # tag=v1.3.0-rc.1
+- configs/kubeflow-config.yaml
+
+#resources:
+#- ../../../.cache/manifests/manifests-1.2-branch/stacks/azure/application/jupyter-web-app
+
+configMapGenerator:
+- files:
+  - configs/spawner_ui_config.yaml
+  behavior: replace
+  name: jupyter-web-app-config
+  namespace: kubeflow
+
+generatorOptions:
+  disableNameSuffixHash: true
