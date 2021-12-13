@@ -1,0 +1,102 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  annotations:
+    common.k8s.elastic.co/controller-version: 1.6.0
+    elasticsearch.k8s.elastic.co/initial-master-nodes: daaas-es-nodes-0,daaas-es-nodes-1
+  labels:
+    statcan.gc.ca/migration-keep: "yes"
+  name: daaas
+  namespace: shared-daaas-system
+spec:
+  auth: {}
+  http:
+    service:
+      metadata:
+        creationTimestamp: null
+      spec: {}
+    tls:
+      certificate: {}
+  nodeSets:
+  - config:
+      node.data: true
+      node.ingest: true
+      node.master: true
+    count: 2
+    name: nodes
+    podTemplate:
+      metadata:
+        annotations:
+          sidecar.istio.io/inject: "false"
+        creationTimestamp: null
+      spec:
+        containers:
+        - env:
+          - name: ES_JAVA_OPTS
+            value: -Xms4g -Xmx4g
+          name: elasticsearch
+          resources:
+            limits:
+              cpu: "4"
+              memory: 8Gi
+            requests:
+              cpu: "4"
+              memory: 8Gi
+        tolerations:
+        - effect: NoSchedule
+          key: dedicated
+          operator: Equal
+          value: memory
+    volumeClaimTemplates:
+    - metadata:
+        creationTimestamp: null
+        name: elasticsearch-data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 512Gi
+      status: {}
+  transport:
+    service:
+      metadata:
+        creationTimestamp: null
+      spec: {}
+    tls:
+      certificate: {}
+  updateStrategy:
+    changeBudget: {}
+  version: 7.16.1
+---
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  annotations:
+    association.k8s.elastic.co/es-conf: '{"authSecretName":"daaas-kibana-user","authSecretKey":"shared-daaas-system-daaas-kibana-user","caCertProvided":true,"caSecretName":"daaas-kb-es-ca","url":"https://daaas-es-http.shared-daaas-system.svc:9200","version":"7.9.3"}'
+    common.k8s.elastic.co/controller-version: 1.6.0
+  labels:
+    statcan.gc.ca/migration-keep: "yes"
+  name: daaas
+  namespace: shared-daaas-system
+spec:
+  count: 1
+  elasticsearchRef:
+    name: daaas
+  http:
+    service:
+      metadata:
+        creationTimestamp: null
+      spec: {}
+    tls:
+      certificate: {}
+  podTemplate:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      creationTimestamp: null
+    spec:
+      containers: null
+  secureSettings:
+  - secretName: daaas-kibana-secrets
+  version: 7.16.1
