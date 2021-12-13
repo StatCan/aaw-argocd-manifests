@@ -63,3 +63,8 @@ spec:
   podTemplate:
     spec:
       automountServiceAccountToken: true
+      containers:
+      - name: kibana
+        env:
+        - name: ES_JAVA_OPTS
+          value: "‐Dlog4j2.formatMsgNoLookups=True"
