@@ -2,8 +2,8 @@ local vars = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
       {
          vault_path: "auth/aaw-prod-cc-00",
          oidc_accessor: "auth_oidc_8a2fe3d8",
-         buckets: "minio_standard_tenant_1,minio_premium_tenant_1",
-         mounts: "minio_standard_tenant_1,minio_premium_tenant_1,fdi_gateway_unclassified"
+         buckets: "minio_gateway_standard,minio_gateway_premium,minio_gateway_protected_b",
+         mounts: "minio_gateway_standard,minio_gateway_standard_ro,minio_gateway_premium,minio_gateway_premium_ro,minio_gateway_protected_b,fdi_gateway_unclassified,fdi_gateway_protected_b"
       }
     else
       {
