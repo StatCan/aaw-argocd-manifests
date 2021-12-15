@@ -6,7 +6,7 @@ global:
     existingSecret: minio-gateway-secret
 gateway:
   enabled: true
-  replicaCount: 1
+  replicaCount: 3
   type: azure
   updateStrategy:
     type: RollingUpdate
