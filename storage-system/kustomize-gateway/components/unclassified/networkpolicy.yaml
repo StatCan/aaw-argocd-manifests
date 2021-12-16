@@ -14,6 +14,9 @@ spec:
             operator: NotIn
             values:
               - protected-b
-  podSelector: {}
+  podSelector:
+    matchLabels:
+      # This matches minio, not etcd or opa
+      app.kubernetes.io/instance: minio-gateway
   policyTypes:
   - Ingress
