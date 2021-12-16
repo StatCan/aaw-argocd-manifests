@@ -2,137 +2,137 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/architecture/00-introduction/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/architecture/01-limitations/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/architecture/02-azure/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/architecture/03-classification/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/architecture/04-storage/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/architecture/05-network/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/architecture/06-kubernetes/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/architecture/07-kubeflow/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/architecture/08-appendix-a/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/daaas-system/namespace-controller/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/daaas-system/network-policies/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/daaas-system/notebook-controllers/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/daaas-system/notebook-controllers/goofys-injector/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/daaas-system/notebook-controllers/minio-credential-injector/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/daaas-system/notebook-controllers/notebook-auth-policy-checker/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/daaas-system/profile-controllers/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/daaas-system/profile-controllers/kubeflow-controller/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/daaas-system/profile-controllers/profiles-controller/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/daaas-system/serving/inferenceservices-controller/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/daaas-system/workflows-cronjob/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/statcan-system/gatekeeper/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/statcan-system/sidecar-terminator/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/statcan-system/toleration-injector/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/storage-system/kustomize-gateway/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/storage-system/kustomize-gateway/base/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/storage-system/kustomize-gateway/overlays/gateway-bundle/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
