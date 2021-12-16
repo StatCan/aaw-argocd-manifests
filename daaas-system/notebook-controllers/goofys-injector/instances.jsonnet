@@ -6,8 +6,6 @@ local instances = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
     "instances.json": |||
     {"name": "minio_standard_tenant_1", "short": "standard", "classification": "unclassified", "externalUrl": "https://minio-gateway-standard-system-boathouse.aaw.cloud.statcan.ca:443"}
     {"name": "minio_premium_tenant_1", "short": "premium", "classification": "unclassified", "externalUrl": "https://minio-gateway-premium-system-boathouse.aaw.cloud.statcan.ca:443"}
-    {"name": "minio_gateway_standard", "short": "gateway-standard", "classification": "unclassified", "externalUrl": "https://minio-gateway-standard-system-boathouse.aaw.cloud.statcan.ca:443"}
-    {"name": "minio_gateway_premium", "short": "gateway-premium", "classification": "unclassified", "externalUrl": "https://minio-gateway-premium-system-boathouse.aaw.cloud.statcan.ca:443"}
 |||
 }
 else
