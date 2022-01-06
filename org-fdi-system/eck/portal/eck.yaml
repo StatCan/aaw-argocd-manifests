@@ -4,9 +4,9 @@ metadata:
   name: portal
   namespace: org-fdi-system
 spec:
-  version: 7.16.1
+  version: 7.16.2
   http:
-    tls: 
+    tls:
       selfSignedCertificate:
         disabled: true
   nodeSets:
@@ -21,10 +21,10 @@ spec:
       metadata:
         annotations:
           traffic.sidecar.istio.io/includeInboundPorts: "*"
-          traffic.sidecar.istio.io/excludeOutboundPorts: "9300" 
+          traffic.sidecar.istio.io/excludeOutboundPorts: "9300"
           traffic.sidecar.istio.io/excludeInboundPorts: "9300"
       spec:
-        automountServiceAccountToken: true 
+        automountServiceAccountToken: true
         containers:
         - name: elasticsearch
           resources:
@@ -52,9 +52,9 @@ metadata:
   name: portal
   namespace: org-fdi-system
 spec:
-  version: 7.16.1
+  version: 7.16.2
   http:
-    tls: 
+    tls:
       selfSignedCertificate:
         disabled: true
   count: 1
