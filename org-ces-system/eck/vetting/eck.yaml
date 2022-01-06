@@ -4,7 +4,7 @@ metadata:
   name: vetting
   namespace: org-ces-system
 spec:
-  version: 7.16.1
+  version: 7.16.2
   http:
     tls:
       selfSignedCertificate:
@@ -52,7 +52,7 @@ metadata:
   name: vetting
   namespace: org-ces-system
 spec:
-  version: 7.16.1
+  version: 7.16.2
   http:
     tls:
       selfSignedCertificate:

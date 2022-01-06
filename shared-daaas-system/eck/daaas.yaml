@@ -67,7 +67,7 @@ spec:
       certificate: {}
   updateStrategy:
     changeBudget: {}
-  version: 7.16.1
+  version: 7.16.2
 ---
 apiVersion: kibana.k8s.elastic.co/v1
 kind: Kibana
@@ -99,4 +99,4 @@ spec:
       containers: null
   secureSettings:
   - secretName: daaas-kibana-secrets
-  version: 7.16.1
+  version: 7.16.2
