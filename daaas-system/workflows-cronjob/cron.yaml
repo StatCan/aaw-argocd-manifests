@@ -48,4 +48,4 @@ spec:
           containers:
           - name: argocli
             image: argoproj/argocli:latest
-            args: ["delete", "--all-namespaces" , "-l" , "scheduledworkflows.kubeflow.org/isOwnedByScheduledWorkflow=true", "--older" ,"5d"]
+            args: ["delete", "--all-namespaces" , "-l" , "workflows.argoproj.io/completed=true", "--older" ,"5d"]
