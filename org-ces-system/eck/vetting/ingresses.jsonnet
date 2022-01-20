@@ -26,8 +26,12 @@ local domain = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
           "paths": [
             {
               "backend": {
-                "serviceName": "vetting-kb-http",
-                "servicePort": 5601
+                "service": {
+                  "name": "vetting-kb-http",
+                  "port": {
+                    "number": 5601
+                  }
+                }
               },
               "path": "/*",
               "pathType": "ImplementationSpecific"
