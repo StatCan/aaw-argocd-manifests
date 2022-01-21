@@ -6,13 +6,13 @@ global:
     existingSecret: minio-gateway-secret
 gateway:
   enabled: true
-  replicaCount: 3
+  replicaCount: 2
   type: azure
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: "25%"
-      maxUnavailable: "25%"
+      maxSurge: "50%"
+      maxUnavailable: "50%"
   # autoscaling:
   #   enabled: true
   #   minReplicas: "2"

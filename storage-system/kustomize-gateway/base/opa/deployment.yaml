@@ -6,15 +6,15 @@ metadata:
   labels:
     app.kubernetes.io/name: minio-gateway-opa
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: minio-gateway-opa
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
+      maxSurge: 50%
+      maxUnavailable: 50%
   template:
     metadata:
       labels:
