@@ -29,3 +29,7 @@ patches:
       path: /metadata/name
       value: minio-gateway-premium-oidc-system-kubeflow-opa-sync
 
+images:
+- name: k8scc01covidacr.azurecr.io/minio:2021.5.27-debian-10-r8
+  newName: k8scc01covidacr.azurecr.io/minio/minio
+  newTag: cdb08ebe
