@@ -26,7 +26,7 @@ This version does not use Vault, but instead uses OpenID Connect with Azure Acti
 
 The `bundle` version refers to [OPA Bundles](https://www.openpolicyagent.org/docs/v0.12.2/bundles/), the use case here is when we are providing access to data within the cluster, but the allowed users and rules around the data is not determined by us. In this case, we are working with the FAIR Data Infrastructure team, who is responsible for the data and governance over it.
 
-### AAD Pod Identity
+## components/aad-pod-identity
 
 For the MinIO Gateway use case with the FDI team, storage accounts are managed by the FDI team. MinIO Gateway needs a storage account name and key to access buckets; however, it would be a security risk to manually add storage account credentials as a CI/CD variable or a secret. AAD Pod Identity was our solution to this.
 
@@ -55,11 +55,15 @@ Notable aspects of the design:
 
 - The Vault versions need the following configurations changes:
   - Instantiate a gateway via the terraform module.
-  - Add to the [MinIO Credential injector](https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/minio-credential-injector/instances.jsonnet)
-  - Add to the [Goofys injector](https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/goofys-injector/instances.jsonnet)
-  - Add to the [Kubeflow Controller](https://github.com/StatCan/aaw-argocd-manifests/blob/2d827fe546d37fed36bf0974f383b47fe2eff211/daaas-system/kubeflow-controller/deployment.jsonnet#L6-L18) (in the future, the profiles-controller).
+  - Add to the [MinIO Credential injector](#minio-credential-injector)
+  - Add to the [Goofys injector](#goofys-injector)
+  - Add to the [Kubeflow Controller](#profile-controller)
   - Grant Vault access by configuring the terraform for Vault which creates the necessary `config`, `mounts` and `roles` for each MinIO instance. At the moment this is done from within the terraform module that deploys these ArgoCD `Application`s.
   - Configure the Vault roles for `profile-configurator` and `boathouse` to allow them to interact with the MinIO instances. This is in the dedicated `vault` terraform repo.
+
+## FDI MinIO Integration Architecture
+
+![fdi_diagram.png](fdi_diagram.png)
 
 ## Special note on Boathouse
 
@@ -89,3 +93,23 @@ data:
     rewrite name minio-gateway-standard-ro-system-boathouse.aaw.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
     rewrite name minio-gateway-premium-ro-system-boathouse.aaw.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
 ```
+
+# minio-credential-injector
+
+The [minio credential injector](https://github.com/StatCan/aaw-minio-credential-injector) is a mutating webhook that uses Vault in order to inject MinIO crendentials into notebooks and argo workflows.
+
+You would need to add the new MinIO gateway to the list of instances in the [ConfigMap](https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/notebook-controllers/minio-credential-injector/instances.jsonnet) used by the [aaw-minio-credential deployment](https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/notebook-controllers/minio-credential-injector/deployment.jsonnet).
+
+# goofys-injector
+
+The [goofys-injector](https://github.com/StatCan/aaw-goofys-injector) injects MinIO volume configuration into Jupyter Notebook pods. It mounts buckets as file systems in a Jupyter Notebook.
+
+You would need to add the new MinIO gateway to the list of instances in the [ConfigMap](https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/notebook-controllers/goofys-injector/instances.jsonnet) used by the [goofys-injector deployment](https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/notebook-controllers/goofys-injector/manifest.yaml).
+
+# profile-controller
+
+The [profile-controller](https://github.com/StatCan/aaw-kubeflow-controller) is a Kubeflow controller which sets PodDefaults and Vault policies for all Profiles.
+
+You would need to add the new MinIO gateway to the list of `minio_instances` in the [kubeflow-controller deployment](https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/profile-controllers/kubeflow-controller/deployment.jsonnet).
+
+> The kubeflow-controller was the original mechanism for adding per-profile resources across namespaces. Its moving to a refactored design, the profiles-controller, which factors the controllers into separate modules which execute independently. The monolithic kubeflow-controller will eventually be removed.
