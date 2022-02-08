@@ -17,7 +17,11 @@ local vars = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
 local values = |||
   image:
     repository: k8scc01covidacr.azurecr.io/profiles-controller
-    tag: a2cae656cdad82ef00d8eaaa9c2b72da22109d26
+    tag: ac1d9f01e47ff57f9348cd9dd8e1d64e67f8a97f
+
+  extraEnv:
+  - name: REQUEUE_TIME
+    value: "5"
 
   vaultagent:
     enabled: true
@@ -76,7 +80,7 @@ local values = |||
     "source": {
       "repoURL": "https://statcan.github.io/charts",
       "chart": "profiles-controller",
-      "targetRevision": "0.1.9",
+      "targetRevision": "0.1.10",
       "helm": {
         "releaseName": "profiles-controller",
         "values": values
