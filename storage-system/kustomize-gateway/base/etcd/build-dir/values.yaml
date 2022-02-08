@@ -1,0 +1,47 @@
+nameOverride: "minio-gateway"
+commonLabels:
+  app: minio-gateway-etcd
+auth:
+  token:
+    type: simple
+  rbac:
+    create: false
+    enabled: false
+replicaCount: 1
+initialClusterState: new
+persistence:
+  enabled: false
+resources:
+  limits:
+    cpu: "2"
+    memory: 8Gi
+  requests:
+    cpu: "2"
+    memory: 8Gi
+# nodeSelector:
+#   agentpool: storage
+# affinity:
+#   podAntiAffinity:
+#     preferredDuringSchedulingIgnoredDuringExecution:
+#     - podAffinityTerm:
+#         labelSelector:
+#           matchExpressions:
+#           - key: app
+#             operator: In
+#             values:
+#             - minio-gateway-etcd
+#         topologyKey: kubernetes.io/hostname
+#       weight: 100
+# - effect: NoSchedule
+#   key: node.statcan.gc.ca/purpose
+#   operator: Equal
+#   value: system
+# - effect: NoSchedule
+#   key: node.statcan.gc.ca/use
+#   operator: Equal
+#   value: storage
+# # - effect: NoSchedule
+# #   key: data.statcan.gc.ca/classification
+# #   operator: Equal
+# #   value: protected-b
+

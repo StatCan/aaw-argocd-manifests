@@ -12,3 +12,31 @@ resources:
 
 components:
   - ../kustomize-gateway/components/unclassified/
+
+# s~\.minio\.~.${namespace}.~g
+patchesStrategicMerge:
+- |-
+   apiVersion: apps/v1
+   kind: StatefulSet
+   metadata:
+     name: minio-gateway-etcd
+   spec:
+     template:
+       spec:
+         affinity:
+           podAntiAffinity: {}
+         containers:
+           - name: etcd
+             env:
+               - name: MY_POD_NAME
+                 valueFrom:
+                   fieldRef:
+                     fieldPath: metadata.name
+               - name: ETCD_ADVERTISE_CLIENT_URLS
+                 value: http://$(MY_POD_NAME).minio-gateway-etcd-headless.minio-gateway-standard-system.svc.cluster.local:2379,http://minio-gateway-etcd.minio-gateway-standard-system.svc.cluster.local:2379
+
+               - name: ETCD_INITIAL_ADVERTISE_PEER_URLS
+                 value: "http://$(MY_POD_NAME).minio-gateway-etcd-headless.minio-gateway-standard-system.svc.cluster.local:2380"
+
+               - name: ETCD_INITIAL_CLUSTER
+                 value: "minio-gateway-etcd-0=http://minio-gateway-etcd-0.minio-gateway-etcd-headless.minio-gateway-standard-system.svc.cluster.local:2380"
