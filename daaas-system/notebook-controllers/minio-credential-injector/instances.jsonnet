@@ -18,8 +18,7 @@ local instances = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
 else
 {
     "instances.json": |||
-    {"name": "minio_standard", "alias": "", "classification": "unclassified", "serviceUrl": "http://minio.minio-standard-system:443", "externalUrl": "https://minio-standard.aaw-dev.cloud.statcan.ca"}
-    {"name": "minio_protected_b", "alias": "", "classification": "protected-b", "serviceUrl": "http://minio.minio-protected-b-system:443", "externalUrl": ""}
+    {"name": "minio_gateway_protected_b", "alias": "", "classification": "protected-b", "serviceUrl": "http://minio-gateway.minio-gateway-protected-b-system:9000", "externalUrl": ""}
     {"name": "minio_gateway_standard", "alias": "minio-standard-tenant-1", "classification": "unclassified", "serviceUrl": "http://minio-gateway.minio-gateway-standard-system:9000", "externalUrl": "https://minio-gateway-standard-system-boathouse.aaw-dev.cloud.statcan.ca"}
     {"name": "minio_gateway_standard", "alias": "", "classification": "unclassified", "serviceUrl": "http://minio-gateway.minio-gateway-standard-system:9000", "externalUrl": "https://minio-gateway-standard-system-boathouse.aaw-dev.cloud.statcan.ca"}
     {"name": "minio_gateway_standard_ro", "alias": "", "classification": "protected-b", "serviceUrl": "http://minio-gateway.minio-gateway-standard-ro-system:9000", "externalUrl": "https://minio-gateway-standard-ro-system-boathouse.aaw-dev.cloud.statcan.ca"}
