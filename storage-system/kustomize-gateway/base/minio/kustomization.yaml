@@ -3,3 +3,26 @@ kind: Kustomization
 
 resources:
 - manifest.yaml
+
+patchesStrategicMerge:
+- |-
+   apiVersion: apps/v1
+   kind: Deployment
+   metadata:
+     name: minio-gateway
+   spec:
+     template:
+       spec:
+         containers:
+         - name: minio
+           env:
+           - name: MINIO_ROOT_USER
+             valueFrom:
+               secretKeyRef:
+                 name: minio-gateway-secret
+                 key: access-key
+           - name: MINIO_ROOT_PASSWORD
+             valueFrom:
+               secretKeyRef:
+                 name: minio-gateway-secret
+                 key: secret-key

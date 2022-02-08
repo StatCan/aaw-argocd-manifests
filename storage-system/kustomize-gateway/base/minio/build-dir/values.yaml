@@ -29,16 +29,6 @@ extraEnvVars:
     value: http://minio-gateway-etcd:2379/
   - name: MINIO_IAM_OPA_URL
     value: http://minio-gateway-opa:8181/v1/data/httpapi/authz
-  - name: AWS_ACCESS_KEY_ID
-    valueFrom:
-      secretKeyRef:
-        name: spaces-secret
-        key: accessKey
-  - name: AWS_SECRET_ACCESS_KEY
-    valueFrom:
-      secretKeyRef:
-        name: spaces-secret
-        key: secretKey
 
 extraVolumes:
 - name: minio-sh
