@@ -40,3 +40,19 @@ patchesStrategicMerge:
 
                - name: ETCD_INITIAL_CLUSTER
                  value: "minio-gateway-etcd-0=http://minio-gateway-etcd-0.minio-gateway-etcd-headless.minio-gateway-standard-system.svc.cluster.local:2380"
+
+- |-
+   apiVersion: apps/v1
+   kind: Deployment
+   metadata:
+     name: minio-gateway
+   spec:
+     template:
+       spec:
+         containers:
+         - name: minio
+           env:
+           - name: MINIO_SERVER_URL
+             value: http://minio-gateway.minio-gateway-standard-system:9000
+           #- name: MINIO_BROWSER_REDIRECT_URL
+           #  value: http://minio-gateway.minio-gateway-standard-system:9001
