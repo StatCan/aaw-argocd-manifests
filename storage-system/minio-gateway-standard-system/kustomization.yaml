@@ -53,6 +53,6 @@ patchesStrategicMerge:
          - name: minio
            env:
            - name: MINIO_SERVER_URL
-             value: http://minio-gateway.minio-gateway-standard-system:9000
+             value: http://minio-gateway-api.minio-gateway-standard-system
            - name: MINIO_BROWSER_REDIRECT_URL
-             value: http://minio-gateway.minio-gateway-standard-system:9001
+             value: http://minio-gateway-console.minio-gateway-standard-system
