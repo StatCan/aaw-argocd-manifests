@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
 - manifest.yaml
+- services.yaml
 
 patchesStrategicMerge:
 - |-

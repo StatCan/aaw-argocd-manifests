@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: minio-gateway
+    app.kubernetes.io/instance: minio-gateway
+    app.kubernetes.io/name: minio-gateway-api
+  name: minio-gateway-api
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 9000
+  selector:
+    app.kubernetes.io/instance: minio-gateway
+    app.kubernetes.io/name: minio-gateway
+    instance: minio-gateway
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: minio-gateway
+    app.kubernetes.io/instance: minio-gateway
+    app.kubernetes.io/name: minio-gateway-api
+  name: minio-gateway-console
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 9001
+  selector:
+    app.kubernetes.io/instance: minio-gateway
+    app.kubernetes.io/name: minio-gateway
+    instance: minio-gateway
