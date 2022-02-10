@@ -55,4 +55,4 @@ patchesStrategicMerge:
            - name: MINIO_SERVER_URL
              value: https://minio-gateway-standard-system-boathouse.aaw-dev.cloud.statcan.ca
            - name: MINIO_BROWSER_REDIRECT_URL
-             value: https://console.minio-gateway-standard-system-boathouse.aaw-dev.cloud.statcan.ca
+             value: https://console-minio-gateway-standard-system-boathouse.aaw-dev.cloud.statcan.ca
