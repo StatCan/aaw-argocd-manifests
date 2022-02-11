@@ -25,8 +25,8 @@ gateway:
       storageAccountKeyExistingSecret: "azure-blob-storage"
       storageAccountKeyExistingSecretKey: "storageAccountKey"
 extraEnvVars:
-  - name: MINIO_ETCD_ENDPOINTS
-    value: http://minio-gateway-etcd:2379/
+#  - name: MINIO_ETCD_ENDPOINTS
+#    value: http://minio-gateway-etcd:2379/
   - name: MINIO_IAM_OPA_URL
     value: http://minio-gateway-opa:8181/v1/data/httpapi/authz
 
