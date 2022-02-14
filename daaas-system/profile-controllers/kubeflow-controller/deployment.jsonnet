@@ -1,4 +1,4 @@
-local image = "k8scc01covidacr.azurecr.io/kubeflow-controller:74e4cd6479292f33eca209f28f295c266528b678";
+local image = "k8scc01covidacr.azurecr.io/kubeflow-controller:8ba4b2e2b917bf708cca917fe6eeac56f22f78c0";
 
 assert std.member(["aaw-dev-cc-00", "aaw-prod-cc-00", "master"], std.extVar('targetRevision'));
 
@@ -46,7 +46,7 @@ local config = |||
 ||| % {mount_path: vars.vault_path};
 
 
-    
+
 [
     {
       apiVersion: "v1",
