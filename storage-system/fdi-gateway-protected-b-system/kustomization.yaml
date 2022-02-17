@@ -13,11 +13,3 @@ resources:
 components:
   - ../kustomize-gateway/components/protected-b/
   # - ../kustomize-gateway/components/general-pool/
-
-replicas:
-- name: minio-gateway
-  count: 0
-- name: minio-gateway-etcd
-  count: 0
-- name: minio-gateway-opa
-  count: 0
