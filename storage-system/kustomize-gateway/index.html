@@ -1406,6 +1406,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#componentsaad-pod-identity" class="md-nav__link">
+    components/aad-pod-identity
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1420,7 +1427,7 @@
                 
                 
                 <h1 id="minio-gateway">MinIO Gateway</h1>
-<p>Each MinIO Gateway consists of MinIO + OPA + Etcd, with MinIO running in gateway mode, <code>etcd</code> acting as a cachefor the credentials, and OPA doing the policy enforcement. All except the <code>OIDC</code> flavour use <code>Vault</code> and the vault-minio-plugin for managing access/secret keys. There are four flavours of the gateway:</p>
+<p>Each MinIO Gateway consists of MinIO + OPA + Etcd, with MinIO running in gateway mode, <code>etcd</code> acting as a cache for the credentials, and OPA doing the policy enforcement. All instances except <code>OIDC</code> use <code>Vault</code> and the vault-minio-plugin for managing access/secret keys. There are four flavours of the gateway:</p>
 <p><strong>Note: Only the OIDC version will have an Ingress. See notes below</strong></p>
 <h2 id="overlaysgateway-rw-read-write-vault-version">overlays/gateway-rw (Read-Write Vault Version)</h2>
 <p>This version is the stock version, with OPA configuration to allow users to both read and write from MinIO.</p>
@@ -1430,16 +1437,23 @@
 <p>The typical use-case here is to provide a read-only mirror of the data. For example, unclassified data can be made available as a read-only system to the protected-b notebooks, to allow use-cases like webscraping.</p>
 <p><strong>Note: This system will not have an Ingress object.</strong> This will only be accessed by an internal URL, which prevents tokens from being used from outside the cluster.</p>
 <h2 id="overlaysgateway-oidc-read-write-oidc-version">overlays/gateway-oidc (Read-Write OIDC Version)</h2>
-<p>This version does not use Vault, but instead uses the <a href="https://github.com/StatCan/aaw-kubeflow-opa-sync"><code>kubeflow-opa-sync</code></a> to get RoleBindings in the namespace. A user can connect to a bucket over OIDC if their username is assigned a contributor role in the namespace.</p>
+<p>This version does not use Vault, but instead uses OpenID Connect with Azure Active Directory to login and <a href="https://github.com/StatCan/aaw-kubeflow-opa-sync"><code>kubeflow-opa-sync</code></a> to get RoleBindings in the namespace. A user can connect to a bucket over OIDC if their username is assigned a contributor role in the namespace.</p>
 <h2 id="overlaysgateway-bundle-remotely-configured-vault-version">overlays/gateway-bundle (Remotely Configured Vault Version)</h2>
 <p>The <code>bundle</code> version refers to <a href="https://www.openpolicyagent.org/docs/v0.12.2/bundles/">OPA Bundles</a>, the use case here is when we are providing access to data within the cluster, but the allowed users and rules around the data is not determined by us. In this case, we are working with the FAIR Data Infrastructure team, who is responsible for the data and governance over it.</p>
+<h2 id="componentsaad-pod-identity">components/aad-pod-identity</h2>
+<p>For the MinIO Gateway use case with the FDI team, storage accounts are managed by the FDI team. MinIO Gateway needs a storage account name and key to access buckets; however, it would be a security risk to manually add storage account credentials as a CI/CD variable or a secret. AAD Pod Identity was our solution to this.</p>
+<p>AAD Pod Identity allows a pod to assume a user-assigned identity. This user assigned identity is given permissions to get the storage account key. The pod writes the key to a secret, and MinIO Gateway gets the credentials from the secret.</p>
 <h1 id="architecture">Architecture</h1>
 <p>Most aspects of the architecture are captured in the diagram below (which pictures a Vault version plus and OIDC version). Note that each MinIO gateway instance resides in a different namespace, mostly to avoid name conflicts as well as to be able to apply network policies at the namespace level.</p>
 <p><img alt="architecture.jpg" src="architecture.jpg" /></p>
 <p>Notable aspects of the design:</p>
 <ul>
-<li>All instances live in their own namespace.</li>
-<li>This is to simplify name conflicts and network policies</li>
+<li>
+<p>All instances live in their own namespace.</p>
+</li>
+<li>
+<p>This is to simplify name conflicts and network policies</p>
+</li>
 <li>Expected use is to use the <code>data.statcan.gc.ca/classification</code> label on the namespace to restrict connections.</li>
 <li>Only the <code>minio-gateway:9000</code> service in the namespace should be reachable by notebooks.</li>
 <li>
@@ -1458,17 +1472,19 @@
 <p>The Vault versions need the following configurations changes:</p>
 </li>
 <li>Instantiate a gateway via the terraform module.</li>
-<li>Add to the <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/minio-credential-injector/instances.jsonnet">MinIO Credential injector</a></li>
-<li>Add to the <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/goofys-injector/instances.jsonnet">Goofys injector</a></li>
-<li>Add to the <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/2d827fe546d37fed36bf0974f383b47fe2eff211/daaas-system/kubeflow-controller/deployment.jsonnet#L6-L18">Kubeflow Controller</a> (in the future, the profiles-controller).</li>
-<li>Grant Vault access by configuring the terraform for Vault which creates the necessary <code>config</code>, <code>mounts</code> and <code>roles</code> for each MinIO instance. At the moment this is done from within the terraform module that deploys these ArgoCD <code>Application</code>s. </li>
+<li>Add to the <a href="#minio-credential-injector">MinIO Credential injector</a></li>
+<li>Add to the <a href="#goofys-injector">Goofys injector</a></li>
+<li>Add to the <a href="#profile-controller">Kubeflow Controller</a></li>
+<li>Grant Vault access by configuring the terraform for Vault which creates the necessary <code>config</code>, <code>mounts</code> and <code>roles</code> for each MinIO instance. At the moment this is done from within the terraform module that deploys these ArgoCD <code>Application</code>s.</li>
 <li>Configure the Vault roles for <code>profile-configurator</code> and <code>boathouse</code> to allow them to interact with the MinIO instances. This is in the dedicated <code>vault</code> terraform repo.</li>
 </ul>
+<h2 id="fdi-minio-integration-architecture">FDI MinIO Integration Architecture</h2>
+<p><img alt="fdi_diagram.png" src="fdi_diagram.png" /></p>
 <h2 id="special-note-on-boathouse">Special note on Boathouse</h2>
 <p>At the moment Boathouse can only connect to external URLs (ingresses) because the CSI driver is not within the cluster and cannot use cluster DNS or kube-proxy.</p>
 <p>As a result, the current workaround is to have dedicated <code>{instance}-boathouse.{domain}</code> ingresses for boathouse to connect to, and then these ingresses will be restricted to only communicate with the Boathouse service. At the moment the ingress is not locked down, but the proposed solution is to have the ingresses live on a private ingressgateway with a fixed IP, and then configure a firewall to allo communication only to/from that ingressgateway and boathouse.</p>
 <h1 id="using-external-addresses-within-the-cluster">Using external addresses within the cluster</h1>
-<p>Because of the <code>trafficPolicy: Local</code> setting on the cluster, commands like <code>curl https://kubeflow.{domain}</code> actually fail within the cluster (unless you happen to initiate the request from the same node). This is side-stepped by configuring CoreDNS to bypass this, by routing the requests to the ingress-gateway, which then manages the traffic. </p>
+<p>Because of the <code>trafficPolicy: Local</code> setting on the cluster, commands like <code>curl https://kubeflow.{domain}</code> actually fail within the cluster (unless you happen to initiate the request from the same node). This is side-stepped by configuring CoreDNS to bypass this, by routing the requests to the ingress-gateway, which then manages the traffic.</p>
 <pre><code class="language-yaml">apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -1486,6 +1502,18 @@ data:
     rewrite name minio-gateway-standard-ro-system-boathouse.aaw.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
     rewrite name minio-gateway-premium-ro-system-boathouse.aaw.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
 </code></pre>
+<h1 id="minio-credential-injector">minio-credential-injector</h1>
+<p>The <a href="https://github.com/StatCan/aaw-minio-credential-injector">minio credential injector</a> is a mutating webhook that uses Vault in order to inject MinIO crendentials into notebooks and argo workflows.</p>
+<p>You would need to add the new MinIO gateway to the list of instances in the <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/notebook-controllers/minio-credential-injector/instances.jsonnet">ConfigMap</a> used by the <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/notebook-controllers/minio-credential-injector/deployment.jsonnet">aaw-minio-credential deployment</a>.</p>
+<h1 id="goofys-injector">goofys-injector</h1>
+<p>The <a href="https://github.com/StatCan/aaw-goofys-injector">goofys-injector</a> injects MinIO volume configuration into Jupyter Notebook pods. It mounts buckets as file systems in a Jupyter Notebook.</p>
+<p>You would need to add the new MinIO gateway to the list of instances in the <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/notebook-controllers/goofys-injector/instances.jsonnet">ConfigMap</a> used by the <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/notebook-controllers/goofys-injector/manifest.yaml">goofys-injector deployment</a>.</p>
+<h1 id="profile-controller">profile-controller</h1>
+<p>The <a href="https://github.com/StatCan/aaw-kubeflow-controller">profile-controller</a> is a Kubeflow controller which sets PodDefaults and Vault policies for all Profiles.</p>
+<p>You would need to add the new MinIO gateway to the list of <code>minio_instances</code> in the <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/profile-controllers/kubeflow-controller/deployment.jsonnet">kubeflow-controller deployment</a>.</p>
+<blockquote>
+<p>The kubeflow-controller was the original mechanism for adding per-profile resources across namespaces. Its moving to a refactored design, the profiles-controller, which factors the controllers into separate modules which execute independently. The monolithic kubeflow-controller will eventually be removed.</p>
+</blockquote>
                 
               
               
