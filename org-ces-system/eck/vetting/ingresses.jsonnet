@@ -8,38 +8,78 @@ local domain = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
   ;
 
 [
-{
-  "apiVersion": "networking.k8s.io/v1",
-  "kind": "Ingress",
-  "metadata": {
-    "name": "kibana-ingress",
-    "namespace": "org-ces-system",
-    "annotations": {
-      "kubernetes.io/ingress.class": "istio"
+  {
+    "apiVersion": "networking.istio.io/v1beta1",
+    "kind": "VirtualService",
+    "metadata": {
+      "name": "elastic-ingress",
+      "namespace": "org-ces-system"
     },
-  },
-  "spec": {
-    "rules": [
-      {
-        "host": "org-ces-system-kibana." + domain,
-        "http": {
-          "paths": [
+    "spec": {
+      "gateways": [
+        "istio-system/istio-ingressgateway-protected-b"
+      ],
+      "hosts": [
+        "org-ces-system-elastic." + domain
+      ],
+      "http": [
+        {
+          "match": [
             {
-              "backend": {
-                "service": {
-                  "name": "vetting-kb-http",
-                  "port": {
-                    "number": 5601
-                  }
-                }
-              },
-              "path": "/*",
-              "pathType": "ImplementationSpecific"
+              "uri": {
+                "prefix": "/"
+              }
             }
           ],
+          "route": [
+            {
+              "destination": {
+                "host": "vetting-es-http.org-ces-system.svc.cluster.local",
+                "port": {
+                  "number": 9200
+                }
+              }
+            }
+          ]
         }
-      }
-    ]
+      ]
+    }
+  },
+  {
+    "apiVersion": "networking.istio.io/v1beta1",
+    "kind": "VirtualService",
+    "metadata": {
+      "name": "kibana-ingress",
+      "namespace": "org-ces-system"
+    },
+    "spec": {
+      "gateways": [
+        "istio-system/authenticated"
+      ],
+      "hosts": [
+        "org-ces-system-kibana." + domain
+      ],
+      "http": [
+        {
+          "match": [
+            {
+              "uri": {
+                "prefix": "/"
+              }
+            }
+          ],
+          "route": [
+            {
+              "destination": {
+                "host": "vetting-kb-http.org-ces-system.svc.cluster.local",
+                "port": {
+                  "number": 5601
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
   }
-}
 ]
