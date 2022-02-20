@@ -1,5 +1,5 @@
 # Only have dev and prod at the moment
-assert std.member(["aaw-dev-cc-00", "aaw-prod-cc-00"], std.extVar('targetRevision'));
+assert std.member(["aaw-dev-cc-00", "aaw-prod-cc-00", "feat-kubeflow-manifests"], std.extVar('targetRevision'));
 
 {
   apiVersion: "argoproj.io/v1alpha1",
@@ -14,96 +14,78 @@ assert std.member(["aaw-dev-cc-00", "aaw-prod-cc-00"], std.extVar('targetRevisio
         list: {
           elements: [
             {
-              app: "kubeflow-namespace",
-              folder: "common",
+              app: "common/kubeflow-namespace",
               overlay: "base"
-              # Example, if you need a dev/prod split, use
-              # > overlay: "overlays/" + std.extVar('targetRevision')
-              # and have a dev and prod overlay in aaw-kubeflow-manifests.
             },
+            # Example, if you need a dev/prod split, use
+            # > overlay: "overlays/" + std.extVar('targetRevision')
+            # and have a dev and prod overlay in aaw-kubeflow-manifests.
             {
-              app: "kubeflow-roles",
-              folder: "common",
+              app: "common/kubeflow-roles",
               overlay: "base"
             },
             {
-              app: "oidc-authservice",
-              folder: "common",
+              app: "common/oidc-authservice",
               overlay: "base"
             },
             {
-              app: "knative",
-              folder: "common",
+              app: "common/knative",
               overlay: "base"
             },
             {
-              app: "admission-webhook",
-              folder: "apps",
+              app: "apps/admission-webhook",
               overlay: "base"
             },
             {
-              app: "centraldashboard",
-              folder: "apps",
+              app: "apps/centraldashboard",
               overlay: "base"
             },
             {
-              app: "jupyter-web-app",
-              folder: "apps",
+              app: "apps/jupyter-web-app",
               overlay: "base"
             },
             {
-              app: "katib",
-              folder: "apps",
+              app: "apps/katib",
               overlay: "base"
             },
             {
-              app: "kfserving",
-              folder: "apps",
+              app: "apps/kfserving",
               overlay: "base"
             },
             {
-              app: "mpi-job",
-              folder: "apps",
+              app: "apps/mpi-job",
               overlay: "base"
             },
             {
-              app: "mxnet-job",
-              folder: "apps",
+              app: "apps/mxnet-job",
               overlay: "base"
             },
             {
-              app: "notebook-controller",
-              folder: "apps",
+              app: "apps/notebook-controller",
               overlay: "base"
             },
             {
-              app: "pipeline",
-              folder: "apps",
+              app: "apps/pipeline",
               overlay: "base"
             },
             {
-              app: "profiles",
-              folder: "apps",
+              app: "apps/profiles",
               overlay: "base"
             },
             {
-              app: "pytorch-job",
-              folder: "apps",
+              app: "apps/pytorch-job",
               overlay: "base"
             },
             {
-              app: "tr-training",
-              folder: "apps",
+              app: "apps/tr-training",
               overlay: "base"
             },
             {
-              app: "seldon",
-              folder: "apps",
+              app: "apps/seldon",
               overlay: "base"
             },
             {
-              app: "spark",
-              folder: "apps",
+              app: "apps/spark",
               overlay: "base"
             }
           ]
@@ -122,7 +104,7 @@ assert std.member(["aaw-dev-cc-00", "aaw-prod-cc-00"], std.extVar('targetRevisio
         },
         project: "default",
         source: {
-          path: "kustomize/{{folder}}/{{app}}/{{overlay}}",
+          path: "kustomize/{{app}}/{{overlay}}",
           repoURL: "https://github.com/statcan/aaw-kubeflow-manifests.git",
           targetRevision: std.extVar('targetRevision')
         },
