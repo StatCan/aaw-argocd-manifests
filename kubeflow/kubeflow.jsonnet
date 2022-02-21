@@ -1,9 +1,15 @@
 # Only have dev and prod at the moment
 assert std.member(["aaw-dev-cc-00", "aaw-prod-cc-00", "feat-kubeflow-manifests"], std.extVar('targetRevision'));
 
+
+local appsetVersion = "0.1.0";
+
 // Old Application sets require `url` and `cluster` to be set.
 local applicationset_compatibility_fix(x) =
-  {url: "", cluster: "", values: x};
+  if appsetVersion == "0.1.0"
+  then {url: "", cluster: "", values: x}
+  else x;
+
 
 {
   apiVersion: "argoproj.io/v1alpha1",
@@ -108,7 +114,9 @@ local applicationset_compatibility_fix(x) =
         },
         project: "default",
         source: {
-          path: "kustomize/{{app}}/{{overlay}}",
+          path: if appsetVersion == "0.1.0"
+                then "kustomize/{{values.app}}/{{values.overlay}}"
+                else "kustomize/{{app}}/{{overlay}}",
           repoURL: "https://github.com/statcan/aaw-kubeflow-manifests.git",
           targetRevision: std.extVar('targetRevision')
         },
