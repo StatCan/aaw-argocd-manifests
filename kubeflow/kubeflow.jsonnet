@@ -95,7 +95,7 @@ local applicationset_compatibility_fix(x) =
               overlay: "base"
             },
             {
-              app: "apps/tr-training",
+              app: "apps/tf-training",
               overlay: "base"
             },
             {
