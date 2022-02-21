@@ -3,7 +3,7 @@ assert std.member(["aaw-dev-cc-00", "aaw-prod-cc-00", "feat-kubeflow-manifests"]
 
 // Old Application sets require `url` and `cluster` to be set.
 local applicationset_compatibility_fix(x) =
-  {url: "", cluster: ""} + x;
+  {url: "", cluster: "", values: x};
 
 {
   apiVersion: "argoproj.io/v1alpha1",
