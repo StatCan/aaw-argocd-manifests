@@ -108,12 +108,12 @@ assert std.member(["aaw-dev-cc-00", "aaw-prod-cc-00", "feat-kubeflow-manifests"]
           repoURL: "https://github.com/statcan/aaw-kubeflow-manifests.git",
           targetRevision: std.extVar('targetRevision')
         },
-        syncPolicy: {
-          automated: {
-            prune: true,
-            selfHeal: true
-          }
-        }
+        #syncPolicy: {
+        #  automated: {
+        #    prune: true,
+        #    selfHeal: true
+        #  }
+        #}
       }
     }
   }
