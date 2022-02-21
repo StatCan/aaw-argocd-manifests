@@ -4,12 +4,20 @@ assert std.member(["aaw-dev-cc-00", "aaw-prod-cc-00", "feat-kubeflow-manifests"]
 
 local appsetVersion = "0.1.0";
 
+# s.split("/")[-1]
+local basename(s) =
+  local path = std.split(s, "/");
+  path[std.length(path)-1];
+
 // Old Application sets require `url` and `cluster` to be set.
 local applicationset_compatibility_fix(x) =
   if appsetVersion == "0.1.0"
-  then {url: "https://kubernetes.default.svc", cluster: "in-cluster", values: x}
-  else x;
-
+  then {
+    url: "https://kubernetes.default.svc",
+    cluster: "in-cluster",
+    values: x + {name: basename(x.app)}
+  }
+  else x + {name: basename(x.app)};
 
 {
   apiVersion: "argoproj.io/v1alpha1",
@@ -104,7 +112,9 @@ local applicationset_compatibility_fix(x) =
     ],
     template: {
       metadata: {
-        name: "kubeflow-aaw",
+        name: "kubeflow-aaw-" + if appsetVersion == "0.1.0"
+                                then "{{values.name}}"
+                                else "{{name}}",
         namespace: "daaas-system"
       },
       spec: {
