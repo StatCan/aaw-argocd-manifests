@@ -120,7 +120,7 @@ local applicationset_compatibility_fix(x) =
       spec: {
         destination: {
           name: "in-cluster",
-          namespace: "daaas-system"
+          namespace: "kubeflow"
         },
         project: "default",
         source: {
