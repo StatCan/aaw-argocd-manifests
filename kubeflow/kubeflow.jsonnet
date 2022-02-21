@@ -99,11 +99,11 @@ local applicationset_compatibility_fix(x) =
               overlay: "base"
             },
             {
-              app: "apps/seldon",
+              app: "contrib/seldon",
               overlay: "base"
             },
             {
-              app: "apps/spark",
+              app: "contrib/spark",
               overlay: "base"
             }
           ])
