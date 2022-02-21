@@ -1,6 +1,10 @@
 # Only have dev and prod at the moment
 assert std.member(["aaw-dev-cc-00", "aaw-prod-cc-00", "feat-kubeflow-manifests"], std.extVar('targetRevision'));
 
+// Old Application sets require `url` and `cluster` to be set.
+local applicationset_compatibility_fix(x) =
+  {url: "", cluster: ""} + x;
+
 {
   apiVersion: "argoproj.io/v1alpha1",
   kind: "ApplicationSet",
@@ -12,7 +16,7 @@ assert std.member(["aaw-dev-cc-00", "aaw-prod-cc-00", "feat-kubeflow-manifests"]
     generators: [
       {
         list: {
-          elements: [
+          elements: std.map(applicationset_compatibility_fix, [
             {
               app: "common/kubeflow-namespace",
               overlay: "base"
@@ -88,7 +92,7 @@ assert std.member(["aaw-dev-cc-00", "aaw-prod-cc-00", "feat-kubeflow-manifests"]
               app: "apps/spark",
               overlay: "base"
             }
-          ]
+          ])
         }
       }
     ],
