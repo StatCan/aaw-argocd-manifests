@@ -7,7 +7,7 @@ local appsetVersion = "0.1.0";
 // Old Application sets require `url` and `cluster` to be set.
 local applicationset_compatibility_fix(x) =
   if appsetVersion == "0.1.0"
-  then {url: "", cluster: "", values: x}
+  then {url: "https://kubernetes.default.svc", cluster: "in-cluster", values: x}
   else x;
 
 
