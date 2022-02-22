@@ -20,7 +20,7 @@ local domain = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
         "istio-system/protected-b"
       ],
       "hosts": [
-        "org-ces-system-elastic-private." + domain
+        "org-ces-system-elastic.protected-b." + domain
       ],
       "http": [
         {
