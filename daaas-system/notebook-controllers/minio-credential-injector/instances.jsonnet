@@ -22,6 +22,8 @@ else
     {"name": "minio_gateway_standard", "alias": "minio-standard-tenant-1", "classification": "unclassified", "serviceUrl": "http://minio-gateway.minio-gateway-standard-system:9000", "externalUrl": "https://minio-gateway-standard-system-boathouse.aaw-dev.cloud.statcan.ca"}
     {"name": "minio_gateway_standard", "alias": "", "classification": "unclassified", "serviceUrl": "http://minio-gateway.minio-gateway-standard-system:9000", "externalUrl": "https://minio-gateway-standard-system-boathouse.aaw-dev.cloud.statcan.ca"}
     {"name": "minio_gateway_standard_ro", "alias": "", "classification": "protected-b", "serviceUrl": "http://minio-gateway.minio-gateway-standard-ro-system:9000", "externalUrl": "https://minio-gateway-standard-ro-system-boathouse.aaw-dev.cloud.statcan.ca"}
+    {"name": "fdi_gateway_unclassified", "alias": "", "classification": "unclassified", "serviceUrl": "http://minio-gateway.fdi-gateway-unclassified-system:9000", "externalUrl": ""}
+    {"name": "fdi_gateway_protected_b", "alias": "", "classification": "protected-b", "serviceUrl": "http://minio-gateway.fdi-gateway-protected-b-system:9000", "externalUrl": ""}
 |||
 };
 

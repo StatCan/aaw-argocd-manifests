@@ -55,6 +55,7 @@ Notable aspects of the design:
 
 - The Vault versions need the following configurations changes:
   - Instantiate a gateway via the terraform module.
+    - In the terraform add the new MinIO instance's namespace to the istio clusterrbacconfig in order to enable Istio RBAC in the namespace.
   - Add to the [MinIO Credential injector](#minio-credential-injector)
   - Add to the [Goofys injector](#goofys-injector)
   - Add to the [Kubeflow Controller](#profile-controller)
