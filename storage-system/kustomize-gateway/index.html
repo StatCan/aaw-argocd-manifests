@@ -1471,7 +1471,10 @@
 <li>
 <p>The Vault versions need the following configurations changes:</p>
 </li>
-<li>Instantiate a gateway via the terraform module.</li>
+<li>Instantiate a gateway via the terraform module.<ul>
+<li>In the terraform add the new MinIO instance's namespace to the istio clusterrbacconfig in order to enable Istio RBAC in the namespace.</li>
+</ul>
+</li>
 <li>Add to the <a href="#minio-credential-injector">MinIO Credential injector</a></li>
 <li>Add to the <a href="#goofys-injector">Goofys injector</a></li>
 <li>Add to the <a href="#profile-controller">Kubeflow Controller</a></li>
