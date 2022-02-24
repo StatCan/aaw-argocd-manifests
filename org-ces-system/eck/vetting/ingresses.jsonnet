@@ -12,6 +12,43 @@ local domain = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
     "apiVersion": "networking.istio.io/v1beta1",
     "kind": "VirtualService",
     "metadata": {
+      "name": "elastic-ingress-private-temp",
+      "namespace": "org-ces-system"
+    },
+    "spec": {
+      "gateways": [
+        "istio-system/protected-b"
+      ],
+      "hosts": [
+        "org-ces-system-vetting-elastic." + domain
+      ],
+      "http": [
+        {
+          "match": [
+            {
+              "uri": {
+                "prefix": "/"
+              }
+            }
+          ],
+          "route": [
+            {
+              "destination": {
+                "host": "vetting-es-http.org-ces-system.svc.cluster.local",
+                "port": {
+                  "number": 9200
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "apiVersion": "networking.istio.io/v1beta1",
+    "kind": "VirtualService",
+    "metadata": {
       "name": "elastic-ingress-private",
       "namespace": "org-ces-system"
     },
