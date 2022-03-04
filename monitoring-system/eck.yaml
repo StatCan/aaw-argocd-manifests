@@ -1,0 +1,80 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: elastic-monitoring
+  namespace: monitoring-system
+spec:
+  version: 8.0.0
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+  nodeSets:
+  - name: nodes
+    count: 2
+    config:
+      node.master: true
+      node.data: true
+      node.ingest: true
+      node.store.allow_mmap: false
+    podTemplate:
+      metadata:
+        annotations:
+          traffic.sidecar.istio.io/includeInboundPorts: "*"
+          traffic.sidecar.istio.io/excludeOutboundPorts: "9300"
+          traffic.sidecar.istio.io/excludeInboundPorts: "9300"
+      spec:
+        automountServiceAccountToken: true
+        containers:
+        - name: elasticsearch
+          resources:
+            limits:
+              memory: 8Gi
+              cpu: "4"
+            requests:
+              cpu: "4"
+              memory: 8Gi
+    volumeClaimTemplates:
+      - metadata:
+          name: elasticsearch-data
+        spec:
+          storageClassName: default
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 512Gi
+---
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: kibana-monitoring
+  namespace: monitoring-system
+spec:
+  version: 8.0.0
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+  count: 1
+  elasticsearchRef:
+    name: elastic-monitoring
+  secureSettings:
+  - secretName: monitoring-kibana-secrets
+  podTemplate:
+    spec:
+      automountServiceAccountToken: true
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: logging-policy
+  namespace: monitoring-system
+spec:
+  portLevelMtls:
+    9200:
+      mode: PERMISSIVE
+  selector:
+    matchLabels:
+      common.k8s.elastic.co/type: elasticsearch
+      elasticsearch.k8s.elastic.co/cluster-name: elastic-monitoring
