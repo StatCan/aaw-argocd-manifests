@@ -6,7 +6,7 @@ metadata:
   labels:
     apps.kubernetes.io/name: minio-credential-injector
 ---
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: minio-credential-injector-issuer
@@ -16,7 +16,7 @@ metadata:
 spec:
   selfSigned: {}
 ---
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: minio-credential-injector
