@@ -1,4 +1,4 @@
-local image = "k8scc01covidacr.azurecr.io/kubeflow-controller:8ba4b2e2b917bf708cca917fe6eeac56f22f78c0";
+local image = "k8scc01covidacr.azurecr.io/kubeflow-controller:a2c0175561081209ca44921658139ab284265cd8";
 
 assert std.member(["aaw-dev-cc-00", "aaw-prod-cc-00", "master"], std.extVar('targetRevision'));
 
