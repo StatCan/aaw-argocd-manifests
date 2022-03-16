@@ -4,47 +4,47 @@ metadata:
   name: elastic-monitoring
   namespace: monitoring-system
 spec:
-  version: 8.0.0
+  version: 8.1.0
   http:
     tls:
       selfSignedCertificate:
         disabled: true
   nodeSets:
-  - name: nodes
-    count: 3
-    config:
-      node.roles: ["master", "data", "ingest"]
-      node.store.allow_mmap: false
-    podTemplate:
-      metadata:
-        annotations:
-          traffic.sidecar.istio.io/includeInboundPorts: "*"
-          traffic.sidecar.istio.io/excludeOutboundPorts: "9300"
-          traffic.sidecar.istio.io/excludeInboundPorts: "9300"
-      spec:
-        automountServiceAccountToken: true
-        containers:
-        - name: elasticsearch
-          resources:
-            limits:
-              memory: 8Gi
-              cpu: "2"
-            requests:
-              cpu: "2"
-              memory: 8Gi
-          env:
-          - name: ES_JAVA_OPTS
-            value: "-Xms4g -Xmx4g"
-    volumeClaimTemplates:
-      - metadata:
-          name: elasticsearch-data
+    - name: nodes
+      count: 3
+      config:
+        node.roles: ["master", "data", "ingest"]
+        node.store.allow_mmap: false
+      podTemplate:
+        metadata:
+          annotations:
+            traffic.sidecar.istio.io/includeInboundPorts: "*"
+            traffic.sidecar.istio.io/excludeOutboundPorts: "9300"
+            traffic.sidecar.istio.io/excludeInboundPorts: "9300"
         spec:
-          storageClassName: default
-          accessModes:
-          - ReadWriteOnce
-          resources:
-            requests:
-              storage: 512Gi
+          automountServiceAccountToken: true
+          containers:
+            - name: elasticsearch
+              resources:
+                limits:
+                  memory: 8Gi
+                  cpu: "2"
+                requests:
+                  cpu: "2"
+                  memory: 8Gi
+              env:
+                - name: ES_JAVA_OPTS
+                  value: "-Xms4g -Xmx4g"
+      volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            storageClassName: default
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 512Gi
 ---
 apiVersion: kibana.k8s.elastic.co/v1
 kind: Kibana
@@ -52,7 +52,7 @@ metadata:
   name: kibana-monitoring
   namespace: monitoring-system
 spec:
-  version: 8.0.0
+  version: 8.1.0
   http:
     tls:
       selfSignedCertificate:
@@ -60,11 +60,40 @@ spec:
   count: 1
   elasticsearchRef:
     name: elastic-monitoring
-  secureSettings:
-  - secretName: monitoring-kibana-secrets
   podTemplate:
     spec:
       automountServiceAccountToken: true
+---
+apiVersion: beat.k8s.elastic.co/v1beta1
+kind: Beat
+metadata:
+  name: heartbeat-monitoring
+  namespace: monitoring-system
+spec:
+  type: heartbeat
+  version: 8.1.0
+  elasticsearchRef:
+    name: elastic-monitoring
+  configRef:
+    secretName: heartbeat-config
+  deployment:
+    replicas: 1
+    podTemplate:
+      spec:
+        securityContext:
+          runAsUser: 0
+        containers:
+          - name: heartbeat
+            image: docker.elastic.co/beats/heartbeat:8.1.0
+            env:
+              - name: NODE_NAME
+                valueFrom:
+                  fieldRef:
+                    fieldPath: spec.nodeName
+              - name: NS_NAME
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.namespace
 ---
 apiVersion: security.istio.io/v1beta1
 kind: PeerAuthentication
