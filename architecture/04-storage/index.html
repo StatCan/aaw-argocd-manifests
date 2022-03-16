@@ -359,6 +359,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#minio-gateway-using-azure-blob-storage" class="md-nav__link">
+    MinIO Gateway using Azure Blob Storage
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1467,6 +1474,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#minio-gateway-using-azure-blob-storage" class="md-nav__link">
+    MinIO Gateway using Azure Blob Storage
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1627,6 +1641,15 @@ Protected B instance.</p>
 process be approved, providing a write-only bucket in the Unclassified
 instance mapped to a read-only bucket on the Protected B instance.</p>
 </blockquote>
+<h3 id="minio-gateway-using-azure-blob-storage">MinIO Gateway using Azure Blob Storage</h3>
+<p>With regards to the <em>Recommendation STR-OBJ-02</em> above, AAW has decided to use 
+Azure Blob Storage to eliminate the need for data copying.</p>
+<p>MinIO has a gateway feature that allows proxying requests to Azure Blob Storage. 
+All MinIO instances in AAW will use MinIO in gateway mode. This will eliminate 
+the need for data copying.</p>
+<p>A write-only bucket on the Standard MinIO instance will have the data stored in
+an Azure Blob Storage account, its counterpart read-only bucket on the
+protected B MinIO instance will use the same Azure Blob Storage account.</p>
 <h2 id="receiving-and-outputting-protected-b-data-tofrom-aaw">Receiving and outputting Protected B data to/from AAW</h2>
 <p>This proposal does not propose a solution for receiving Protected B data into
 the environment nor for extracting output from completed analysis. This will
