@@ -13,27 +13,37 @@ configMapGenerator:
 
 # NOTE: We're not using the headless service
 patchesStrategicMerge:
-- |-
-   apiVersion: apps/v1
-   kind: Deployment
-   metadata:
-     name: minio-gateway
-   spec:
-     template:
-       spec:
-         containers:
-           - name: minio
-             env:
-               - name: MINIO_IDENTITY_OPENID_CONFIG_URL
-                 valueFrom:
-                   secretKeyRef:
-                     name: minio-gateway-openid-secret
-                     key: MINIO_IDENTITY_OPENID_CONFIG_URL
-               - name: MINIO_IDENTITY_OPENID_CLIENT_ID
-                 valueFrom:
-                   secretKeyRef:
-                     name: minio-gateway-openid-secret
-                     key: MINIO_IDENTITY_OPENID_CLIENT_ID
+  - |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: minio-gateway
+    spec:
+      template:
+        spec:
+          containers:
+            - name: minio
+              env:
+                - name: MINIO_IDENTITY_OPENID_CONFIG_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-gateway-openid-secret
+                      key: MINIO_IDENTITY_OPENID_CONFIG_URL
+                - name: MINIO_IDENTITY_OPENID_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-gateway-openid-secret
+                      key: MINIO_IDENTITY_OPENID_CLIENT_ID
+                - name: MINIO_IDENTITY_OPENID_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-gateway-openid-secret
+                      key: MINIO_IDENTITY_OPENID_CLIENT_SECRET
+                - name: MINIO_IDENTITY_OPENID_REDIRECT_URI
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-gateway-openid-secret
+                      key: MINIO_IDENTITY_OPENID_REDIRECT_URI
 
 # Add Kubeflow OPA Sync
 patchesJson6902:

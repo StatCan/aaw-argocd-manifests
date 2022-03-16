@@ -33,7 +33,7 @@ spec:
             - name: MINIO_ADMIN
               valueFrom:
                 secretKeyRef:
-                  key: access-key
+                  key: root-user
                   name: minio-gateway-secret
           ports:
             - containerPort: 8181
