@@ -12,11 +12,37 @@ stringData:
         type: tcp
         schedule: "@every 5s"
         hosts: ["elastic-monitoring-es-http.monitoring-system.svc:9200"]
+
       - name: kibana
         tags: ["internal", "${NS_NAME}"]
         type: tcp
         schedule: "@every 5s"
         hosts: ["kibana-monitoring-kb-http.monitoring-system.svc:5601"]
+
+      - name: argocd
+        tags: ["ingress", "${NS_NAME}", "aaw-dev", "oidc"]
+        type: http
+        schedule: "@every 5s"
+        hosts: ["https://daaas-system-argocd.aaw-dev.cloud.statcan.ca/"]
+
+      - name: minio
+        tags: ["ingress", "${NS_NAME}", "aaw-dev", "oidc"]
+        type: http
+        schedule: "@every 5s"
+        hosts: ["https://minio.aaw-dev.cloud.statcan.ca/minio/login"]
+
+      - name: portal
+        tags: ["ingress", "${NS_NAME}", "aaw-dev"]
+        type: http
+        schedule: "@every 5s"
+        hosts: ["https://analytics-platform.statcan.gc.ca/covid19"]
+
+      - name: kubeflow
+        tags: ["ingress", "${NS_NAME}", "aaw-dev", "authenticated"]
+        type: http
+        schedule: "@every 5s"
+        hosts: ["https://kubeflow.aaw-dev.cloud.statcan.ca/#"]
+
     processors:
       - add_observer_metadata:
           cache.ttl: 5m
