@@ -19,6 +19,7 @@ patchesStrategicMerge:
     metadata:
       name: minio-gateway
     spec:
+      replicas: 1
       template:
         spec:
           containers:
