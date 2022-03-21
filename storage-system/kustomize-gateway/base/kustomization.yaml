@@ -10,7 +10,7 @@ generatorOptions:
 
 resources:
   - minio/
-  # - etcd/
+  - etcd/
   - opa/
   - networkpolicies/
 
