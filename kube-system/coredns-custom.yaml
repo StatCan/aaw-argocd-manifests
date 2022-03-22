@@ -19,4 +19,3 @@ data:
     rewrite name minio-standard.aaw-dev.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
     rewrite name minio-premium.aaw-dev.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
     rewrite name max-object-detector.christian-ritter.aaw-dev.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
-  kfserving-ingress.override: |
