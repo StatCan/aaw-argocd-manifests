@@ -122,7 +122,7 @@ local applicationset_compatibility_fix(x) =
           name: "in-cluster",
           namespace: "kubeflow"
         },
-        project: "default",
+        project: "kubeflow",
         source: {
           path: if appsetVersion == "0.1.0"
                 then "kustomize/{{values.app}}/{{values.overlay}}"
