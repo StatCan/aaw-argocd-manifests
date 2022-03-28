@@ -39,23 +39,6 @@ rewrite name console-minio-gateway-standard-system-boathouse." + domain + " isti
 rewrite name max-object-detector.christian-ritter." + domain + " istio-ingressgateway.istio-system.svc.cluster.local"
   ;
 
-# KFSERVING BASE (all envrionemnts)
-local kfserving_base = 
-    "rewrite name max-object-detector.will-hearn." + domain + " istio-ingressgateway.istio-system.svc.cluster.local"
-  ;
-
-# KFSERVING EXTRA (specific envrionemnts)
-local kfserving_extra = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
-
-    #PROD
-    "rewrite name max-object-detector.zachary-seguin." + domain + " istio-ingressgateway.istio-system.svc.cluster.local"
-    
-  else
-  
-    #DEV
-    ""
-  ;
-
 {
   apiVersion: 'v1',
   kind: 'ConfigMap',
@@ -69,7 +52,6 @@ local kfserving_extra = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
     },
   },
   data: {
-    'ingress.override': ingress_base + "\n     " + ingress_extra,
-    'kfserving-ingress.override': kfserving_base + "\n     " + kfserving_extra
+    'ingress.override': ingress_base + "\n\n" + ingress_extra
   },
 }
