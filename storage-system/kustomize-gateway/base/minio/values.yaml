@@ -5,19 +5,8 @@ auth:
   existingSecret: minio-gateway-secret
 gateway:
   enabled: true
-  replicaCount: 3
+  replicaCount: 1
   type: azure
-  updateStrategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: "25%"
-      maxUnavailable: "25%"
-  # autoscaling:
-  #   enabled: true
-  #   minReplicas: "2"
-  #   maxReplicas: "4"
-  #   targetCPU: "60"
-  #   targetMemory: "60"
   auth:
     azure:
       storageAccountNameExistingSecret: "azure-blob-storage"
@@ -66,9 +55,9 @@ ingress:
   hostname: storage-system.aaw.cloud.statcan.ca
 resources:
   limits:
-    cpu: "4"
-    memory: 16Gi
+    cpu: "8"
+    memory: 32Gi
   requests:
-    cpu: "4"
-    memory: 16Gi
+    cpu: "8"
+    memory: 32Gi
 tolerations: []
