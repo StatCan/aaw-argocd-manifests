@@ -340,6 +340,33 @@
     Terraform
   </a>
   
+    <nav class="md-nav" aria-label="Terraform">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-the-aaw-platform-and-infrastructure" class="md-nav__link">
+    Install the AAW Platform and Infrastructure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-the-cloud-native-platform" class="md-nav__link">
+    Install the Cloud Native Platform
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#misc" class="md-nav__link">
+    Misc
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1716,6 +1743,33 @@
     Terraform
   </a>
   
+    <nav class="md-nav" aria-label="Terraform">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-the-aaw-platform-and-infrastructure" class="md-nav__link">
+    Install the AAW Platform and Infrastructure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-the-cloud-native-platform" class="md-nav__link">
+    Install the Cloud Native Platform
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#misc" class="md-nav__link">
+    Misc
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1952,7 +2006,7 @@
 </ol>
 <h3 id="are-there-any-pre-loaded-data-datasets-in-aaw-that-we-can-access-and-use-for-both-r-and-python-notebooks">Are there any pre-loaded data (datasets) in AAW that we can access and use for both R and Python notebooks?</h3>
 <ul>
-<li>Our JupyterLab images come with some example notebooks and data, they can be found in <code>/aaw-contrib-jupyter-notebooks/</code>. </li>
+<li>Our JupyterLab images come with some example notebooks and data, they can be found in <code>/aaw-contrib-jupyter-notebooks/</code>.</li>
 <li>Our R Studio image also has some example notebooks and data, they can be found in <code>/aaw-contrib-r-notebooks/</code>.</li>
 </ul>
 <h2 id="presentations">Presentations</h2>
@@ -2029,7 +2083,7 @@
 <td>Public</td>
 </tr>
 <tr>
-<td><a href="https://github.com/StatCan/aaw-kubeflow-manifest">aaw-kubeflow-manifest</a></td>
+<td><a href="https://github.com/StatCan/aaw-kubeflow-manifests">aaw-kubeflow-manifests</a></td>
 <td>Kustomize installation manifests for Kubeflow</td>
 <td>Public</td>
 </tr>
@@ -2093,6 +2147,132 @@
 <h2 id="terraform">Terraform</h2>
 <p>The following is a list of all the <code>terraform</code> related repositories for the
 Advanced Analytics Workspace project.</p>
+<h3 id="install-the-aaw-platform-and-infrastructure">Install the AAW Platform and Infrastructure</h3>
+<pre><code class="language-sh">## Installs AAW Platform and Infrastructure
+##
+## └─── https://github.com/statcan/terraform-advanced-analytics-workspaces-infrastructure
+##      ├─── https://github.com/statcan/aaw-dev-cc-00
+##      ├─── https://github.com/statcan/aaw-prod-cc-00
+##      │    ├── https://github.com/statcan/terraform-azure-statcan-aaw-environment
+##      │    │   ├── https://github.com/statcan/terraform-statcan-aaw-network
+##      │    │   └── https://github.com/statcan/terraform-azure-statcan-cloud-native-environment-infrastructure
+##      │    │       ├── https://github.com/canada-ca-terraform-modules/terraform-azurerm-kubernetes-cluster
+##      │    │       └── https://github.com/canada-ca-terraform-modules/terraform-azurerm-kubernetes-cluster-nodepool
+##      │    └─── https://github.com/statcan/terraform-statcan-aaw-platform (see below)
+##      └─── https://github.com/statcan/terraform-azure-statcan-aaw-region-environment
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Repository</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AAW</td>
+<td><a href="https://github.com/statcan/terraform-advanced-analytics-workspaces-infrastructure-example">terraform-advanced-analytics-workspaces-infrastructure</a></td>
+<td>Reference implementation for an Advanced Analytics Workspaces (AAW) infrastructure pipeline</td>
+</tr>
+<tr>
+<td>AAW</td>
+<td><a href="https://github.com/statcan/terraform-statcan-aaw-infrastructure-example">aaw-dev-cc-00</a></td>
+<td>Reference implementation for an Advanced Analytics Workspaces (AAW) development environment</td>
+</tr>
+<tr>
+<td>AAW</td>
+<td><a href="https://github.com/statcan/terraform-statcan-aaw-infrastructure-example">aaw-prod-cc-00</a></td>
+<td>Reference implementation for an Advanced Analytics Workspaces (AAW) production environment</td>
+</tr>
+<tr>
+<td>AAW</td>
+<td><a href="https://github.com/statcan/terraform-azure-statcan-aaw-environment">terraform-azure-statcan-aaw-environment</a></td>
+<td>Terraform module of Advanced Analytics Workspaces (AAW) per-environment Azure configuration</td>
+</tr>
+<tr>
+<td>AAW</td>
+<td><a href="https://github.com/statcan/terraform-azure-statcan-aaw-network">terraform-azure-statcan-aaw-network</a></td>
+<td>Terraform module of Advanced Analytics Workspaces (AAW) networking</td>
+</tr>
+<tr>
+<td>AAW</td>
+<td><a href="https://github.com/statcan/terraform-azure-statcan-cloud-native-environment-infrastructure">terraform-azure-statcan-cloud-native-environment-infrastructure</a></td>
+<td>Terraform module for Statistics Canada's Cloud Native Environment Azure Cloud Infrastructure</td>
+</tr>
+<tr>
+<td>AAW</td>
+<td><a href="https://github.com/statcan/terraform-azurerm-kubernetes-cluster">terraform-azurerm-kubernetes-cluster</a></td>
+<td>Terraform module for Azure Kubernetes Service (AKS) cluster</td>
+</tr>
+<tr>
+<td>AAW</td>
+<td><a href="https://github.com/statcan/terraform-azurerm-kubernetes-cluster-nodepool">terraform-azurerm-kubernetes-cluster-nodepool</a></td>
+<td>Terraform module for Azure Kubernetes Service (AKS) nodepool</td>
+</tr>
+<tr>
+<td>AAW</td>
+<td><a href="https://github.com/statcan/terraform-azure-statcan-aaw-region-environment">terraform-azure-statcan-aaw-region-environment</a></td>
+<td>Terraform module of Advanced Analytics Workspaces (AAW) per-region configuration of Azure</td>
+</tr>
+<tr>
+<td>AAW</td>
+<td><a href="https://github.com/statcan/terraform-statcan-aaw-platform">terraform-statcan-aaw-platform</a></td>
+<td>Terraform module for the Advanced Analytics Workspaces (AAW) platform</td>
+</tr>
+</tbody>
+</table>
+<h3 id="install-the-cloud-native-platform">Install the Cloud Native Platform</h3>
+<pre><code class="language-sh">## Statistics Canada's Cloud Native Platform (CNP)
+##
+## └─── https://github.com/statcan/terraform-statcan-aaw-platform
+##      ├─── https://github.com/statcan/terraform-azure-statcan-cloud-native-platform-infrastructure
+##      │    ├─── aad_pod_identity
+##      │    ├─── cert_manager
+##      │    ├─── vault
+##      │    └─── velero
+##      ├─── https://github.com/statcan/terraform-statcan-kubernetes-core-platform
+##      │    ├─── aad_pod_identity
+##      │    ├─── cert_manager
+##      │    ├─── fluentd
+##      │    ├─── gatekeeper
+##      │    ├─── kubecost
+##      │    ├─── prometheus
+##      │    ├─── vault_agent
+##      │    └─── velero
+##      ├─── https://github.com/statcan/terraform-statcan-kubernetes-app-platform
+##      │    ├─── istio operator
+##      │    └─── istio gateway handling
+##      └─── https://github.com/statcan/terraform-kubernetes-namespace
+##           └─── daaas-system
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Repository</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CNS</td>
+<td><a href="https://github.com/statcan/terraform-azure-statcan-cloud-native-platform-infrastructure">terraform-azure-statcan-cloud-native-platform-infrastructure</a></td>
+<td>Terraform module for Statistics Canada Azure Cloud Native Platform Infrastructure</td>
+</tr>
+<tr>
+<td>CNS</td>
+<td><a href="https://github.com/statcan/terraform-statcan-kubernetes-core-platform">terraform-statcan-kubernetes-core-platform</a></td>
+<td>Terraform module for Statistics Canada Core Kubernetes Platform</td>
+</tr>
+<tr>
+<td>CNS</td>
+<td><a href="https://github.com/statcan/terraform-statcan-kubernetes-app-platform">terraform-statcan-kubernetes-app-platform</a></td>
+<td>Terraform module for Statistics Canada Kubernetes Application Platform</td>
+</tr>
+</tbody>
+</table>
+<h3 id="misc">Misc</h3>
 <table>
 <thead>
 <tr>
@@ -2104,27 +2284,12 @@ Advanced Analytics Workspace project.</p>
 <tbody>
 <tr>
 <td><a href="https://github.com/StatCan/terraform-aaw-managed-databases">terraform-aaw-managed-databases</a></td>
-<td>Terraform to deploy Azure Managed Databases</td>
+<td>Terraform module for deployment of Azure Managed Databases</td>
 <td>Private</td>
 </tr>
 <tr>
 <td><a href="https://github.com/StatCan/terraform-aaw-vault">terraform-aaw-vault</a></td>
-<td>Terraform for configuring Hashicorp Vault</td>
-<td>Private</td>
-</tr>
-<tr>
-<td><a href="https://github.com/StatCan/terraform-advanced-analytics-workspaces-infrastructure">terraform-advanced-analytics-workspaces-infrastructure</a></td>
-<td>Terraform to deploy the infrastructure for the Advanced Analytics Workspaces</td>
-<td>Private</td>
-</tr>
-<tr>
-<td><a href="https://github.com/StatCan/terraform-aaw-infrastructure-aaw-dev-cc-00">terraform-aaw-infrastructure-aaw-dev-cc-00</a></td>
-<td>Terraform to deploy the AAW infrastructure for the development environment</td>
-<td>Private</td>
-</tr>
-<tr>
-<td><a href="https://github.com/StatCan/terraform-aaw-infrastructure-aaw-prod-cc-00">terraform-aaw-infrastructure-aaw-prod-cc-00</a></td>
-<td>Terraform to deploy the AAW infrastructure for the production environment</td>
+<td>Terraform module for configuring Hashicorp Vault</td>
 <td>Private</td>
 </tr>
 </tbody>
