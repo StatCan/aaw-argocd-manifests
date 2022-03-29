@@ -36,7 +36,8 @@ rewrite name vma-agdcc.statcan.gc.ca istio-ingressgateway-protected-b.istio-syst
 rewrite name minio-premium." + domain + " istio-ingressgateway.istio-system.svc.cluster.local
 rewrite name vetting." + domain + " istio-ingressgateway-protected-b.istio-system.svc.cluster.local
 rewrite name console-minio-gateway-standard-system-boathouse." + domain + " istio-ingressgateway.istio-system.svc.cluster.local
-rewrite name max-object-detector.christian-ritter." + domain + " istio-ingressgateway.istio-system.svc.cluster.local"
+rewrite name max-object-detector.christian-ritter." + domain + " istio-ingressgateway.istio-system.svc.cluster.local
+"
   ;
 
 {
