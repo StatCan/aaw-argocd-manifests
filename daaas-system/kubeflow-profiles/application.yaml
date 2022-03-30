@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: 'https://github.com/StatCan/aaw-kubeflow-profiles.git'
     path: .
-    targetRevision: owner-transfer
+    targetRevision: main
   ignoreDifferences:
   - group: ""
     kind: Namespace
