@@ -17,7 +17,7 @@ local vars = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
 local values = |||
   image:
     repository: k8scc01covidacr.azurecr.io/profiles-controller
-    tag: 356949defecf053637fed8bf4f92576a721645e5
+    tag: 3a70d49279ff22d00da9f725b95e0480e6f67ff9
 
   extraEnv:
   - name: REQUEUE_TIME
@@ -57,7 +57,8 @@ local values = |||
       supportGroups:
         # DAaaS-AAW-Support
         - 468415c1-d3c2-4c7c-a69d-38f3ce11d351
-
+    gitea:
+      namespace: "profiles-argocd-system"
     buckets:
       instances: %(instances)s
 ||| % {mount_path: vars.vault_path, instances: vars.buckets};
@@ -80,7 +81,7 @@ local values = |||
     "source": {
       "repoURL": "https://statcan.github.io/charts",
       "chart": "profiles-controller",
-      "targetRevision": "0.1.10",
+      "targetRevision": "0.2.0",
       "helm": {
         "releaseName": "profiles-controller",
         "values": values
