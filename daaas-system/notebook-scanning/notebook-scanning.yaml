@@ -1,0 +1,66 @@
+# Namespace and secrets done from terraform
+---
+# Access notebooks across the cluster, and get read on the ConfigMap for an image to update to.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: notebook-img-cleanup-cluster-role
+rules:
+  - apiGroups: ["kubeflow.org/v1"]
+    resources: ["notebooks"] 
+    verbs: ["get", "update", "list"]
+  - apiGroups: [""]
+    resources: ["configmap"]
+    verbs: ["get"]
+---
+#Service Account
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: notebook-img-cleanup-sa
+  namespace: notebook-cleanup-system
+---
+# RoleBinding, specifically for Clusterroles
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  namespace: notebook-cleanup-system
+  name: notebook-img-cleanup-rb-cr
+subjects:
+- kind: ServiceAccount
+  name: notebook-img-cleanup-sa
+  namespace: notebook-cleanup-system
+roleRef:
+  kind: ClusterRole
+  name: notebook-img-cleanup-cluster-role
+  apiGroup: rbac.authorization.k8s.io/v1
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: image-cleanup
+  namespace: notebook-cleanup-system
+spec:
+  schedule: "0 22 * * 5"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: notebook-img-cleanup-sa
+          automountServiceAccountToken: true
+          restartPolicy: OnFailure
+          containers:
+          - name: image-cleanup-job
+            image: k8scc01covidacr.azurecr.io/notebook-cleanup:ca2a0c7679e61a83f847a99bae53913ecd7ef3d1
+            imagePullPolicy: IfNotPresent
+            env:
+              - name: JFROG_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: jfrog-aaw-notebook-scanning-secret
+                    key: jfrog_aaw_username
+              - name: JFROG_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: jfrog-aaw-notebook-scanning-secret
+                    key: jfrog_aaw_encrypted_password
