@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-config
+  namespace: daaas-system
+data:
+  fluent.conf: |
+    <filter **>
+      @type grep
+      <exclude>
+        key log
+        pattern ^.*Successfully synced.*$
+      </exclude>
+    </filter>
+    <match **>
+      @type default
+    </match>
