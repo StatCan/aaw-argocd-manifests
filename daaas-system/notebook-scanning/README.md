@@ -12,14 +12,16 @@ Get a list of notebook servers which are affected by a non-ignored vulnerability
 For the first deployment this can just be standard output written do the console.
 
 Part 2:
-Use the jupyter-web-app configmap as a truth / most up to date image, and create a list of 
-images to update to (using the output from part 1)
+~~Use the jupyter-web-app configmap as a truth / most up to date image, and create a list of 
+images to update to (using the output from part 1)~~
+
+We have decided to move towards a semantic versioning / imago approach where this source of truth may not be required if we use a long-lived tag and just restart the pods and re-trigger a pull on the tag.
 
 Part 3: 
 Send user emails about their notebook images that will be updated
 
 Part 4: 
-Update the images
+Update the images (may be through imago)
 
 Extra thoughts:
 May make use of annotations to see when an image was scanned and then use that as 
