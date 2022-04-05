@@ -1,43 +1,21 @@
 # Only have dev and prod at the moment
-assert std.member(["aaw-dev-cc-00", "aaw-prod-cc-00", "master"], std.extVar('targetRevision'));
+#assert std.member(["aaw-dev-cc-00", "aaw-prod-cc-00", "master"], std.extVar('targetRevision'));
+local isProd = std.extVar('targetRevision') == "aaw-prod-cc-00";
 
-# DOMAIN
-local domain = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
-      "aaw.cloud.statcan.ca"
-  else
-      "aaw-dev.cloud.statcan.ca"
-  ;
+# Domains
+local aawDomain = if isProd then "aaw.cloud.statcan.ca" else "aaw-dev.cloud.statcan.ca";
+local statcanDomain = ".statcan.gc.ca";
+local covidDomain = ".covid.cloud.statcan.ca";
 
-# INGRESS BASE (all envrionemnts)
-local ingress_base = 
-    "rewrite name vault." + domain + " istio-ingressgateway.istio-system.svc.cluster.local
-rewrite name minio-gateway-standard-system-boathouse." + domain + " istio-ingressgateway.istio-system.svc.cluster.local
-rewrite name minio-gateway-premium-system-boathouse." + domain + " istio-ingressgateway.istio-system.svc.cluster.local
-rewrite name minio-gateway-standard-ro-system-boathouse." + domain + " istio-ingressgateway.istio-system.svc.cluster.local
-rewrite name minio-gateway-premium-ro-system-boathouse." + domain + " istio-ingressgateway.istio-system.svc.cluster.local"
-  ;
-
-# INGRESS EXTRA (specific envrionemnts)
-local ingress_extra = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
-
-    #PROD
-    "rewrite name minio-standard-tenant-1.covid.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
-rewrite name minio-premium-tenant-1.covid.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
-rewrite name analytics-platform.statcan.gc.ca istio-ingressgateway.istio-system.svc.cluster.local
-rewrite name plateforme-analyse.statcan.gc.ca istio-ingressgateway.istio-system.svc.cluster.local
-rewrite name daaas-system-kibana." + domain + " istio-ingressgateway.istio-system.svc.cluster.local
-rewrite name jfrog." + domain + " istio-ingressgateway.istio-system.svc.cluster.local
-rewrite name vma-agdcc.statcan.gc.ca istio-ingressgateway-protected-b.istio-system.svc.cluster.local"
-
-  else
+#Gateways
+local defaultGateway = "istio-ingressgateway.istio-system.svc.cluster.local";                                                                                                                                                                                                                                                                                                           
+local protectedGateway = "istio-ingressgateway-protected-b.istio-system.svc.cluster.local"; 
   
-    #DEV
-    "rewrite name minio-standard." + domain + " istio-ingressgateway.istio-system.svc.cluster.local
-rewrite name minio-premium." + domain + " istio-ingressgateway.istio-system.svc.cluster.local
-rewrite name vetting." + domain + " istio-ingressgateway-protected-b.istio-system.svc.cluster.local
-rewrite name console-minio-gateway-standard-system-boathouse." + domain + " istio-ingressgateway.istio-system.svc.cluster.local
-rewrite name max-object-detector.christian-ritter." + domain + " istio-ingressgateway.istio-system.svc.cluster.local"
-  ;
+local rewrite(subdomain, gateway, domain=aawDomain) = "rewrite name %(subdomain)s.%(domain)s %(gateway)s\n" % {                                                                                                                                                                                                                                                                                             
+  subdomain: subdomain,                                                                                                                                                                                                                                                                                                                                                                 
+  gateway: gateway,                                                                                                                                                                                                                                                                                                                                                                     
+  domain: domain                                                                                                                                                                                                                                                                                                                                                                        
+}; 
 
 {
   apiVersion: 'v1',
@@ -52,6 +30,28 @@ rewrite name max-object-detector.christian-ritter." + domain + " istio-ingressga
     },
   },
   data: {
-    'ingress.override': ingress_base + "\n\n" + ingress_extra
+    'ingress.override': 
+      rewrite("vault", defaultGateway) +
+      rewrite("minio-gateway-standard-system-boathouse", defaultGateway) +
+      rewrite("minio-gateway-premium-system-boathouse", defaultGateway) +
+      rewrite("minio-gateway-standard-ro-system-boathouse", defaultGateway) +
+      rewrite("minio-gateway-premium-ro-system-boathouse", defaultGateway) +
+      
+      if isProd then
+        #PROD ONLY
+        rewrite("minio-standard-tenant-1", defaultGateway, covidDomain) +
+        rewrite("minio-premium-tenant-1", defaultGateway, covidDomain) +
+        rewrite("analytics-platform", defaultGateway, statcanDomain) +
+        rewrite("plateforme-analyse", defaultGateway, statcanDomain) +
+        rewrite("daaas-system-kibana", defaultGateway) +
+        rewrite("jfrog", defaultGateway) +
+        rewrite("vma-agdcc", protectedGateway, statcanDomain)
+      else
+        #DEV ONLY
+        rewrite("minio-standard", defaultGateway) +
+        rewrite("minio-premium", defaultGateway) +
+        rewrite("console-minio-gateway-standard-system-boathouse", defaultGateway) +
+        rewrite("max-object-detector.christian-ritter", defaultGateway) +
+        rewrite("vetting", protectedGateway)
   },
 }
