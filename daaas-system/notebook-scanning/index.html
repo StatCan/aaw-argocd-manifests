@@ -1453,12 +1453,13 @@
 Get a list of notebook servers which are affected by a non-ignored vulnerability as found by jfrog XRAY.
 For the first deployment this can just be standard output written do the console.</p>
 <p>Part 2:
-Use the jupyter-web-app configmap as a truth / most up to date image, and create a list of 
-images to update to (using the output from part 1)</p>
+~~Use the jupyter-web-app configmap as a truth / most up to date image, and create a list of 
+images to update to (using the output from part 1)~~</p>
+<p>We have decided to move towards a semantic versioning / imago approach where this source of truth may not be required if we use a long-lived tag and just restart the pods and re-trigger a pull on the tag.</p>
 <p>Part 3: 
 Send user emails about their notebook images that will be updated</p>
 <p>Part 4: 
-Update the images</p>
+Update the images (may be through imago)</p>
 <p>Extra thoughts:
 May make use of annotations to see when an image was scanned and then use that as 
 information as to when to update it? Don't just send an email and then update the image right away.</p>
