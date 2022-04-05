@@ -11,14 +11,14 @@
       
       
       
-        <link rel="canonical" href="https://statcan.github.io/aaw-argocd-manifests/architecture/04-storage/">
+        <link rel="canonical" href="https://statcan.github.io/aaw-argocd-manifests/daaas-system/notebook-scanning/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.6">
     
     
       
-        <title>Storage - AAW ArgoCD Manifests</title>
+        <title>Index - AAW ArgoCD Manifests</title>
       
     
     
@@ -65,7 +65,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#storage" class="md-skip">
+        <a href="#purpose" class="md-skip">
           Skip to content
         </a>
       
@@ -97,7 +97,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Storage
+              Index
             
           </span>
         </div>
@@ -197,14 +197,12 @@
 
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" data-md-state="indeterminate" type="checkbox" id="__nav_2" checked>
       
       
       
@@ -247,7 +245,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../00-introduction/" class="md-nav__link">
+      <a href="../../architecture/00-introduction/" class="md-nav__link">
         Securing Advanced Analytics Workspaces
       </a>
     </li>
@@ -261,7 +259,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../01-limitations/" class="md-nav__link">
+      <a href="../../architecture/01-limitations/" class="md-nav__link">
         Limitations
       </a>
     </li>
@@ -275,7 +273,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../02-azure/" class="md-nav__link">
+      <a href="../../architecture/02-azure/" class="md-nav__link">
         Azure Resources
       </a>
     </li>
@@ -289,7 +287,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../03-classification/" class="md-nav__link">
+      <a href="../../architecture/03-classification/" class="md-nav__link">
         Classification
       </a>
     </li>
@@ -301,87 +299,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Storage
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../architecture/04-storage/" class="md-nav__link">
         Storage
       </a>
-      
-        
-
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#disk-storage" class="md-nav__link">
-    Disk storage
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#object-storage" class="md-nav__link">
-    Object storage
-  </a>
-  
-    <nav class="md-nav" aria-label="Object storage">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#one-way-synchronization-with-unclassified-minio-instance" class="md-nav__link">
-    One-way synchronization with unclassified MinIO instance
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#minio-gateway-using-azure-blob-storage" class="md-nav__link">
-    MinIO Gateway using Azure Blob Storage
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#receiving-and-outputting-protected-b-data-tofrom-aaw" class="md-nav__link">
-    Receiving and outputting Protected B data to/from AAW
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -393,7 +315,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../05-network/" class="md-nav__link">
+      <a href="../../architecture/05-network/" class="md-nav__link">
         Network
       </a>
     </li>
@@ -407,7 +329,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../06-kubernetes/" class="md-nav__link">
+      <a href="../../architecture/06-kubernetes/" class="md-nav__link">
         Kubernetes
       </a>
     </li>
@@ -421,7 +343,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../07-kubeflow/" class="md-nav__link">
+      <a href="../../architecture/07-kubeflow/" class="md-nav__link">
         Kubeflow
       </a>
     </li>
@@ -435,7 +357,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../08-appendix-a/" class="md-nav__link">
+      <a href="../../architecture/08-appendix-a/" class="md-nav__link">
         Appendix A: Non-security recommendations
       </a>
     </li>
@@ -455,12 +377,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" data-md-state="indeterminate" type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
       
       
       
@@ -516,7 +440,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../daaas-system/namespace-controller/">Namespace controller</a>
+          <a href="../namespace-controller/">Namespace controller</a>
           
         </div>
       
@@ -560,7 +484,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../daaas-system/network-policies/">Network policies</a>
+          <a href="../network-policies/">Network policies</a>
           
         </div>
       
@@ -610,7 +534,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../daaas-system/notebook-controllers/">Notebook controllers</a>
+          <a href="../notebook-controllers/">Notebook controllers</a>
           
             <label for="__nav_3_3">
               <span class="md-nav__icon md-icon"></span>
@@ -651,7 +575,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../daaas-system/notebook-controllers/goofys-injector/">Goofys injector</a>
+          <a href="../notebook-controllers/goofys-injector/">Goofys injector</a>
           
         </div>
       
@@ -695,7 +619,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../daaas-system/notebook-controllers/minio-credential-injector/">Minio credential injector</a>
+          <a href="../notebook-controllers/minio-credential-injector/">Minio credential injector</a>
           
         </div>
       
@@ -739,7 +663,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../daaas-system/notebook-controllers/notebook-auth-policy-checker/">Notebook auth policy checker</a>
+          <a href="../notebook-controllers/notebook-auth-policy-checker/">Notebook auth policy checker</a>
           
         </div>
       
@@ -771,12 +695,14 @@
               
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4" data-md-state="indeterminate" type="checkbox" id="__nav_3_4" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4" type="checkbox" id="__nav_3_4" checked>
       
       
       
@@ -789,8 +715,8 @@
       
         
         
-        <div class="md-nav__link md-nav__link--index ">
-          <a href="../../daaas-system/notebook-scanning/">Notebook scanning</a>
+        <div class="md-nav__link md-nav__link--index md-nav__link--active">
+          <a href="./">Notebook scanning</a>
           
         </div>
       
@@ -838,7 +764,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../daaas-system/profile-controllers/">Profile controllers</a>
+          <a href="../profile-controllers/">Profile controllers</a>
           
             <label for="__nav_3_5">
               <span class="md-nav__icon md-icon"></span>
@@ -879,7 +805,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../daaas-system/profile-controllers/kubeflow-controller/">Kubeflow controller</a>
+          <a href="../profile-controllers/kubeflow-controller/">Kubeflow controller</a>
           
         </div>
       
@@ -923,7 +849,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../daaas-system/profile-controllers/profiles-controller/">Profiles controller</a>
+          <a href="../profile-controllers/profiles-controller/">Profiles controller</a>
           
         </div>
       
@@ -1004,7 +930,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../daaas-system/serving/inferenceservices-controller/">Inferenceservices controller</a>
+          <a href="../serving/inferenceservices-controller/">Inferenceservices controller</a>
           
         </div>
       
@@ -1055,7 +981,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../daaas-system/workflows-cronjob/">Workflows cronjob</a>
+          <a href="../workflows-cronjob/">Workflows cronjob</a>
           
         </div>
       
@@ -1489,8 +1415,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -1499,42 +1423,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#disk-storage" class="md-nav__link">
-    Disk storage
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#object-storage" class="md-nav__link">
-    Object storage
-  </a>
-  
-    <nav class="md-nav" aria-label="Object storage">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#one-way-synchronization-with-unclassified-minio-instance" class="md-nav__link">
-    One-way synchronization with unclassified MinIO instance
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#minio-gateway-using-azure-blob-storage" class="md-nav__link">
-    MinIO Gateway using Azure Blob Storage
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#receiving-and-outputting-protected-b-data-tofrom-aaw" class="md-nav__link">
-    Receiving and outputting Protected B data to/from AAW
+  <a href="#purpose" class="md-nav__link">
+    Purpose
   </a>
   
 </li>
@@ -1552,156 +1442,26 @@
               
                 
                 
-                <h1 id="storage">Storage</h1>
-<p>Data is the largest asset and attack surface of Protected B workloads
-within the Advanced Analytics Workspaces. This section is focusing
-on storage controlled by users directely. The AAW environment consists
-currently of two main types of user storage:</p>
-<ul>
-<li>Disk storage (attached to one pod at a time)</li>
-<li>Object storage</li>
-</ul>
-<p>Additionally, data is obtained from the following sources:</p>
-<ul>
-<li>Object storage (internal to AAW)</li>
-<li>Statistics Canada public data</li>
-<li>External data sources</li>
-</ul>
-<p>Kubernetes supports other storage providers, including mounting of local
-directories into a container, but this is blocked by existing Gatekeeper
-policies.</p>
-<p>In general, the rules are:</p>
-<blockquote>
-<p><strong>Data store</strong>: Any location, physical or logical, which is capable of
-storing user-generated data.</p>
-</blockquote>
-<ol>
-<li>Protected B data stores may be read and written to by a Protected B workload</li>
-<li>Protected B data stores may never be accessed from an unclassified workload</li>
-</ol>
-<p><em>Note: This proposal does not define sharing of data between Protected B
-workloads. This is left to the DAaaS project to elaborate and design
-should this funcationality be deemed necessary.</em></p>
-<h2 id="disk-storage">Disk storage</h2>
-<p>Access to disk storage will be restricted based on the classification of the
-disk and the classification of the pod it is being connected to. The following
-table describes the disk classification, disk mode and pod classification, and
-whether the combination is permitted or denied:</p>
-<table>
-<thead>
-<tr>
-<th>Pod Classification</th>
-<th>Disk Classification</th>
-<th>Disk Mode</th>
-<th>Result</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Unclassified</td>
-<td>Unclassified</td>
-<td>Read only</td>
-<td>Permitted</td>
-</tr>
-<tr>
-<td>Unclassified</td>
-<td>Unclassified</td>
-<td>Read/write</td>
-<td>Permitted</td>
-</tr>
-<tr>
-<td>Unclassified</td>
-<td>Protected B</td>
-<td>Read only</td>
-<td>Denied</td>
-</tr>
-<tr>
-<td>Unclassified</td>
-<td>Protected B</td>
-<td>Read/write</td>
-<td>Denied</td>
-</tr>
-<tr>
-<td>Protected B</td>
-<td>Unclassified</td>
-<td>Read only</td>
-<td>Denied</td>
-</tr>
-<tr>
-<td>Protected B</td>
-<td>Unclassified</td>
-<td>Read/write</td>
-<td>Denied</td>
-</tr>
-<tr>
-<td>Protected B</td>
-<td>Protected B</td>
-<td>Read only</td>
-<td>Permitted</td>
-</tr>
-<tr>
-<td>Protected B</td>
-<td>Protected B</td>
-<td>Read/write</td>
-<td>Permitted</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>Disk policies will be enforced by policy in Gatekeeper and the
-Open Policy Agent.</p>
-<p><strong>Recommendation STR-DSK-01</strong>: The above disk policy be applied
-to the AAW environment.</p>
-</blockquote>
-<h2 id="object-storage">Object storage</h2>
-<p>A separate Protected B MinIO instance will be created for protected workloads.
-This MinIO instance will operate similar to the existing MinIO instances,
-except it will not be available outside of protected workloads (optionally,
-the web interface can be enabled and only available to Protected B workloads).</p>
-<p>Because this proposal does not contain any provisions on how to share data
-between Protected B workloads, there will be no shared folder instance
-on the Protected B MinIO object store.</p>
-<p>Restricted access to MinIO storage will be implemented
-using <em>Network Policies</em>.</p>
-<blockquote>
-<p><strong>Recommendation STR-OBJ-01</strong>: The above object storage policy be applied
-to the AAW environment.</p>
-</blockquote>
-<h3 id="one-way-synchronization-with-unclassified-minio-instance">One-way synchronization with unclassified MinIO instance</h3>
-<p>To facilitate fetching data from the internet, a one-way synchronization from
-the unclassified Standard MinIO instance will be performed. A write-only bucket
-on the Standard MinIO instance will be mirrored to a read-only bucket on
-the protected B MinIO instance.</p>
-<p>The synchronization pod will be the only pod which will be authorized to access
-both the Unclassified and Protected B MinIO instances. The credentials assigned
-to it will be:</p>
-<ul>
-<li>Read-only on the Unclassified instance in the “Sync” bucket</li>
-<li>Write-only on the Protected B instance in the “Sync” bucket</li>
-</ul>
-<p>All users will have write access to the “Sync” bucket on the Unclassified
-instance, and all users will have read access to the “Sync” bucket on the
-Protected B instance.</p>
-<blockquote>
-<p><strong>Recommendation STR-OBJ-02</strong>: The above object storage synchronization
-process be approved, providing a write-only bucket in the Unclassified
-instance mapped to a read-only bucket on the Protected B instance.</p>
-</blockquote>
-<h3 id="minio-gateway-using-azure-blob-storage">MinIO Gateway using Azure Blob Storage</h3>
-<p>With regards to the <em>Recommendation STR-OBJ-02</em> above, AAW has decided to use 
-Azure Blob Storage to eliminate the need for data copying.</p>
-<p>MinIO has a gateway feature that allows proxying requests to Azure Blob Storage. 
-All MinIO instances in AAW will use MinIO in gateway mode. This will eliminate 
-the need for data copying.</p>
-<p>A write-only bucket on the Standard MinIO instance will have the data stored in
-an Azure Blob Storage account, its counterpart read-only bucket on the
-protected B MinIO instance will use the same Azure Blob Storage account.</p>
-<h2 id="receiving-and-outputting-protected-b-data-tofrom-aaw">Receiving and outputting Protected B data to/from AAW</h2>
-<p>This proposal does not propose a solution for receiving Protected B data into
-the environment nor for extracting output from completed analysis. This will
-require coordination with the appropriate groups at Statistics Canada
-and will be left to the Data Analytics as a Service (DAaaS) project for
-elaboration and design.</p>
+                  <h1>Index</h1>
+                
+                <h2 id="purpose">Purpose</h2>
+<p>EPIC: https://github.com/StatCan/daaas/issues/461</p>
+<p>Provide a way for user notebooks to be scanned and updated.</p>
+<p>This is a WIP and we will be deploying what we have in parts (some may be combined).</p>
+<p>Here's a general run through of what will happen.</p>
+<p>Part 1:
+Get a list of notebook servers which are affected by a non-ignored vulnerability as found by jfrog XRAY.
+For the first deployment this can just be standard output written do the console.</p>
+<p>Part 2:
+Use the jupyter-web-app configmap as a truth / most up to date image, and create a list of 
+images to update to (using the output from part 1)</p>
+<p>Part 3: 
+Send user emails about their notebook images that will be updated</p>
+<p>Part 4: 
+Update the images</p>
+<p>Extra thoughts:
+May make use of annotations to see when an image was scanned and then use that as 
+information as to when to update it? Don't just send an email and then update the image right away.</p>
                 
               
               
@@ -1721,7 +1481,7 @@ elaboration and design.</p>
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../03-classification/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Classification" rel="prev">
+        <a href="../notebook-controllers/notebook-auth-policy-checker/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Blocking Upload and Download" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1730,20 +1490,20 @@ elaboration and design.</p>
               <span class="md-footer__direction">
                 Previous
               </span>
-              Classification
+              Blocking Upload and Download
             </div>
           </div>
         </a>
       
       
         
-        <a href="../05-network/" class="md-footer__link md-footer__link--next" aria-label="Next: Network" rel="next">
+        <a href="../profile-controllers/" class="md-footer__link md-footer__link--next" aria-label="Next: Profiles Controller" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Network
+              Profiles Controller
             </div>
           </div>
           <div class="md-footer__button md-icon">
