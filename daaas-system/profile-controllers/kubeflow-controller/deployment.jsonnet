@@ -1,4 +1,4 @@
-local image = "k8scc01covidacr.azurecr.io/kubeflow-controller:74e4cd6479292f33eca209f28f295c266528b678";
+local image = "k8scc01covidacr.azurecr.io/kubeflow-controller:a2c0175561081209ca44921658139ab284265cd8";
 
 assert std.member(["aaw-dev-cc-00", "aaw-prod-cc-00", "master"], std.extVar('targetRevision'));
 
@@ -13,7 +13,7 @@ local vars = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
       {
          vault_path: "auth/aaw-dev-cc-00",
          oidc_accessor: "auth_oidc_6fdc919f",
-         minio_instances: "minio_gateway_standard,minio_gateway_standard_ro,minio_gateway_premium,minio_gateway_premium_ro,fdi_gateway_unclassified"
+         minio_instances: "minio_gateway_standard,minio_gateway_standard_ro,minio_gateway_premium,minio_gateway_premium_ro,fdi_gateway_unclassified,minio_gateway_protected_b,fdi_gateway_protected_b"
       }
     ;
 
@@ -46,7 +46,7 @@ local config = |||
 ||| % {mount_path: vars.vault_path};
 
 
-    
+
 [
     {
       apiVersion: "v1",
@@ -98,8 +98,12 @@ local config = |||
                 "name": "profile-configurator",
                 "image": image,
                 "resources": {
+                  "requests": {
+                    "memory": "512Mi",
+                    "cpu": "500m"
+                  },
                   "limits": {
-                    "memory": "128Mi",
+                    "memory": "512Mi",
                     "cpu": "500m"
                   }
                 },
