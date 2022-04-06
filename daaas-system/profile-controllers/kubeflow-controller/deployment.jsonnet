@@ -98,8 +98,12 @@ local config = |||
                 "name": "profile-configurator",
                 "image": image,
                 "resources": {
+                  "requests": {
+                    "memory": "512Mi",
+                    "cpu": "500m"
+                  },
                   "limits": {
-                    "memory": "128Mi",
+                    "memory": "512Mi",
                     "cpu": "500m"
                   }
                 },
