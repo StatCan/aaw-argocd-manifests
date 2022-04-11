@@ -1,0 +1,80 @@
+image:
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: 1.16-dev
+  rootless: true # only possible when running 1.14 or later
+
+service:
+  http:
+    port: 80
+    clusterIP:
+  ssh:
+    port: 22
+    clusterIP:
+
+resources:
+  limits:
+    memory: 500Mi
+    cpu: 500m
+  requests:
+    memory: 500Mi
+    cpu: 500m
+
+extraVolumes:
+  - name: config-volume
+    configMap:
+      name: gitea-banner
+
+extraVolumeMounts:
+  - name: config-volume
+    readOnly: false
+    mountPath: /custom
+
+gitea:
+  admin:
+    username: superuser
+    password: password
+
+  config:
+    server:
+      DOMAIN: gitea
+      PROTOCOL: http
+      ROOT_URL: http://gitea-http
+      SSH_DOMAIN: gitea
+      ENABLE_PPROF: false
+      HTTP_PORT: 3000
+    database:
+      DB_TYPE: postgres
+      HOST: gitea-postgresql:5432
+      NAME: gitea
+      PASSWD: gitea
+      USER: gitea
+  
+  metrics:
+    enabled: false
+    serviceMonitor:
+      enabled: false
+
+memcached:
+  enabled: false
+  service:
+    port: 11211
+
+postgresql:
+  enabled: true
+  global:
+    postgresql:
+      postgresqlDatabase: gitea
+      postgresqlUsername: gitea
+      postgresqlPassword: gitea
+      servicePort: 5432
+  resources:
+    limits:
+      memory: 500Mi
+      cpu: 500m
+    requests:
+      memory: 500Mi
+      cpu: 500m
+  persistence:
+    size: 1Gi
+  
+checkDeprecation: true
