@@ -12,7 +12,7 @@ metadata:
   namespace: default
 type: Opaque
 data:
-  postgresql-postgres-password: "RjRkRXl3QWxHUw=="
+  postgresql-postgres-password: "blF6akVwOVFoeQ=="
   postgresql-password: "Z2l0ZWE="
 ---
 # Source: gitea/templates/gitea/config.yaml
