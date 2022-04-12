@@ -8,7 +8,8 @@ local statcanDomain = ".statcan.gc.ca";
 local covidDomain = ".covid.cloud.statcan.ca";
 
 #Gateways
-local defaultGateway = "istio-ingressgateway.istio-system.svc.cluster.local";                                                                                                                                                                                                                                                                                                           
+local defaultGateway = "istio-ingressgateway.istio-system.svc.cluster.local";
+local kubeflowGateway = "istio-ingressgateway-kubeflow.istio-system.svc.cluster.local";                                                                                                                                                   
 local protectedGateway = "istio-ingressgateway-protected-b.istio-system.svc.cluster.local"; 
   
 local rewrite(subdomain, gateway, domain=aawDomain) = "rewrite name %(subdomain)s.%(domain)s %(gateway)s\n" % {                                                                                                                                                                                                                                                                                             
@@ -52,6 +53,7 @@ local rewrite(subdomain, gateway, domain=aawDomain) = "rewrite name %(subdomain)
         rewrite("minio-premium", defaultGateway) +
         rewrite("console-minio-gateway-standard-system-boathouse", defaultGateway) +
         rewrite("max-object-detector.christian-ritter", defaultGateway) +
-        rewrite("vetting", protectedGateway)
+        rewrite("vetting", protectedGateway) + 
+        rewrite("kubeflow", kubeflowGateway)
   },
 }
