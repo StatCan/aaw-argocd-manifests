@@ -1575,6 +1575,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#giteago" class="md-nav__link">
+    gitea.go
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#limitrangego" class="md-nav__link">
     limitrange.go
   </a>
@@ -1686,6 +1693,8 @@ developing custom profile controllers. The mechanisms are defined in the
 <a href="https://github.com/kubernetes/client-go/tree/master/tools/cache">tools/cache folder</a> of the library.</p>
 <h3 id="authpolicygo"><a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/authpolicy.go">authpolicy.go</a></h3>
 <p>Responsible for creating, removing and updating <a href="https://istio.io/latest/docs/reference/config/security/authorization-policy/#Source">Istio Authorization Policies</a> using the <a href="https://github.com/istio/client-go">Istio client</a> for a given <code>Profile</code>. Currently, the only <code>AuthorizationPolicy</code> is to block upload/download from protected-b <code>Notebook</code>'s.</p>
+<h3 id="giteago"><a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/gitea.go">gitea.go</a></h3>
+<p>Responsible for deploying <a href="https://github.com/go-gitea/gitea">gitea</a> as <a href="https://github.com/argoproj/argo-cd">argocd</a> applications per <code>Profile</code>. Currently, <a href="https://github.com/argoproj/argo-cd">argocd</a> applications are deployed by the gitea controller based on the customized gitea manifest found <a href="https://github.com/StatCan/aaw-argocd-manifests/tree/aaw-dev-cc-00/profiles-argocd-system/template/gitea">here</a>. </p>
 <h3 id="limitrangego"><a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/limitrange.go">limitrange.go</a></h3>
 <p>Responsible for creating, removing and updating <code>LimitRange</code> resources for a given profile. <code>LimitRange</code> resources are generated to limit the cpu and memory resources for the kubeflow profile's default container. <code>LimitRange</code> resources require the implementation of a controller managing <code>ResourceQuotas</code>, which is provided in this package (see <a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/quotas.go">quotas.go</a>). Implementing <code>LimitRange</code> resources allows any Pod to run associated with the <code>Profile</code>, restricted by a <code>ResourceQuota</code>.</p>
 <h3 id="miniogo"><a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/minio.go">minio.go</a></h3>
