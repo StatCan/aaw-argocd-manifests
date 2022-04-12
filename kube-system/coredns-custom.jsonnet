@@ -53,7 +53,6 @@ local rewrite(subdomain, gateway, domain=aawDomain) = "rewrite name %(subdomain)
         rewrite("minio-premium", defaultGateway) +
         rewrite("console-minio-gateway-standard-system-boathouse", defaultGateway) +
         rewrite("max-object-detector.christian-ritter", defaultGateway) +
-        rewrite("vetting", protectedGateway) + 
-        rewrite("kubeflow", kubeflowGateway)
+        rewrite("vetting", protectedGateway)
   },
 }
