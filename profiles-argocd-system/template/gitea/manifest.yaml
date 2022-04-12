@@ -51,6 +51,7 @@ stringData:
     SSH_LISTEN_PORT=2222
     SSH_PORT=22
     START_SSH_SERVER=true
+    STATIC_URL_PREFIX=/gitea/
 ---
 # Source: gitea/templates/gitea/config.yaml
 apiVersion: v1
