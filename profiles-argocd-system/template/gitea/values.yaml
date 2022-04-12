@@ -39,6 +39,7 @@ gitea:
       DOMAIN: gitea
       PROTOCOL: http
       ROOT_URL: http://gitea-http
+      STATIC_URL_PREFIX: /gitea/
       SSH_DOMAIN: gitea
       ENABLE_PPROF: false
       HTTP_PORT: 3000
@@ -48,7 +49,7 @@ gitea:
       NAME: gitea
       PASSWD: gitea
       USER: gitea
-  
+
   metrics:
     enabled: false
     serviceMonitor:
@@ -76,5 +77,5 @@ postgresql:
       cpu: 500m
   persistence:
     size: 1Gi
-  
+
 checkDeprecation: true
