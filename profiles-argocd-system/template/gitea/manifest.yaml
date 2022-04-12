@@ -12,7 +12,7 @@ metadata:
   namespace: default
 type: Opaque
 data:
-  postgresql-postgres-password: "M1NFMUhSNGEzQw=="
+  postgresql-postgres-password: "Z0E1dnd6bjFtdg=="
   postgresql-password: "Z2l0ZWE="
 ---
 # Source: gitea/templates/gitea/config.yaml
@@ -46,7 +46,7 @@ stringData:
     ENABLE_PPROF=false
     HTTP_PORT=3000
     PROTOCOL=http
-    ROOT_URL=http://gitea-http
+    ROOT_URL=https://kubeflow.aaw-dev.cloud.statcan.ca/gitea/
     SSH_DOMAIN=gitea
     SSH_LISTEN_PORT=2222
     SSH_PORT=22
@@ -571,7 +571,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: ccd3ca23e695b27e566114eac984789dc48b6be60dd0b58215cec418546a57e7
+        checksum/config: 5d62acdeee6a9673223b3597683cf28a68fe8f70a962d14a6238182351de98f5
       labels:
         helm.sh/chart: gitea-5.0.4
         app: gitea
