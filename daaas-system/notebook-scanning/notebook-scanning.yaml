@@ -1,14 +1,15 @@
 # Namespace and secrets done from terraform
 ---
 # Access notebooks across the cluster, and get read on the ConfigMap for an image to update to.
+# Removed update from notebooks since w/ imago just restart pods
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: notebook-img-cleanup-cluster-role
 rules:
-  - apiGroups: ["kubeflow.org/v1"]
+  - apiGroups: ["kubeflow.org"]
     resources: ["notebooks"] 
-    verbs: ["get", "update", "list"]
+    verbs: ["get", "list"]
   - apiGroups: [""]
     resources: ["configmap"]
     verbs: ["get"]
@@ -22,10 +23,9 @@ metadata:
 ---
 # RoleBinding, specifically for Clusterroles
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
-  namespace: notebook-cleanup-system
-  name: notebook-img-cleanup-rb-cr
+  name: notebook-img-cleanup-crb
 subjects:
 - kind: ServiceAccount
   name: notebook-img-cleanup-sa
@@ -41,7 +41,7 @@ metadata:
   name: image-cleanup
   namespace: notebook-cleanup-system
 spec:
-  schedule: "0 22 * * 5"
+  schedule: "0 22 * * *"
   jobTemplate:
     spec:
       template:
