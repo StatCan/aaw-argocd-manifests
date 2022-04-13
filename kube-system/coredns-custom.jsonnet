@@ -4,8 +4,8 @@ local isProd = std.extVar('targetRevision') == "aaw-prod-cc-00";
 
 # Domains
 local aawDomain = if isProd then "aaw.cloud.statcan.ca" else "aaw-dev.cloud.statcan.ca";
-local statcanDomain = ".statcan.gc.ca";
-local covidDomain = ".covid.cloud.statcan.ca";
+local statcanDomain = "statcan.gc.ca";
+local covidDomain = "covid.cloud.statcan.ca";
 
 #Gateways
 local defaultGateway = "istio-ingressgateway.istio-system.svc.cluster.local";
