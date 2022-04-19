@@ -9,7 +9,7 @@ local domain = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
 
 [
 {
-    "apiVersion": "networking.istio.io/v1beta3",
+    "apiVersion": "networking.istio.io/v1beta1",
     "kind": "VirtualService",
     "metadata": {
       "name": "kibana-monitoring",
