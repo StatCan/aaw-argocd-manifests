@@ -3,7 +3,6 @@ kind: Elasticsearch
 metadata:
   name: elastic-monitoring
   namespace: monitoring-system
-  resourceVersion: '821943235'
 spec:
   version: 8.1.0
   http:
