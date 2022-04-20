@@ -1,0 +1,35 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: portal
+  namespace: org-fdi-system
+spec:
+  gateways:
+  - ingress-general-system/general-istio-ingress-gateway-https
+  hosts:
+  - org-fdi-system-portal.aaw-dev.cloud.statcan.ca
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: analytics-platform-portal.org-fdi-system.svc.cluster.local
+        port:
+          number: 8000
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: portal
+  namespace: org-fdi-system
+spec:
+  host: analytics-platform-portal.org-fdi-system.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      simple: ROUND_ROBIN
+    portLevelSettings:
+    - port:
+        number: 443
+      tls:
+        mode: DISABLE
