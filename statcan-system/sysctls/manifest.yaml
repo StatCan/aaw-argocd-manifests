@@ -1,0 +1,81 @@
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  name: sysctl
+  namespace: statcan-system
+  labels:
+    app.kubernetes.io/name: sysctl
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: sysctl
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/name: sysctl
+      annotations:
+        name: scheduler.alpha.kubernetes.io/critical-pod
+    spec:
+      containers:
+        - name: sysctl
+          image: 'busybox:latest'
+          command:
+            - /bin/sh
+            - '-c'
+            - |2
+                          set -o errexit
+                          set -o xtrace
+                          while sysctl -w vm.max_map_count=262144
+                          do
+                            sleep 60s
+                          done
+          resources:
+            limits:
+              cpu: 10m
+              memory: 20Mi
+            requests:
+              cpu: 10m
+              memory: 20Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+          securityContext:
+            privileged: true
+            runAsUser: 0
+            runAsGroup: 0
+            runAsNonRoot: false
+            readOnlyRootFilesystem: false
+            allowPrivilegeEscalation: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        kubernetes.io/os: linux
+      automountServiceAccountToken: false
+      hostNetwork: true
+      hostPID: true
+      hostIPC: true
+      shareProcessNamespace: false
+      securityContext: {}
+      schedulerName: default-scheduler
+      tolerations:
+        - key: CriticalAddonsOnly
+          operator: Exists
+        - key: nvidia.com/gpu
+          operator: Exists
+          effect: NoSchedule
+        - key: node.statcan.gc.ca/use
+          operator: Exists
+          effect: NoSchedule
+        - key: node.statcan.gc.ca/purpose
+          operator: Exists
+          effect: NoSchedule
+        - key: data.statcan.gc.ca/classification
+          operator: Exists
+          effect: NoSchedule
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  revisionHistoryLimit: 10
