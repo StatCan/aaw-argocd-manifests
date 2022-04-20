@@ -1,0 +1,34 @@
+kind: VirtualService
+metadata:
+  name: geoserver
+  namespace: org-geo-system
+spec:
+  gateways:
+  - ingress-general-system/general-istio-ingress-gateway-https
+  hosts:
+  - org-geo-system-geoserver.aaw-dev.cloud.statcan.ca
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: geoserver.org-geo-system.svc.cluster.local
+        port:
+          number: 8080
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: geoserver
+  namespace: org-geo-system
+spec:
+  host: geoserver.org-geo-system.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      simple: ROUND_ROBIN
+    portLevelSettings:
+    - port:
+        number: 443
+      tls:
+        mode: DISABLE
