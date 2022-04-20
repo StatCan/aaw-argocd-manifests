@@ -17,7 +17,7 @@ local domain = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
     },
     "spec": {
       "gateways": [
-        "istio-system/authenticated"
+        "istio-system/authenticated-istio-ingress-gateway-https"
       ],
       "hosts": [
         "monitoring-kibana." + domain
@@ -54,7 +54,7 @@ local domain = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
     },
     "spec": {
       "gateways": [
-        "istio-system/authenticated"
+        "istio-system/authenticated-istio-ingress-gateway-https"
       ],
       "hosts": [
         "monitoring-elastic." + domain

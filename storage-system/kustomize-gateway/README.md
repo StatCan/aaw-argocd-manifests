@@ -88,11 +88,11 @@ metadata:
   namespace: kube-system
 data:
   ingress.override: |
-    rewrite name vault.aaw.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
-    rewrite name minio-gateway-standard-system-boathouse.aaw.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
-    rewrite name minio-gateway-premium-system-boathouse.aaw.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
-    rewrite name minio-gateway-standard-ro-system-boathouse.aaw.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
-    rewrite name minio-gateway-premium-ro-system-boathouse.aaw.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
+    rewrite name vault.aaw.cloud.statcan.ca general.ingress-general-system.svc.cluster.local
+    rewrite name minio-gateway-standard-system-boathouse.aaw.cloud.statcan.ca general.ingress-general-system.svc.cluster.local
+    rewrite name minio-gateway-premium-system-boathouse.aaw.cloud.statcan.ca general.ingress-general-system.svc.cluster.local
+    rewrite name minio-gateway-standard-ro-system-boathouse.aaw.cloud.statcan.ca general.ingress-general-system.svc.cluster.local
+    rewrite name minio-gateway-premium-ro-system-boathouse.aaw.cloud.statcan.ca general.ingress-general-system.svc.cluster.local
 ```
 
 # minio-credential-injector
