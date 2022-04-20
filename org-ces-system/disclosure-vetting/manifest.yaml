@@ -1,0 +1,51 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: allow-postgresql-vetting
+  namespace: org-ces-system
+spec:
+  exportTo:
+    - .
+  hosts:
+    - daaasvettingprod.postgres.database.azure.com
+  ports:
+    - name: tcp-pgsql
+      number: 5432
+      protocol: TCP
+  resolution: DNS
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: disclosure-vetting
+  namespace: org-ces-system
+spec:
+  gateways:
+  - ingress-general-system/general-istio-ingress-gateway-https
+  hosts:
+  - org-ces-system-disclosure-vetting.aaw-dev.cloud.statcan.ca
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: disclosure-vetting.org-ces-system.svc.cluster.local
+        port:
+          number: 5000
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: disclosure-vetting
+  namespace: org-ces-system
+spec:
+  host: disclosure-vetting.org-ces-system.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      simple: ROUND_ROBIN
+    portLevelSettings:
+    - port:
+        number: 443
+      tls:
+        mode: DISABLE
