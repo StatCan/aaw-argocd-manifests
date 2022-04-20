@@ -1664,11 +1664,11 @@ metadata:
   namespace: kube-system
 data:
   ingress.override: |
-    rewrite name vault.aaw.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
-    rewrite name minio-gateway-standard-system-boathouse.aaw.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
-    rewrite name minio-gateway-premium-system-boathouse.aaw.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
-    rewrite name minio-gateway-standard-ro-system-boathouse.aaw.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
-    rewrite name minio-gateway-premium-ro-system-boathouse.aaw.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
+    rewrite name vault.aaw.cloud.statcan.ca general.ingress-general-system.svc.cluster.local
+    rewrite name minio-gateway-standard-system-boathouse.aaw.cloud.statcan.ca general.ingress-general-system.svc.cluster.local
+    rewrite name minio-gateway-premium-system-boathouse.aaw.cloud.statcan.ca general.ingress-general-system.svc.cluster.local
+    rewrite name minio-gateway-standard-ro-system-boathouse.aaw.cloud.statcan.ca general.ingress-general-system.svc.cluster.local
+    rewrite name minio-gateway-premium-ro-system-boathouse.aaw.cloud.statcan.ca general.ingress-general-system.svc.cluster.local
 </code></pre>
 <h1 id="minio-credential-injector">minio-credential-injector</h1>
 <p>The <a href="https://github.com/StatCan/aaw-minio-credential-injector">minio credential injector</a> is a mutating webhook that uses Vault in order to inject MinIO crendentials into notebooks and argo workflows.</p>
