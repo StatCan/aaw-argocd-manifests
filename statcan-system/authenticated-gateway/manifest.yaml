@@ -45,9 +45,6 @@ metadata:
   name: force-authentication
   namespace: istio-system
 spec:
-  workloadSelector:
-    labels:
-      istio: ingressgateway-authenticated
   configPatches:
   - applyTo: HTTP_FILTER
     match:
