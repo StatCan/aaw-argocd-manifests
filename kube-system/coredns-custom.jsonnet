@@ -8,14 +8,15 @@ local statcanDomain = "statcan.gc.ca";
 local covidDomain = "covid.cloud.statcan.ca";
 
 #Gateways
-local defaultGateway = "istio-ingressgateway.istio-system.svc.cluster.local";                                                                                                                                                                                                                                                                                                           
-local protectedGateway = "istio-ingressgateway-protected-b.istio-system.svc.cluster.local"; 
-  
-local rewrite(subdomain, gateway, domain=aawDomain) = "rewrite name %(subdomain)s.%(domain)s %(gateway)s\n" % {                                                                                                                                                                                                                                                                                             
-  subdomain: subdomain,                                                                                                                                                                                                                                                                                                                                                                 
-  gateway: gateway,                                                                                                                                                                                                                                                                                                                                                                     
-  domain: domain                                                                                                                                                                                                                                                                                                                                                                        
-}; 
+local defaultGateway = "general.ingress-general-system.svc.cluster.local";
+local kubeflowGateway = "kubeflow.istio-system.svc.cluster.local";
+local protectedGateway = "protected-b.istio-system.svc.cluster.local";
+
+local rewrite(subdomain, gateway, domain=aawDomain) = "rewrite name %(subdomain)s.%(domain)s %(gateway)s\n" % {
+  subdomain: subdomain,
+  gateway: gateway,
+  domain: domain
+};
 
 {
   apiVersion: 'v1',
@@ -30,13 +31,13 @@ local rewrite(subdomain, gateway, domain=aawDomain) = "rewrite name %(subdomain)
     },
   },
   data: {
-    'ingress.override': 
+    'ingress.override':
       rewrite("vault", defaultGateway) +
       rewrite("minio-gateway-standard-system-boathouse", defaultGateway) +
       rewrite("minio-gateway-premium-system-boathouse", defaultGateway) +
       rewrite("minio-gateway-standard-ro-system-boathouse", defaultGateway) +
       rewrite("minio-gateway-premium-ro-system-boathouse", defaultGateway) +
-      
+
       if isProd then
         #PROD ONLY
         rewrite("minio-standard-tenant-1", defaultGateway, covidDomain) +

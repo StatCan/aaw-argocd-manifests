@@ -53,7 +53,7 @@ Notable aspects of the design:
   + Add to the [MinIO Credential injector](https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/minio-credential-injector/instances.jsonnet)
   + Add to the [Goofys injector](https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/goofys-injector/instances.jsonnet)
   + Add to the [Kubeflow Controller](https://github.com/StatCan/aaw-argocd-manifests/blob/2d827fe546d37fed36bf0974f383b47fe2eff211/daaas-system/kubeflow-controller/deployment.jsonnet#L6-L18) (in the future, the profiles-controller).
-  + Grant Vault access by configuring the terraform for Vault which creates the necessary `config`, `mounts` and `roles` for each MinIO instance. At the moment this is done from within the terraform module that deploys these ArgoCD `Application`s. 
+  + Grant Vault access by configuring the terraform for Vault which creates the necessary `config`, `mounts` and `roles` for each MinIO instance. At the moment this is done from within the terraform module that deploys these ArgoCD `Application`s.
   + Configure the Vault roles for `profile-configurator` and `boathouse` to allow them to interact with the MinIO instances. This is in the dedicated `vault` terraform repo.
 
 ## Special note on Boathouse
@@ -64,7 +64,7 @@ As a result, the current workaround is to have dedicated `{instance}-boathouse.{
 
 # Using external addresses within the cluster
 
-Because of the `trafficPolicy: Local` setting on the cluster, commands like `curl https://kubeflow.{domain}` actually fail within the cluster (unless you happen to initiate the request from the same node). This is side-stepped by configuring CoreDNS to bypass this, by routing the requests to the ingress-gateway, which then manages the traffic. 
+Because of the `trafficPolicy: Local` setting on the cluster, commands like `curl https://kubeflow.{domain}` actually fail within the cluster (unless you happen to initiate the request from the same node). This is side-stepped by configuring CoreDNS to bypass this, by routing the requests to the ingress-gateway, which then manages the traffic.
 
 ```yaml
 apiVersion: v1
@@ -78,9 +78,9 @@ metadata:
   namespace: kube-system
 data:
   ingress.override: |
-    rewrite name vault.aaw.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
-    rewrite name minio-gateway-standard-system-boathouse.aaw.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
-    rewrite name minio-gateway-premium-system-boathouse.aaw.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
-    rewrite name minio-gateway-standard-ro-system-boathouse.aaw.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
-    rewrite name minio-gateway-premium-ro-system-boathouse.aaw.cloud.statcan.ca istio-ingressgateway.istio-system.svc.cluster.local
+    rewrite name vault.aaw.cloud.statcan.ca general.ingress-general-system.svc.cluster.local
+    rewrite name minio-gateway-standard-system-boathouse.aaw.cloud.statcan.ca general.ingress-general-system.svc.cluster.local
+    rewrite name minio-gateway-premium-system-boathouse.aaw.cloud.statcan.ca general.ingress-general-system.svc.cluster.local
+    rewrite name minio-gateway-standard-ro-system-boathouse.aaw.cloud.statcan.ca general.ingress-general-system.svc.cluster.local
+    rewrite name minio-gateway-premium-ro-system-boathouse.aaw.cloud.statcan.ca general.ingress-general-system.svc.cluster.local
 ```
