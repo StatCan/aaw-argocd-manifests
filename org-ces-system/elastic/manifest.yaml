@@ -1,0 +1,136 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: vetting
+  namespace: org-ces-system
+spec:
+  version: 7.16.2
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+  nodeSets:
+  - config:
+      node.data: true
+      node.ingest: true
+      node.master: true
+      node.store.allow_mmap: false
+    count: 1
+    name: nodes
+    podTemplate:
+      metadata:
+        annotations:
+          traffic.sidecar.istio.io/excludeInboundPorts: "9300"
+          traffic.sidecar.istio.io/excludeOutboundPorts: "9300"
+          traffic.sidecar.istio.io/includeInboundPorts: '*'
+      spec:
+        automountServiceAccountToken: true
+        containers:
+        - env:
+          - name: ES_JAVA_OPTS
+            value: -Xms4g -Xmx4g
+          name: elasticsearch
+          resources:
+            limits:
+              cpu: 1
+              memory: 8Gi
+    volumeClaimTemplates:
+    - metadata:
+        name: elasticsearch-data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 256Gi
+        storageClassName: default
+---
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: vetting
+  namespace: org-ces-system
+spec:
+  version: 7.16.2
+  count: 1
+  elasticsearchRef:
+    name: vetting
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+  podTemplate:
+    spec:
+      automountServiceAccountToken: true
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: es
+  namespace: org-ces-system
+spec:
+  gateways:
+  - ingress-general-system/general-istio-ingress-gateway-https
+  hosts:
+  - org-ces-system-vetting-es.aaw.cloud.statcan.ca
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: vetting-es-http.org-ces-system.svc.cluster.local
+        port:
+          number: 9200
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: es
+  namespace: org-ces-system
+spec:
+  host: vetting-es-http.org-ces-system.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      simple: ROUND_ROBIN
+    portLevelSettings:
+    - port:
+        number: 443
+      tls:
+        mode: DISABLE
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: kb
+  namespace: org-ces-system
+spec:
+  gateways:
+  - ingress-general-system/general-istio-ingress-gateway-https
+  hosts:
+  - org-ces-system-vetting-kb.aaw.cloud.statcan.ca
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: vetting-kb-http.org-ces-system.svc.cluster.local
+        port:
+          number: 5601
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: kb
+  namespace: org-ces-system
+spec:
+  host: vetting-kb-http.org-ces-system.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      simple: ROUND_ROBIN
+    portLevelSettings:
+    - port:
+        number: 443
+      tls:
+        mode: DISABLE
