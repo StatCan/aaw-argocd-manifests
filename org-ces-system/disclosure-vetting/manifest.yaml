@@ -21,7 +21,7 @@ metadata:
   namespace: org-ces-system
 spec:
   gateways:
-  - ingress-general-system/general-istio-ingress-gateway-https
+  - ingress-general-system/protected-b-istio-ingress-gateway-https
   hosts:
   - org-ces-system-disclosure-vetting.aaw.cloud.statcan.ca
   http:
