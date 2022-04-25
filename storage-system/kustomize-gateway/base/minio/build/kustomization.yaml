@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+helmChartInflationGenerator:
+  - chartName: minio
+    chartRepoUrl: https://charts.bitnami.com/bitnami
+    chartVersion: 9.0.1
+    releaseName: minio-gateway
+    helmBin: /home/argocd/custom-tools/helm-wrapper
+    values: values.yaml

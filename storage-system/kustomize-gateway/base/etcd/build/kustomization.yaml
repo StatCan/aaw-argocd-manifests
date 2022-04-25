@@ -4,8 +4,13 @@ kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
 
-resources:
-- manifest.yaml
+helmChartInflationGenerator:
+- chartName: etcd
+  chartRepoUrl: https://charts.bitnami.com/bitnami
+  chartVersion: 6.2.9
+  releaseName: minio-gateway-etcd
+  helmBin: /home/argocd/custom-tools/helm-wrapper
+  values: values.yaml
 
 # NOTE: We're not using the headless service
 patchesStrategicMerge:
