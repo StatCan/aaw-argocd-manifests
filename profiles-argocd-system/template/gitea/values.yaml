@@ -42,7 +42,7 @@ gitea:
       # TODO: this should be fixed upstream so that domain and prefix are two separate
       # environment variables. For now, we are just hard-coding the domain.
     - name: ENV_TO_INI__ROOT__URL
-      value: "kubeflow.aaw-dev.cloud.statcan.ca/gitea/$(MY_POD_NAMESPACE)/"
+      value: "https://kubeflow.aaw-dev.cloud.statcan.ca/gitea/$(MY_POD_NAMESPACE)/"
 
   config:
     server:
