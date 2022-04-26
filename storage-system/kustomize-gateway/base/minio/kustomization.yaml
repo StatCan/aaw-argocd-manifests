@@ -4,10 +4,5 @@ kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
 
-helmChartInflationGenerator:
-  - chartName: minio
-    chartRepoUrl: https://charts.bitnami.com/bitnami
-    chartVersion: 9.0.1
-    releaseName: minio-gateway
-    helmBin: /home/argocd/custom-tools/helm-wrapper
-    values: values.yaml
+resources:
+  - manifest.yaml

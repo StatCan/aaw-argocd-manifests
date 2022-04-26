@@ -1,0 +1,76 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: force-authentication
+  namespace: istio-system
+spec:
+  workloadSelectors:
+    labels:
+      app.kubernetes.io/instance: authenticated
+      app.kubernetes.io/name: istio-ingress-gateway
+  configPatches:
+  - applyTo: HTTP_FILTER
+    match:
+      context: GATEWAY
+      listener:
+        filterChain:
+          filter:
+            name: "envoy.http_connection_manager"
+            subFilter:
+              name: "envoy.filters.http.jwt_authn"
+    patch:
+      operation: INSERT_BEFORE
+      value:
+        name: envoy.ext_authz
+        typed_config:
+          "@type": type.googleapis.com/envoy.config.filter.http.ext_authz.v2.ExtAuthz
+          http_service:
+            server_uri:
+              uri: http://oauth2-proxy.oauth2-proxy-system.svc.cluster.local:4180
+              cluster: 'outbound|4180||oauth2-proxy.oauth2-proxy-system.svc.cluster.local'
+              timeout: 10s
+            authorizationRequest:
+              allowedHeaders:
+                patterns:
+                - exact: cookie
+                - exact: "x-forwarded-proto"
+                - exact: "x-forwarded-host"
+                - exact: "x-forwarded-for"
+            authorizationResponse:
+              allowedUpstreamHeaders:
+                patterns:
+                - exact: authorization
+          statusOnError:
+            code: GatewayTimeout
+---
+apiVersion: "security.istio.io/v1beta1"
+kind: "RequestAuthentication"
+metadata:
+  name: force-authentication
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: authenticated
+      app.kubernetes.io/name: istio-ingress-gateway
+  jwtRules:
+  - issuer: "https://sts.windows.net/258f1f99-ee3d-42c7-bfc5-7af1b2343e02/"
+    jwksUri: "https://login.microsoftonline.com/common/discovery/keys"
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: force-authentication
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: authenticated
+      app.kubernetes.io/name: istio-ingress-gateway
+  action: ALLOW
+  rules:
+  - when:
+      - key: request.auth.claims[groups]
+        values:
+          # DAaaS-Users
+          - ad1b9b06-5fc4-4507-96cf-d6a3e0978611
