@@ -12,7 +12,7 @@ metadata:
   namespace: default
 type: Opaque
 data:
-  postgresql-postgres-password: "Z0E1dnd6bjFtdg=="
+  postgresql-postgres-password: "WjIxY3kzTW5saA=="
   postgresql-password: "Z2l0ZWE="
 ---
 # Source: gitea/templates/gitea/config.yaml
@@ -51,7 +51,6 @@ stringData:
     SSH_LISTEN_PORT=2222
     SSH_PORT=22
     START_SSH_SERVER=true
-    STATIC_URL_PREFIX=/gitea/
 ---
 # Source: gitea/templates/gitea/config.yaml
 apiVersion: v1
@@ -620,6 +619,12 @@ spec:
               value: /data
             - name: GITEA_TEMP
               value: /tmp/gitea
+            - name: MY_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: ENV_TO_INI__ROOT__URL
+              value: https://(kubeflow.aaw-dev.cloud.statcan.ca,kubeflow.aaw.cloud.statcan.ca,gitea-http)/gitea/$(MY_POD_NAMESPACE)/
           volumeMounts:
             - name: config
               mountPath: /usr/sbin
