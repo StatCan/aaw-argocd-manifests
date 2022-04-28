@@ -1579,6 +1579,19 @@
     gitea.go
   </a>
   
+    <nav class="md-nav" aria-label="gitea.go">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gitea-user-interface" class="md-nav__link">
+    Gitea User Interface
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -1696,7 +1709,13 @@ developing custom profile controllers. The mechanisms are defined in the
 <h3 id="giteago"><a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/gitea.go">gitea.go</a></h3>
 <p>Responsible for deploying <a href="https://github.com/go-gitea/gitea">gitea</a> as <a href="https://github.com/argoproj/argo-cd">argocd</a> applications per <code>Profile</code>. Currently, <a href="https://github.com/argoproj/argo-cd">argocd</a> applications are deployed by the gitea controller based on the customized gitea manifest found <a href="https://github.com/StatCan/aaw-argocd-manifests/tree/aaw-dev-cc-00/profiles-argocd-system/template/gitea">here</a>.</p>
 <p>The diagram below highlights the key components involved with the Gitea controller[^1]</p>
-<p><img alt="Gitea Controller Diagram" src="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/diagrams/gitea_controller.png" /></p>
+<p><img alt="Gitea Controller Diagram" src="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/docs/diagrams/gitea_controller.png" /></p>
+<h4 id="gitea-user-interface">Gitea User Interface</h4>
+<p>The Gitea user interface is embedded within the <a href="https://github.com/StatCan/aaw-kubeflow-manifests/blob/aaw-dev-cc-00/kustomize/apps/centraldashboard/base/centraldashboard-config.yaml">Kubeflow dashboard</a>'s user interface, rendered by an iframe.</p>
+<p>Requests to a namespace's Gitea server are made to the Kubeflow base url with the suffix <code>/gitea/?ns=&lt;user-namespace&gt;</code>, where the user's namespace is passed as an http parameter. An Istio Virtual Service created by the <code>gitea.go</code> controller contains an http route that redirects traffic from <code>/gitea/?ns=&lt;user-namespace&gt;</code> to <code>/gitea/&lt;user-namespace&gt;/</code>. A second http route routes traffic from <code>/gitea/&lt;user-namespace&gt;/</code> to the Gitea instance in the user's namespace.</p>
+<p>The <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/profiles-argocd-system/template/gitea/">Gitea application server</a> sets the <code>ROOT_URL</code> environment variable to contain the Kubeflow base URL with the <code>/gitea/&lt;user-namespace&gt;/</code>. This is required as it is the application's responsibility to establish the URLS that will be used in the browser to retrieve static assets and send requests to application endpoints.</p>
+<p>The Gitea application <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/profiles-argocd-system/template/gitea/values.yaml#L37-L45">values.yaml file</a> makes use of <a href="https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/">pod fields as environment variables</a> and <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-interdependent-environment-variables/#define-an-environment-dependent-variable-for-a-container">dependent environment variables</a> to create a <code>ROOT_URL</code> that depends on the user's namespace. Additionally, an <a href="https://github.com/go-gitea/gitea/issues/6397">upstream gitea issue</a> indicates that it is possible to set multiple domains in the <code>ROOT_URL</code> environment variable by using the syntax <code>ROOT_URL=https://(domain1,domain2)/gitea/</code>, which is how the dev/prod domains are set without needing to check the deployment environment.</p>
+<p>To allow requests to reach the user's Gitea instance, a Network Policy is set in the user's namespace that allows ingress traffic from the kubeflow-gateway to be sent to any pods in the user's namespace that match the <code>app: gitea</code> label selector.</p>
 <p>[^1]: Istio icons provided by <a href="https://istio.io/latest/about/media-resources/">Istio Media Resources</a></p>
 <h3 id="limitrangego"><a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/limitrange.go">limitrange.go</a></h3>
 <p>Responsible for creating, removing and updating <code>LimitRange</code> resources for a given profile. <code>LimitRange</code> resources are generated to limit the cpu and memory resources for the kubeflow profile's default container. <code>LimitRange</code> resources require the implementation of a controller managing <code>ResourceQuotas</code>, which is provided in this package (see <a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/quotas.go">quotas.go</a>). Implementing <code>LimitRange</code> resources allows any Pod to run associated with the <code>Profile</code>, restricted by a <code>ResourceQuota</code>.</p>
