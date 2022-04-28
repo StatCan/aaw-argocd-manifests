@@ -43,6 +43,8 @@ gitea:
       # environment variables. For now, we are just hard-coding the domain.
     - name: ENV_TO_INI__SERVER__ROOT_URL
       value: "https://kubeflow.aaw-dev.cloud.statcan.ca/gitea/$(MY_POD_NAMESPACE)/"
+    - name: ENV_TO_INI__SERVER__STATIC_URL_PREFIX
+      value: "/gitea/$(MY_POD_NAMESPACE)/"
 
   config:
     server:
