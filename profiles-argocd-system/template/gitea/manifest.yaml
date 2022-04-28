@@ -12,7 +12,7 @@ metadata:
   namespace: default
 type: Opaque
 data:
-  postgresql-postgres-password: "WlRyZ2Z3bjZaNQ=="
+  postgresql-postgres-password: "cWNoTWdDSGQ4Nw=="
   postgresql-password: "Z2l0ZWE="
 ---
 # Source: gitea/templates/gitea/config.yaml
@@ -625,6 +625,8 @@ spec:
                   fieldPath: metadata.namespace
             - name: ENV_TO_INI__SERVER__ROOT_URL
               value: https://kubeflow.aaw-dev.cloud.statcan.ca/gitea/$(MY_POD_NAMESPACE)/
+            - name: ENV_TO_INI__SERVER__STATIC_URL_PREFIX
+              value: /gitea/$(MY_POD_NAMESPACE)/
           volumeMounts:
             - name: config
               mountPath: /usr/sbin
