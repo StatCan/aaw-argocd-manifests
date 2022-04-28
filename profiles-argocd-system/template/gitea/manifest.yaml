@@ -621,7 +621,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: ENV_TO_INI__SERVER__ROOT_URL
-              value: https://(kubeflow.aaw-dev.cloud.statcan.ca,kubeflow.aaw.cloud.statcan.ca,gitea-http)/gitea/$(MY_POD_NAMESPACE)/
+              value: https://kubeflow.aaw-dev.cloud.statcan.ca/gitea/$(MY_POD_NAMESPACE)/
           volumeMounts:
             - name: config
               mountPath: /usr/sbin
