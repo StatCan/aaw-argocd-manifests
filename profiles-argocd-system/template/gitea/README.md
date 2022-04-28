@@ -1,5 +1,5 @@
 # Gitea Manifest
-This is the default installation manifest for gitea. 
+This is the default installation manifest for gitea.
 
 Patches have been applied to the [gitea helm chart](https://gitea.com/gitea/helm-chart) via kustomize, in [kustomize.yaml](./kustomization.yaml).
 
@@ -10,10 +10,10 @@ Patches have been applied to the [gitea helm chart](https://gitea.com/gitea/helm
 make install
 ```
 
-- [manifest.yaml](./manifest.yaml) is the manifest generated from purely the [gitea helm chart](https://gitea.com/gitea/helm-chart). 
+- [manifest.yaml](./manifest.yaml) is the manifest generated from purely the [gitea helm chart](https://gitea.com/gitea/helm-chart).
 
 ## View the customized manifest
 Run the below command to generate the customized yaml.
 ```bash
-kustomize build .
+make
 ```
