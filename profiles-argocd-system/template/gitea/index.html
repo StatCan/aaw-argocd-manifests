@@ -1573,7 +1573,7 @@
                 
                 
                 <h1 id="gitea-manifest">Gitea Manifest</h1>
-<p>This is the default installation manifest for gitea. </p>
+<p>This is the default installation manifest for gitea.</p>
 <p>Patches have been applied to the <a href="https://gitea.com/gitea/helm-chart">gitea helm chart</a> via kustomize, in <a href="./kustomization.yaml">kustomize.yaml</a>.</p>
 <h2 id="install-locally">Install Locally</h2>
 <ul>
@@ -1582,11 +1582,11 @@
 <pre><code class="language-bash">make install
 </code></pre>
 <ul>
-<li><a href="./manifest.yaml">manifest.yaml</a> is the manifest generated from purely the <a href="https://gitea.com/gitea/helm-chart">gitea helm chart</a>. </li>
+<li><a href="./manifest.yaml">manifest.yaml</a> is the manifest generated from purely the <a href="https://gitea.com/gitea/helm-chart">gitea helm chart</a>.</li>
 </ul>
 <h2 id="view-the-customized-manifest">View the customized manifest</h2>
 <p>Run the below command to generate the customized yaml.</p>
-<pre><code class="language-bash">kustomize build .
+<pre><code class="language-bash">make
 </code></pre>
                 
               
