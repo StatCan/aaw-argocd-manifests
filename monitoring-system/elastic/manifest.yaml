@@ -1,0 +1,131 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: elastic-monitoring
+  namespace: monitoring-system
+spec:
+  version: 8.1.0
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+  nodeSets:
+    - config:
+        node.roles:
+          - master
+          - data
+          - ingest
+        node.store.allow_mmap: false
+      count: 3
+      name: nodes
+      podTemplate:
+        metadata:
+          annotations:
+            traffic.sidecar.istio.io/excludeInboundPorts: '9300'
+            traffic.sidecar.istio.io/excludeOutboundPorts: '9300'
+            traffic.sidecar.istio.io/includeInboundPorts: '*'
+        spec:
+          automountServiceAccountToken: true
+          containers:
+            - env:
+                - name: ES_JAVA_OPTS
+                  value: '-Xms4g -Xmx4g'
+              name: elasticsearch
+              resources:
+                limits:
+                  cpu: '4'
+                  memory: 8Gi
+                requests:
+                  cpu: '2'
+                  memory: 8Gi
+      volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 512Gi
+            storageClassName: default
+---
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: kibana-monitoring
+  namespace: monitoring-system
+spec:
+  version: 8.1.0
+  count: 1
+  elasticsearchRef:
+    name: elastic-monitoring
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+  podTemplate:
+    spec:
+      automountServiceAccountToken: true
+---
+apiVersion: beat.k8s.elastic.co/v1beta1
+kind: Beat
+metadata:
+  name: heartbeat-monitoring
+  namespace: monitoring-system
+spec:
+  version: 8.1.0
+  configRef:
+    secretName: heartbeat-config
+  deployment:
+    podTemplate:
+      spec:
+        containers:
+          - env:
+              - name: NODE_NAME
+                valueFrom:
+                  fieldRef:
+                    fieldPath: spec.nodeName
+              - name: NS_NAME
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.namespace
+            image: 'docker.elastic.co/beats/heartbeat:8.1.0'
+            name: heartbeat
+        securityContext:
+          runAsUser: 0
+    replicas: 1
+  elasticsearchRef:
+    name: elastic-monitoring
+  kibanaRef:
+    name: ''
+  type: heartbeat
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: logging-policy
+  namespace: monitoring-system
+spec:
+  portLevelMtls:
+    '9200':
+      mode: PERMISSIVE
+  selector:
+    matchLabels:
+      common.k8s.elastic.co/type: elasticsearch
+      elasticsearch.k8s.elastic.co/cluster-name: elastic-monitoring
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: kibana-monitoring
+  namespace: monitoring-system
+spec:
+  host: kibana-monitoring-kb-http.monitoring-system.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      simple: ROUND_ROBIN
+    portLevelSettings:
+    - port:
+        number: 443
+      tls:
+        mode: DISABLE
