@@ -75,7 +75,7 @@ patchesJson6902:
       value:
         - -c
         - |
-          sleep 3600
+          sleep 1
           set -euo pipefail
 
           echo '==== BEGIN GITEA CONFIGURATION ===='
