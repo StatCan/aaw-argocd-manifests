@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  path: /nocloud.json
+kind: ConfigMap
+metadata:
+  name: azure-cred-file
+  namespace: azure-blob-csi-system
