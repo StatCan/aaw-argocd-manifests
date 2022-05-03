@@ -61,7 +61,7 @@ stringData:
         # skip empty line
         return
       fi
-      
+
       # 'xargs echo -n' trims all leading/trailing whitespaces and a trailing new line
       local setting="$(awk -F '=' '{print $1}' <<< "${line}" | xargs echo -n)"
 
@@ -169,7 +169,7 @@ stringData:
     }
 
     env | (grep ENV_TO_INI || [[ $? == 1 ]]) > /tmp/existing-envs
-    
+
     # MUST BE CALLED BEFORE OTHER CONFIGURATION
     env2ini::generate_initial_secrets
 
@@ -279,14 +279,13 @@ metadata:
     app.kubernetes.io/version: "1.16-dev"
     version: "1.16-dev"
     app.kubernetes.io/managed-by: Helm
-  annotations:
-    null
+  annotations: null
 spec:
   type: ClusterIP
   ports:
-  - name: http
-    port: 80
-    targetPort: 3000
+    - name: http
+      port: 80
+      targetPort: 3000
   selector:
     app.kubernetes.io/name: gitea
     app.kubernetes.io/instance: gitea
@@ -304,15 +303,14 @@ metadata:
     app.kubernetes.io/version: "1.16-dev"
     version: "1.16-dev"
     app.kubernetes.io/managed-by: Helm
-  annotations:
-    null
+  annotations: null
 spec:
   type: ClusterIP
   ports:
-  - name: ssh
-    port: 22
-    targetPort: 2222
-    protocol: TCP
+    - name: ssh
+      port: 22
+      targetPort: 2222
+      protocol: TCP
   selector:
     app.kubernetes.io/name: gitea
     app.kubernetes.io/instance: gitea
@@ -375,8 +373,7 @@ spec:
             - mountPath: /custom
               name: config-volume
               readOnly: false
-          securityContext:
-            {}
+          securityContext: {}
         - name: init-app-ini
           image: "gitea/gitea:1.16-dev-rootless"
           command: ["/usr/sbin/config_environment.sh"]
@@ -411,8 +408,7 @@ spec:
             - mountPath: /custom
               name: config-volume
               readOnly: false
-          securityContext:
-            {}
+          securityContext: {}
         - name: configure-gitea
           image: "gitea/gitea:1.16-dev-rootless"
           command: ["/usr/sbin/configure_gitea.sh"]
@@ -490,8 +486,7 @@ spec:
             requests:
               cpu: 500m
               memory: 500Mi
-          securityContext:
-            {}
+          securityContext: {}
           volumeMounts:
             - name: temp
               mountPath: /tmp
@@ -525,7 +520,7 @@ spec:
         name: data
       spec:
         accessModes:
-            - "ReadWriteOnce"
+          - "ReadWriteOnce"
         resources:
           requests:
             storage: "10Gi"
@@ -536,7 +531,6 @@ kind: Pod
 metadata:
   name: "gitea-test-connection"
   labels:
-
     helm.sh/chart: gitea-5.0.4
     app: gitea
     app.kubernetes.io/name: gitea
@@ -550,6 +544,6 @@ spec:
   containers:
     - name: wget
       image: busybox
-      command: ['wget']
-      args:  ['gitea-http:80']
+      command: ["wget"]
+      args: ["gitea-http:80"]
   restartPolicy: Never

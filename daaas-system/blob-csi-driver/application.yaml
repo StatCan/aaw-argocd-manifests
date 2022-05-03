@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: blob-csi-driver
+  namespace: daaas-system
+spec:
+  project: platform
+  destination:
+    namespace: azure-blob-csi-system
+    name: in-cluster
+  source:
+    repoURL: 'https://raw.githubusercontent.com/kubernetes-sigs/blob-csi-driver/master/charts'
+    chart: blob-csi-driver
+    targetRevision: v1.11.0
+    helm:
+      releaseName: blob-csi-driver
+      values: |
+        node:
+          enableBlobfuseProxy: true
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: profile-state-controller
+  namespace: daaas-system
+spec:
+  selector:
+    matchLabels:
+      app: profile-state-controller
+  template:
+    metadata:
+      labels:
+        app: profile-state-controller
+    spec:
+      serviceAccountName: profile-state-controller
+      containers:
+        - name: profile-state-controller
+          image: k8scc01covidacr.azurecr.io/profile-state-controller:b43d06908312710e52e8f7158e941f6b91272430
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
