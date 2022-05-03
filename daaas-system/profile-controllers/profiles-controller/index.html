@@ -1546,6 +1546,33 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-to-create-a-controller" class="md-nav__link">
+    How to Create a Controller
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controllers-that-deploy-per-namespace-applications" class="md-nav__link">
+    Controllers that Deploy Per-Namespace Applications
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#terminology" class="md-nav__link">
     Terminology
   </a>
@@ -1684,6 +1711,27 @@
                 <p><a href="https://github.com/StatCan/aaw-kubeflow-profiles-controller"><code>profiles-controller</code></a></p>
 <h1 id="profiles-controller">profiles-controller</h1>
 <p>This repository implements custom controllers for watching <code>Profile</code> resources from Kubeflow.</p>
+<h2 id="overview">Overview</h2>
+<p>The diagram below illustrates how profiles controller components are rolled out on the cluster.[^1][^2]<a href="Moby" title="Docker) icon provided by [icons8](https://icons8.com/icons/set/docker">^3</a></p>
+<p><img alt="Kubeflow Profile Controller Overview" src="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/docs/diagrams/profiles_controller_overview.png" /></p>
+<p>[^1]: Gitlab icons provided by <a href="https://about.gitlab.com/press/press-kit/">Gitlab Press Kit</a>.
+[^2]: Github icons provided by <a href="https://github.com/logos">Github logos</a>.
+[^3]: Argo icon provided by <a href="https://cncf-branding.netlify.app/projects/argo/">CNCF branding</a>.</p>
+<h3 id="how-to-create-a-controller">How to Create a Controller</h3>
+<p><strong>Note</strong>: Modifying a controller is a subset of these steps; if you are only updating an existing controller, ignore the steps that don't apply.</p>
+<ol>
+<li>Create a <code>.go</code> file in the <code>cmd</code> folder of <strong>this</strong> repository with the name of your controller. Your controller must create a <code>cobra.Command</code> and register it with the <code>rootCmd</code> of the application. Your controller will be invoked with the entrypoint <code>./profiles-controller &lt;your controller name&gt;</code>.</li>
+<li>Modify the profiles-controller helm chart in the <a href="https://github.com/StatCan/charts">StatCan charts</a> repo. Add the deployment containing your new controller and update the <code>values.yaml</code> file accordingly with any new parameters specific to your container.</li>
+<li>Once your new controller is ready, merge your branch to the <code>main</code> branch of <strong>this</strong> repository. A Github action in <strong>this</strong> repository runs a build job (see <code>.github/workflows/build.yml</code>) that builds the profiles-controller container image and pushes it to Azure container registry. The pushed image is tagged with the commit SHA of the git commit that triggered the Github Action.</li>
+<li>Go to the build job in the Github action and copy the commit SHA that the image is tagged with to your clipboard. This can be found at the top of the step called <strong>Run docker build</strong> in the <strong>build</strong> job.</li>
+<li>Go to the <a href="https://github.com/StatCan/aaw-argocd-manifests">aaw-argocd-manifests</a> repository and open the <code>application.jsonnet</code> file that deploys the <code>profiles-controller</code> ArgoCD application in the <code>daaas-system</code> namespace. In this file, paste the commit SHA from the previous step to the <code>image.tag</code> field. This updates the image tag for the base image used by the <code>profiles-controller</code> deployment. Note that you can make this edit directly through Github's editing features. This edit should be merged into either the <code>aaw-dev-cc-00</code> branch or the <code>aaw-prod-cc-00</code> branch depending on whether the update applies to the dev or prod environments. The <code>profiles-controller</code> ArgoCD application watches for changes to the <code>application.jsonnet</code> file on these branches.</li>
+</ol>
+<h3 id="controllers-that-deploy-per-namespace-applications">Controllers that Deploy Per-Namespace Applications</h3>
+<p>Some controllers deploy per-namespace applications for each user (e.g. Gitea, S3Proxy). In this case, a few additional steps may be required.</p>
+<ol>
+<li>The <code>profiles-argocd-system</code> folder of the <a href="https://github.com/StatCan/aaw-argocd-manifests">aaw-argocd-manifests</a> repository contains manifests that get deployed by per-namespace ArgoCD applications. The intended pattern is that Kubernetes manifests are applied directly with Kustomize patches as required.</li>
+<li>Depending on what a particular per-namespace application looks like, there may be a manual step required where a developer must build the manifests by, for example, templating a helm chart and saving the output in a <code>manifest.yaml</code> file. In this case, a PR must be made to either the <code>aaw-dev-cc-00</code> or <code>aaw-prod-cc-00</code> branches of the aaw-argocd-manifests repo with the newly build <code>manifest.yaml</code> file.</li>
+</ol>
 <h2 id="terminology">Terminology</h2>
 <p>Helpful links to k8s resources and other terminologies related to this project are provided below.</p>
 <ul>
@@ -1708,7 +1756,7 @@ developing custom profile controllers. The mechanisms are defined in the
 <p>Responsible for creating, removing and updating <a href="https://istio.io/latest/docs/reference/config/security/authorization-policy/#Source">Istio Authorization Policies</a> using the <a href="https://github.com/istio/client-go">Istio client</a> for a given <code>Profile</code>. Currently, the only <code>AuthorizationPolicy</code> is to block upload/download from protected-b <code>Notebook</code>'s.</p>
 <h3 id="giteago"><a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/gitea.go">gitea.go</a></h3>
 <p>Responsible for deploying <a href="https://github.com/go-gitea/gitea">gitea</a> as <a href="https://github.com/argoproj/argo-cd">argocd</a> applications per <code>Profile</code>. Currently, <a href="https://github.com/argoproj/argo-cd">argocd</a> applications are deployed by the gitea controller based on the customized gitea manifest found <a href="https://github.com/StatCan/aaw-argocd-manifests/tree/aaw-dev-cc-00/profiles-argocd-system/template/gitea">here</a>.</p>
-<p>The diagram below highlights the key components involved with the Gitea controller[^1]</p>
+<p>The diagram below highlights the key components involved with the Gitea controller[^5]</p>
 <p><img alt="Gitea Controller Diagram" src="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/docs/diagrams/gitea_controller.png" /></p>
 <h4 id="gitea-user-interface">Gitea User Interface</h4>
 <p>The Gitea user interface is embedded within the <a href="https://github.com/StatCan/aaw-kubeflow-manifests/blob/aaw-dev-cc-00/kustomize/apps/centraldashboard/base/centraldashboard-config.yaml">Kubeflow dashboard</a>'s user interface, rendered by an iframe.</p>
@@ -1716,7 +1764,7 @@ developing custom profile controllers. The mechanisms are defined in the
 <p>The <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/profiles-argocd-system/template/gitea/">Gitea application server</a> sets the <code>ROOT_URL</code> environment variable to contain the Kubeflow base URL with the <code>/gitea/&lt;user-namespace&gt;/</code>. This is required as it is the application's responsibility to establish the URLS that will be used in the browser to retrieve static assets and send requests to application endpoints.</p>
 <p>The Gitea application <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/profiles-argocd-system/template/gitea/values.yaml#L37-L45">values.yaml file</a> makes use of <a href="https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/">pod fields as environment variables</a> and <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-interdependent-environment-variables/#define-an-environment-dependent-variable-for-a-container">dependent environment variables</a> to create a <code>ROOT_URL</code> that depends on the user's namespace. Additionally, an <a href="https://github.com/go-gitea/gitea/issues/6397">upstream gitea issue</a> indicates that it is possible to set multiple domains in the <code>ROOT_URL</code> environment variable by using the syntax <code>ROOT_URL=https://(domain1,domain2)/gitea/</code>, which is how the dev/prod domains are set without needing to check the deployment environment.</p>
 <p>To allow requests to reach the user's Gitea instance, a Network Policy is set in the user's namespace that allows ingress traffic from the kubeflow-gateway to be sent to any pods in the user's namespace that match the <code>app: gitea</code> label selector.</p>
-<p>[^1]: Istio icons provided by <a href="https://istio.io/latest/about/media-resources/">Istio Media Resources</a></p>
+<p>[^5]: Istio icons provided by <a href="https://istio.io/latest/about/media-resources/">Istio Media Resources</a></p>
 <h3 id="limitrangego"><a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/limitrange.go">limitrange.go</a></h3>
 <p>Responsible for creating, removing and updating <code>LimitRange</code> resources for a given profile. <code>LimitRange</code> resources are generated to limit the cpu and memory resources for the kubeflow profile's default container. <code>LimitRange</code> resources require the implementation of a controller managing <code>ResourceQuotas</code>, which is provided in this package (see <a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/quotas.go">quotas.go</a>). Implementing <code>LimitRange</code> resources allows any Pod to run associated with the <code>Profile</code>, restricted by a <code>ResourceQuota</code>.</p>
 <h3 id="miniogo"><a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/minio.go">minio.go</a></h3>
