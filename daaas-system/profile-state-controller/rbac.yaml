@@ -12,7 +12,7 @@ rules:
   - apiGroups:
       - ""
     resources:
-      - "pod"
+      - "pods"
     verbs:
       - watch
       - get
@@ -20,7 +20,7 @@ rules:
   - apiGroups:
       - "rbac.authorization.k8s.io"
     resources:
-      - "rolebinding"
+      - "rolebindings"
     verbs:
       - watch
       - get
@@ -28,7 +28,7 @@ rules:
   - apiGroups:
       - "kubeflow.org"
     resources:
-      - "profile"
+      - "profiles"
     verbs:
       - update
       - watch
