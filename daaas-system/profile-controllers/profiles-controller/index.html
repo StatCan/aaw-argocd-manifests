@@ -1602,6 +1602,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#blob-csigo" class="md-nav__link">
+    blob-csi.go
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#giteago" class="md-nav__link">
     gitea.go
   </a>
@@ -1742,6 +1749,7 @@
 <li><a href="https://www.kubeflow.org/docs/components/notebooks/overview/">Kubeflow Notebook</a></li>
 <li><a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/">Roles and RoleBinding (RBAC)</a></li>
 <li><a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">Labels</a></li>
+<li><a href="https://github.com/kubernetes-sigs/blob-csi-driver">Blob CSI Driver</a></li>
 </ul>
 <h2 id="details">Details</h2>
 <p>The profiles controller uses <a href="https://github.com/kubernetes/client-go/tree/master/tools/cache">client-go library</a> extensively.
@@ -1754,6 +1762,14 @@ developing custom profile controllers. The mechanisms are defined in the
 <a href="https://github.com/kubernetes/client-go/tree/master/tools/cache">tools/cache folder</a> of the library.</p>
 <h3 id="authpolicygo"><a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/authpolicy.go">authpolicy.go</a></h3>
 <p>Responsible for creating, removing and updating <a href="https://istio.io/latest/docs/reference/config/security/authorization-policy/#Source">Istio Authorization Policies</a> using the <a href="https://github.com/istio/client-go">Istio client</a> for a given <code>Profile</code>. Currently, the only <code>AuthorizationPolicy</code> is to block upload/download from protected-b <code>Notebook</code>'s.</p>
+<h3 id="blob-csigo"><a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/blob-csi.go">blob-csi.go</a></h3>
+<p>Creates an Azure Blob Storage container for a user in a few storage accounts (e.g. <code>standard</code>, <code>protected-b</code>, etc.) and binds a PersistentVolume to the container using the <a href="https://github.com/kubernetes-sigs/blob-csi-driver">blob-csi driver</a>. This relies on secrets stored in a system namespace --- secrets are not accessible by users. The controller also creates a PVC in the users namespace bound to this specific PV.</p>
+<ul>
+<li>Supports read-write and read-only PersistentVolumes using mountOptions.</li>
+<li>PVCs are ReadWriteMany or ReadOnlyMany, respectively</li>
+<li>Supports both protected-b and unclassified mounts.</li>
+</ul>
+<p><em>This will deprecate the minio controller.</em></p>
 <h3 id="giteago"><a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/gitea.go">gitea.go</a></h3>
 <p>Responsible for deploying <a href="https://github.com/go-gitea/gitea">gitea</a> as <a href="https://github.com/argoproj/argo-cd">argocd</a> applications per <code>Profile</code>. Currently, <a href="https://github.com/argoproj/argo-cd">argocd</a> applications are deployed by the gitea controller based on the customized gitea manifest found <a href="https://github.com/StatCan/aaw-argocd-manifests/tree/aaw-dev-cc-00/profiles-argocd-system/template/gitea">here</a>.</p>
 <p>The diagram below highlights the key components involved with the Gitea controller[^5]</p>
