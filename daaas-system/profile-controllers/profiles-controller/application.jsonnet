@@ -17,7 +17,7 @@ local vars = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
 local values = |||
   image:
     repository: k8scc01covidacr.azurecr.io/profiles-controller
-    tag: 3e217ec3b3d75aea941ad72e5430fbc29077293e
+    tag: 62ac0186aac77967b2b5fb4ff580390fa7eaf2e0
 
   extraEnv:
   - name: REQUEUE_TIME
@@ -59,6 +59,9 @@ local values = |||
         - 468415c1-d3c2-4c7c-a69d-38f3ce11d351
     gitea:
       namespace: "profiles-argocd-system"
+      envFrom:
+        - secretRef:
+            name: "gitea-postgres-connection-unclassified"
     buckets:
       instances: %(instances)s
 ||| % {mount_path: vars.vault_path, instances: vars.buckets};
@@ -81,7 +84,7 @@ local values = |||
     "source": {
       "repoURL": "https://statcan.github.io/charts",
       "chart": "profiles-controller",
-      "targetRevision": "0.2.0",
+      "targetRevision": "0.3.1",
       "helm": {
         "releaseName": "profiles-controller",
         "values": values
