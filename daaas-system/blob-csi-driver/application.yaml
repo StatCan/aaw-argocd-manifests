@@ -15,14 +15,8 @@ spec:
     helm:
       releaseName: blob-csi-driver
       values: |
-        controller:
-          logLevel: 8
         node:
           enableBlobfuseProxy: true
-          logLevel: 8
-        driver:
-          azureGoSDKLogLevel: "DEBUG"
-
   syncPolicy:
     automated:
       prune: true
