@@ -1,20 +1,4 @@
 ---
-# Source: gitea/charts/postgresql/templates/secrets.yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gitea-postgresql
-  labels:
-    app.kubernetes.io/name: postgresql
-    helm.sh/chart: postgresql-10.3.17
-    app.kubernetes.io/instance: gitea
-    app.kubernetes.io/managed-by: Helm
-  namespace: default
-type: Opaque
-data:
-  postgresql-postgres-password: "cWNoTWdDSGQ4Nw=="
-  postgresql-password: "Z2l0ZWE="
----
 # Source: gitea/templates/gitea/config.yaml
 apiVersion: v1
 kind: Secret
@@ -31,12 +15,6 @@ metadata:
 type: Opaque
 stringData:
   _generals_: ""
-  database: |-
-    DB_TYPE=postgres
-    HOST=gitea-postgresql:5432
-    NAME=gitea
-    PASSWD=gitea
-    USER=gitea
   metrics: ENABLED=false
   repository: ROOT=/data/git/gitea-repositories
   security: INSTALL_LOCK=true
@@ -83,7 +61,7 @@ stringData:
         # skip empty line
         return
       fi
-
+      
       # 'xargs echo -n' trims all leading/trailing whitespaces and a trailing new line
       local setting="$(awk -F '=' '{print $1}' <<< "${line}" | xargs echo -n)"
 
@@ -191,7 +169,7 @@ stringData:
     }
 
     env | (grep ENV_TO_INI || [[ $? == 1 ]]) > /tmp/existing-envs
-
+    
     # MUST BE CALLED BEFORE OTHER CONFIGURATION
     env2ini::generate_initial_secrets
 
@@ -288,60 +266,6 @@ stringData:
 
     echo '==== END GITEA CONFIGURATION ===='
 ---
-# Source: gitea/charts/postgresql/templates/svc-headless.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: gitea-postgresql-headless
-  labels:
-    app.kubernetes.io/name: postgresql
-    helm.sh/chart: postgresql-10.3.17
-    app.kubernetes.io/instance: gitea
-    app.kubernetes.io/managed-by: Helm
-    # Use this annotation in addition to the actual publishNotReadyAddresses
-    # field below because the annotation will stop being respected soon but the
-    # field is broken in some versions of Kubernetes:
-    # https://github.com/kubernetes/kubernetes/issues/58662
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
-  namespace: default
-spec:
-  type: ClusterIP
-  clusterIP: None
-  # We want all pods in the StatefulSet to have their addresses published for
-  # the sake of the other Postgresql pods even before they're ready, since they
-  # have to be able to talk to each other in order to become ready.
-  publishNotReadyAddresses: true
-  ports:
-    - name: tcp-postgresql
-      port: 5432
-      targetPort: tcp-postgresql
-  selector:
-    app.kubernetes.io/name: postgresql
-    app.kubernetes.io/instance: gitea
----
-# Source: gitea/charts/postgresql/templates/svc.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: gitea-postgresql
-  labels:
-    app.kubernetes.io/name: postgresql
-    helm.sh/chart: postgresql-10.3.17
-    app.kubernetes.io/instance: gitea
-    app.kubernetes.io/managed-by: Helm
-  annotations:
-  namespace: default
-spec:
-  type: ClusterIP
-  ports:
-    - name: tcp-postgresql
-      port: 5432
-      targetPort: tcp-postgresql
-  selector:
-    app.kubernetes.io/name: postgresql
-    app.kubernetes.io/instance: gitea
-    role: primary
----
 # Source: gitea/templates/gitea/http-svc.yaml
 apiVersion: v1
 kind: Service
@@ -355,13 +279,14 @@ metadata:
     app.kubernetes.io/version: "1.16-dev"
     version: "1.16-dev"
     app.kubernetes.io/managed-by: Helm
-  annotations: null
+  annotations:
+    null
 spec:
   type: ClusterIP
   ports:
-    - name: http
-      port: 80
-      targetPort: 3000
+  - name: http
+    port: 80
+    targetPort: 3000
   selector:
     app.kubernetes.io/name: gitea
     app.kubernetes.io/instance: gitea
@@ -379,171 +304,18 @@ metadata:
     app.kubernetes.io/version: "1.16-dev"
     version: "1.16-dev"
     app.kubernetes.io/managed-by: Helm
-  annotations: null
+  annotations:
+    null
 spec:
   type: ClusterIP
   ports:
-    - name: ssh
-      port: 22
-      targetPort: 2222
-      protocol: TCP
+  - name: ssh
+    port: 22
+    targetPort: 2222
+    protocol: TCP
   selector:
     app.kubernetes.io/name: gitea
     app.kubernetes.io/instance: gitea
----
-# Source: gitea/charts/postgresql/templates/statefulset.yaml
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: gitea-postgresql
-  labels:
-    app.kubernetes.io/name: postgresql
-    helm.sh/chart: postgresql-10.3.17
-    app.kubernetes.io/instance: gitea
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: primary
-  annotations:
-  namespace: default
-spec:
-  serviceName: gitea-postgresql-headless
-  replicas: 1
-  updateStrategy:
-    type: RollingUpdate
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: postgresql
-      app.kubernetes.io/instance: gitea
-      role: primary
-  template:
-    metadata:
-      name: gitea-postgresql
-      labels:
-        app.kubernetes.io/name: postgresql
-        helm.sh/chart: postgresql-10.3.17
-        app.kubernetes.io/instance: gitea
-        app.kubernetes.io/managed-by: Helm
-        role: primary
-        app.kubernetes.io/component: primary
-    spec:
-      affinity:
-        podAffinity:
-
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
-                labelSelector:
-                  matchLabels:
-                    app.kubernetes.io/name: postgresql
-                    app.kubernetes.io/instance: gitea
-                    app.kubernetes.io/component: primary
-                namespaces:
-                  - "default"
-                topologyKey: kubernetes.io/hostname
-              weight: 1
-        nodeAffinity:
-
-      securityContext:
-        fsGroup: 1001
-      containers:
-        - name: gitea-postgresql
-          image: docker.io/bitnami/postgresql:11.11.0-debian-10-r62
-          imagePullPolicy: "IfNotPresent"
-          resources:
-            limits:
-              cpu: 500m
-              memory: 500Mi
-            requests:
-              cpu: 500m
-              memory: 500Mi
-          securityContext:
-            runAsUser: 1001
-          env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: POSTGRESQL_PORT_NUMBER
-              value: "5432"
-            - name: POSTGRESQL_VOLUME_DIR
-              value: "/bitnami/postgresql"
-            - name: PGDATA
-              value: "/bitnami/postgresql/data"
-            - name: POSTGRES_POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: gitea-postgresql
-                  key: postgresql-postgres-password
-            - name: POSTGRES_USER
-              value: "gitea"
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: gitea-postgresql
-                  key: postgresql-password
-            - name: POSTGRES_DB
-              value: "gitea"
-            - name: POSTGRESQL_ENABLE_LDAP
-              value: "no"
-            - name: POSTGRESQL_ENABLE_TLS
-              value: "no"
-            - name: POSTGRESQL_LOG_HOSTNAME
-              value: "false"
-            - name: POSTGRESQL_LOG_CONNECTIONS
-              value: "false"
-            - name: POSTGRESQL_LOG_DISCONNECTIONS
-              value: "false"
-            - name: POSTGRESQL_PGAUDIT_LOG_CATALOG
-              value: "off"
-            - name: POSTGRESQL_CLIENT_MIN_MESSAGES
-              value: "error"
-            - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
-              value: "pgaudit"
-          ports:
-            - name: tcp-postgresql
-              containerPort: 5432
-          livenessProbe:
-            exec:
-              command:
-                - /bin/sh
-                - -c
-                - exec pg_isready -U "gitea" -d "dbname=gitea" -h 127.0.0.1 -p 5432
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 5
-            successThreshold: 1
-            failureThreshold: 6
-          readinessProbe:
-            exec:
-              command:
-                - /bin/sh
-                - -c
-                - -e
-                - |
-                  exec pg_isready -U "gitea" -d "dbname=gitea" -h 127.0.0.1 -p 5432
-                  [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
-            initialDelaySeconds: 5
-            periodSeconds: 10
-            timeoutSeconds: 5
-            successThreshold: 1
-            failureThreshold: 6
-          volumeMounts:
-            - name: dshm
-              mountPath: /dev/shm
-            - name: data
-              mountPath: /bitnami/postgresql
-              subPath:
-      volumes:
-        - name: dshm
-          emptyDir:
-            medium: Memory
-            sizeLimit: 1Gi
-  volumeClaimTemplates:
-    - metadata:
-        name: data
-      spec:
-        accessModes:
-          - "ReadWriteOnce"
-        resources:
-          requests:
-            storage: "1Gi"
 ---
 # Source: gitea/templates/gitea/statefulset.yaml
 apiVersion: apps/v1
@@ -568,7 +340,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 5d62acdeee6a9673223b3597683cf28a68fe8f70a962d14a6238182351de98f5
+        checksum/config: b81451d39c943a098468d46939421692e1d0e1c8ac289d50f61c62aa7b432a3e
       labels:
         helm.sh/chart: gitea-5.0.4
         app: gitea
@@ -603,7 +375,8 @@ spec:
             - mountPath: /custom
               name: config-volume
               readOnly: false
-          securityContext: {}
+          securityContext:
+            {}
         - name: init-app-ini
           image: "gitea/gitea:1.16-dev-rootless"
           command: ["/usr/sbin/config_environment.sh"]
@@ -621,7 +394,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: ENV_TO_INI__SERVER__ROOT_URL
-              value: https://kubeflow.aaw-dev.cloud.statcan.ca/gitea/$(MY_POD_NAMESPACE)/
+              value: https://(kubeflow.aaw-dev.cloud.statcan.ca,kubeflow.aaw.cloud.statcan.ca)/gitea/$(MY_POD_NAMESPACE)/
             - name: ENV_TO_INI__SERVER__STATIC_URL_PREFIX
               value: /gitea/$(MY_POD_NAMESPACE)/
           volumeMounts:
@@ -633,10 +406,13 @@ spec:
               mountPath: /data
             - name: inline-config-sources
               mountPath: /env-to-ini-mounts/inlines/
+            - name: additional-config-sources-0
+              mountPath: "/env-to-ini-mounts/additionals/0/"
             - mountPath: /custom
               name: config-volume
               readOnly: false
-          securityContext: {}
+          securityContext:
+            {}
         - name: configure-gitea
           image: "gitea/gitea:1.16-dev-rootless"
           command: ["/usr/sbin/configure_gitea.sh"]
@@ -714,7 +490,8 @@ spec:
             requests:
               cpu: 500m
               memory: 500Mi
-          securityContext: {}
+          securityContext:
+            {}
           volumeMounts:
             - name: temp
               mountPath: /tmp
@@ -738,6 +515,9 @@ spec:
         - name: inline-config-sources
           secret:
             secretName: gitea-inline-config
+        - name: additional-config-sources-0
+          secret:
+            secretName: gitea-postgresql-secret
         - name: temp
           emptyDir: {}
   volumeClaimTemplates:
@@ -745,7 +525,7 @@ spec:
         name: data
       spec:
         accessModes:
-          - "ReadWriteOnce"
+            - "ReadWriteOnce"
         resources:
           requests:
             storage: "10Gi"
@@ -756,6 +536,7 @@ kind: Pod
 metadata:
   name: "gitea-test-connection"
   labels:
+
     helm.sh/chart: gitea-5.0.4
     app: gitea
     app.kubernetes.io/name: gitea
@@ -769,6 +550,6 @@ spec:
   containers:
     - name: wget
       image: busybox
-      command: ["wget"]
-      args: ["gitea-http:80"]
+      command: ['wget']
+      args:  ['gitea-http:80']
   restartPolicy: Never

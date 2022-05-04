@@ -33,6 +33,9 @@ gitea:
   admin:
     username: superuser
     password: password
+  additionalConfigSources:
+    - secret:
+        secretName: gitea-postgresql-secret
 
   additionalConfigFromEnvs:
     - name: MY_POD_NAMESPACE
@@ -54,12 +57,6 @@ gitea:
       SSH_DOMAIN: gitea
       ENABLE_PPROF: false
       HTTP_PORT: 3000
-    database:
-      DB_TYPE: postgres
-      HOST: gitea-postgresql:5432
-      NAME: gitea
-      PASSWD: gitea
-      USER: gitea
 
   metrics:
     enabled: false
@@ -72,13 +69,7 @@ memcached:
     port: 11211
 
 postgresql:
-  enabled: true
-  global:
-    postgresql:
-      postgresqlDatabase: gitea
-      postgresqlUsername: gitea
-      postgresqlPassword: gitea
-      servicePort: 5432
+  enabled: false
   resources:
     limits:
       memory: 500Mi
