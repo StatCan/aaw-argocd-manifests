@@ -91,7 +91,7 @@ local domain = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
     },
     "spec": {
       "gateways": [
-        "istio-general-system/general-istio-ingress-gateway-https"
+        "ingress-general-system/general-istio-ingress-gateway-https"
       ],
       "hosts": [
         "org-ces-system-elastic." + domain
@@ -128,7 +128,7 @@ local domain = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
     },
     "spec": {
       "gateways": [
-        "istio-general-system/general-istio-ingress-gateway-https"
+        "ingress-general-system/general-istio-ingress-gateway-https"
       ],
       "hosts": [
         "org-ces-system-kibana." + domain
