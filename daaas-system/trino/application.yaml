@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: trino
+  namespace: daaas-system
+spec:
+  project: platform
+  destination:
+    namespace: trino-system
+    name: in-cluster
+  source:
+    repoURL: 'https://statcan.github.io/charts'
+    chart: trino
+    targetRevision: master
+    helm:
+      releaseName: trino
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hive-metastore
+  namespace: daaas-system
+spec:
+  project: platform
+  destination:
+    namespace: hive-system
+    name: in-cluster
+  source:
+    repoURL: 'https://statcan.github.io/charts'
+    chart: hive-metastore
+    targetRevision: master
+    helm:
+      releaseName: hive-metastore
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
