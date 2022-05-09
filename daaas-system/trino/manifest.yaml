@@ -5,10 +5,10 @@ metadata:
   namespace: daaas-system
 spec:
   gateways:
-    - ingress-general-system/general-istio-ingress-gateway-https
-hosts:
-    - trino.aaw-dev.cloud.statcan.ca
-http:
+  - ingress-general-system/general-istio-ingress-gateway-https
+  hosts:
+  - trino.aaw-dev.cloud.statcan.ca
+  http:
   - match:
     - uri:
         prefix: /
@@ -17,7 +17,7 @@ http:
         host: trino.trino-system.svc.cluster.local
         port:
           number: 8080
-        headers:
-          request:
-            add:
-              x-forwarded-proto: "https"
+      headers:
+        request:
+          add:
+            x-forwarded-proto: "https"
