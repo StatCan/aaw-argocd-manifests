@@ -17,7 +17,7 @@ local vars = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
 local values = |||
   image:
     repository: k8scc01covidacr.azurecr.io/profiles-controller
-    tag: 3e217ec3b3d75aea941ad72e5430fbc29077293e
+    tag: 4eb46247604e4bdaae330985f19c739e56b90f8f
 
   extraEnv:
   - name: REQUEUE_TIME
@@ -57,8 +57,17 @@ local values = |||
       supportGroups:
         # DAaaS-AAW-Support
         - 468415c1-d3c2-4c7c-a69d-38f3ce11d351
+    blobcsi:
+      config: |
+          {"name": "standard", "classification": "unclassified", "secretRef": "aawdevcc00samgstandard/azure-blob-csi-system", "capacity": "100Gi", "readOnly": false}
+          {"name": "premium", "classification": "unclassified", "secretRef": "aawdevcc00samgpremium/azure-blob-csi-system", "capacity": "100Gi", "readOnly": false}
+          {"name": "standard-ro", "classification": "protected-b", "secretRef": "aawdevcc00samgstandard/azure-blob-csi-system", "capacity": "100Gi", "readOnly": true}
+          {"name": "premium-ro", "classification": "protected-b", "secretRef": "aawdevcc00samgpremium/azure-blob-csi-system", "capacity": "100Gi", "readOnly": true}
     gitea:
       namespace: "profiles-argocd-system"
+      envFrom:
+        - secretRef:
+            name: "gitea-postgres-connection-unclassified"
     buckets:
       instances: %(instances)s
 ||| % {mount_path: vars.vault_path, instances: vars.buckets};
@@ -81,7 +90,7 @@ local values = |||
     "source": {
       "repoURL": "https://statcan.github.io/charts",
       "chart": "profiles-controller",
-      "targetRevision": "0.2.0",
+      "targetRevision": "0.3.2",
       "helm": {
         "releaseName": "profiles-controller",
         "values": values
