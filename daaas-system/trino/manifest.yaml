@@ -12,12 +12,12 @@ http:
   - match:
     - uri:
         prefix: /
-route:
-  - destination:
-      host: trino.trino-system.svc.cluster.local
-      port:
-        number: 8080
-    headers:
-      request:
-        add:
-          x-forwarded-proto: "https"
+    route:
+    - destination:
+        host: trino.trino-system.svc.cluster.local
+        port:
+          number: 8080
+        headers:
+          request:
+            add:
+              x-forwarded-proto: "https"
