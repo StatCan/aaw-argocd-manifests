@@ -113,19 +113,3 @@ spec:
     matchLabels:
       common.k8s.elastic.co/type: elasticsearch
       elasticsearch.k8s.elastic.co/cluster-name: elastic-monitoring
----
-apiVersion: networking.istio.io/v1beta1
-kind: DestinationRule
-metadata:
-  name: kibana-monitoring
-  namespace: monitoring-system
-spec:
-  host: kibana-monitoring-kb-http.monitoring-system.svc.cluster.local
-  trafficPolicy:
-    loadBalancer:
-      simple: ROUND_ROBIN
-    portLevelSettings:
-    - port:
-        number: 443
-      tls:
-        mode: DISABLE
