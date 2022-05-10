@@ -17,7 +17,7 @@ local vars = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
 local values = |||
   image:
     repository: k8scc01covidacr.azurecr.io/profiles-controller
-    tag: 4eb46247604e4bdaae330985f19c739e56b90f8f
+    tag: 879b7afe3684648a7a9b787ffda4e1fd75767d14
 
   extraEnv:
   - name: REQUEUE_TIME
