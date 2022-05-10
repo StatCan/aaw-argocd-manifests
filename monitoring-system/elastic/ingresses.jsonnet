@@ -44,42 +44,5 @@ local domain = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
         }
       ]
     }
-  },
-  {
-    "apiVersion": "networking.istio.io/v1beta1",
-    "kind": "VirtualService",
-    "metadata": {
-      "name": "elastic-monitoring",
-      "namespace": "monitoring-system"
-    },
-    "spec": {
-      "gateways": [
-        "ingress-general-system/general-istio-ingress-gateway-https"
-      ],
-      "hosts": [
-        "monitoring-elastic." + domain
-      ],
-      "http": [
-        {
-          "match": [
-            {
-              "uri": {
-                "prefix": "/"
-              }
-            }
-          ],
-          "route": [
-            {
-              "destination": {
-                "host": "elastic-monitoring-es-http.monitoring-system.svc.cluster.local",
-                "port": {
-                  "number": 9200
-                }
-              }
-            }
-          ]
-        }
-      ]
-    }
   }
 ]
