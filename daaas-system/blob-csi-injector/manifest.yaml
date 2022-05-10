@@ -1,0 +1,149 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: blob-csi-injector
+  namespace: daaas-system
+  labels:
+    apps.kubernetes.io/name: blob-csi-injector
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: blob-csi-injector
+rules:
+  - apiGroups:
+      - ""
+    verbs:
+      - list
+      - get
+    resources:
+      - persistentvolumeclaims
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: blob-csi-injector-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: blob-csi-injector
+subjects:
+  - kind: ServiceAccount
+    name: blob-csi-injector
+    namespace: daaas-system
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: blob-csi-injector-issuer
+  namespace: daaas-system
+  labels:
+    apps.kubernetes.io/name: blob-csi-injector
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: blob-csi-injector
+  namespace: daaas-system
+  labels:
+    apps.kubernetes.io/name: blob-csi-injector
+spec:
+  secretName: blob-csi-injector-tls
+  commonName: "blob-csi-injector.daaas-system.svc.cluster.local"
+  dnsNames:
+  - blob-csi-injector
+  - blob-csi-injector.daaas-system
+  - blob-csi-injector.daaas-system.svc
+  - blob-csi-injector.daaas-system.svc.cluster
+  isCA: true
+  duration: 8760h
+  issuerRef:
+    name: blob-csi-injector-issuer
+    kind: Issuer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blob-csi-injector
+  namespace: daaas-system
+  labels:
+    apps.kubernetes.io/name: blob-csi-injector
+spec:
+  selector:
+    matchLabels:
+      apps.kubernetes.io/name: blob-csi-injector
+  template:
+    metadata:
+      labels:
+        apps.kubernetes.io/name: blob-csi-injector
+      annotations:
+        sidecar.istio.io/inject: 'false'
+    spec:
+      serviceAccountName: blob-csi-injector
+      automountServiceAccountToken: true
+      containers:
+      - name: blob-csi-injector
+        image: k8scc01covidacr.azurecr.io/blob-csi-injector:b597a01b37345917f748301c88b7769c253518cf
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+        - name: https
+          containerPort: 8443
+        volumeMounts:
+        - name: certs
+          mountPath: /certs
+          readOnly: true
+      volumes:
+      - name: certs
+        secret:
+          secretName: blob-csi-injector-tls
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blob-csi-injector
+  namespace: daaas-system
+  labels:
+    apps.kubernetes.io/name: blob-csi-injector
+spec:
+  selector:
+    apps.kubernetes.io/name: blob-csi-injector
+  ports:
+  - name: https
+    port: 443
+    targetPort: 8443
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: daaas-system/blob-csi-injector
+  labels:
+    apps.kubernetes.io/name: blob-csi-injector
+  name: blob-csi-injector
+webhooks:
+- admissionReviewVersions:
+  - v1beta1
+  sideEffects: None
+  clientConfig:
+    service:
+      name: blob-csi-injector
+      namespace: daaas-system
+      path: /mutate
+      port: 443
+  failurePolicy: Ignore
+  name: blob-csi-injector.statcan.gc.ca
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    resources:
+    - pods
+    scope: '*'
