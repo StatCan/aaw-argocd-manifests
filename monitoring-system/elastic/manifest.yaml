@@ -4,7 +4,7 @@ metadata:
   name: elastic-monitoring
   namespace: monitoring-system
 spec:
-  version: 8.1.0
+  version: 8.2.0
   http:
     tls:
       selfSignedCertificate:
@@ -55,7 +55,7 @@ metadata:
   name: kibana-monitoring
   namespace: monitoring-system
 spec:
-  version: 8.1.0
+  version: 8.2.0
   count: 1
   elasticsearchRef:
     name: elastic-monitoring
@@ -73,7 +73,7 @@ metadata:
   name: heartbeat-monitoring
   namespace: monitoring-system
 spec:
-  version: 8.1.0
+  version: 8.2.0
   configRef:
     secretName: heartbeat-config
   deployment:
