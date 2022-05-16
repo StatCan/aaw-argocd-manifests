@@ -37,3 +37,29 @@ spec:
         number: 443
       tls:
         mode: DISABLE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: trino
+    heritage: Helm
+    release: trino
+  name: trino-headless
+  namespace: trino-system
+spec:
+  clusterIP: None
+  clusterIPs:
+  - None
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: trino
+    release: trino
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
