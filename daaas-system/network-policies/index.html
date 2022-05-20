@@ -18,7 +18,7 @@
     
     
       
-        <title>Network Policies - AAW ArgoCD Manifests</title>
+        <title>Index - AAW ArgoCD Manifests</title>
       
     
     
@@ -64,11 +64,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#network-policies" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -97,7 +92,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Network Policies
+              Index
             
           </span>
         </div>
@@ -1523,50 +1518,15 @@
               </div>
             
             
-              
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-</nav>
-                  </div>
-                </div>
-              </div>
-            
           
           <div class="md-content" data-md-component="content">
             <article class="md-content__inner md-typeset">
               
                 
                 
-                <p>This repo, which is private, points specifically to <strong>system</strong> resources, such as Artifactory, the MinIO systems, and kubernetes controllers, to allow the system to function. It is a flat repo of network policies, with a dev/prod split done with two branches and <code>kustomization.yaml</code> files to include/exclude network policies depending on the environment.</p>
-<p><strong>See also:</strong>
-- The <a href="https://github.com/StatCan/namespace-controller/blob/main/cmd/network.go">namespace-controller</a> for the full set of default policies
-- The <a href="https://github.com/StatCan/aaw-kubeflow-profiles-controller/blob/main/cmd/network.go">profiles-controller</a> <em>also</em> creates network policies in kubeflow-profile namespaces</p>
-<h1 id="network-policies">Network Policies</h1>
-<p><a href="https://kubernetes.io/docs/concepts/services-networking/network-policies/">Network Policies</a> are a Layer 4 (transport layer) firewall tool for managing flow between pods/namespaces based on labels/selectors and ip ranges. When combined with the <a href="https://github.com/StatCan/gatekeeper-policies/blob/a52197c51e99799e0ac9824a503b6eb1ed7442dc/pod-security-policy/metadata-restrictions/template.yaml#L72-L84">immutable label contraints</a> this enables parts of the protected-b implementation, by allowing policies to apply selectively to a <code>data.statcan.gc.ca/classification</code> label, which may be either <code>unlcassified</code> or <code>protected-b</code>.</p>
-<p><strong>You typically always have a matching <code>Ingress</code> and <code>Egress</code> NetworkPolicy in the recieving and sending namespaces (respectively). The senders are often (but not always) Notebooks, which you should refer to the profiles-controller for more on.</strong></p>
-<h1 id="default-per-namespace-network-policies">Default per-namespace Network Policies</h1>
-<h2 id="default-deny-allow-same-namespace">Default-Deny + Allow-Same-Namespace</h2>
-<p>The philosophy in the AAW is "Default Deny; explicit Allow". There is a <a href="https://github.com/StatCan/namespace-controller/blob/main/cmd/network.go"><code>namespace-controller</code></a> which creates a few default policies; among which is <a href="https://github.com/StatCan/namespace-controller/blob/96f7f1ad2d90cbd24958104211b30d9b86c38d85/cmd/network.go#L132-L145"><code>default-deny</code></a> along with <code>allow-same-ns</code> for allowing traffic in the namespace (among non-protected-b pods).</p>
-<h2 id="all-kubeflow-profiles-are-configured-by-the-profiles-controller">All Kubeflow Profiles are configured by the <code>profiles-controller</code></h2>
-<p>The <a href="https://github.com/StatCan/aaw-kubeflow-profiles-controller/blob/main/cmd/network.go">profiles-controller</a> <em>also</em> creates network policies in kubeflow-profile namespaces. For example, every kubeflow profile namespace will get a NetworkPolicy added to allow notebooks to talk to Artifactory, as well as rules to talk to Protected-B and non-protected-b MinIO.</p>
-<h1 id="implementation-known-issues">Implementation &amp; Known Issues</h1>
-<h2 id="iptables-are-slow">IPTables are slow</h2>
-<p>At the time of writing the <a href="https://github.com/Azure/azure-container-networking/blob/master/docs/npm.md">Azure-NPM</a> is <code>iptables</code> based, which has led to <a href="https://github.com/StatCan/daaas/issues/680#issuecomment-974277460">serious performance issues</a>. Some alternative implementations of NetworkPolicies use eBPF, which claim to offer better performance.</p>
-<h2 id="lots-of-network-policies">Lots of Network Policies</h2>
-<p>Network Policies are a namespaced resource, which means that, when creating <code>N</code> policies in <code>M</code> Kubeflow-Profile namespaces, you get <code>N×M</code> policies, which can result in slow network-policy reconciliation times as well as performance issues reconfiguring the firewalls (as mentioned above). One possible solution for this issue is to explore non-standard alternatives such as Clilium's <a href="https://docs.cilium.io/en/v1.8/concepts/kubernetes/policy/#ciliumclusterwidenetworkpolicy"><code>CiliunClusterwideNetworkPolicy</code>s</a>, which would avoid this issue. It would also remove the need for two kubernetes controllers, <code>namespace-controller --network</code> and <code>profiles-controller --network</code>.</p>
+                  <h1>Index</h1>
                 
-                  
+                <p>This application is used by ArgoCD to deploy network policies from the StatCan <a href="https://github.com/StatCan/aaw-network-policies">aaw-network-policies</a> repository, see that repository for more details about network policies on the AAW platform.</p>
                 
               
               
