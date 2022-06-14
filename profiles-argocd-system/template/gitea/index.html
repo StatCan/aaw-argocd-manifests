@@ -1539,28 +1539,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#install-locally" class="md-nav__link">
-    Install Locally
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#view-the-customized-manifest" class="md-nav__link">
-    View the customized manifest
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -1573,20 +1551,50 @@
                 
                 
                 <h1 id="gitea-manifest">Gitea Manifest</h1>
-<p>This is the default installation manifest for gitea.</p>
-<p>Patches have been applied to the <a href="https://gitea.com/gitea/helm-chart">gitea helm chart</a> via kustomize, in <a href="./kustomization.yaml">kustomize.yaml</a>.</p>
-<h2 id="install-locally">Install Locally</h2>
-<ul>
-<li>To test in a local cluster, run the following commands.</li>
-</ul>
+<p>This is the default installation manifest for gitea unclassified, and protected-b.</p>
+<h1 id="deployment">Deployment</h1>
+<p>The <a href="https://gitea.com/gitea/helm-chart">gitea helm chart</a> is templated as unclassified and protected-b manifests providing:
+<a href="./unclassified/manifest.yaml">unclassified</a> and <a href="./protectedb/manifest.yaml">protected-b</a> manifest files.
+Prior to deployment, patches should be applied to each
+<a href="./unclassified/manifest.yaml">unclassified</a> and <a href="./protectedb/manifest.yaml">protected-b</a> manifest files via kustomize.</p>
+<p>Any kustomization common to the unclassified and protected-b gitea deployments is contained within the <code>base/</code> directory.
+Additional kustomization patches specific to application can be defined in the <code>unclassified/</code> or
+<code>protectedb/</code> directories.</p>
+<h1 id="install-locally">Install Locally</h1>
+<ol>
+<li>To regenerate <a href="./unclassified/manifest.yaml">unclassified</a> and <a href="./protectedb/manifest.yaml">protected-b</a> manifest files,
+run</li>
+</ol>
+<pre><code class="language-bash">make helm-build
+</code></pre>
+<ol>
+<li>To install kustomized manifests in a local cluster, run the following:</li>
+</ol>
 <pre><code class="language-bash">make install
 </code></pre>
+<h1 id="project-structure">Project Structure</h1>
+<pre><code class="language-bash">gitea
+├── Makefile
+├── protected-b
+│   ├── kustomization.yaml
+│   ├── manifest.yaml
+│   └── values.yaml
+├── README.md
+└── unclassified
+    ├── kustomization.yaml
+    ├── manifest.yaml
+    └── values.yaml
+</code></pre>
 <ul>
-<li><a href="./manifest.yaml">manifest.yaml</a> is the manifest generated from purely the <a href="https://gitea.com/gitea/helm-chart">gitea helm chart</a>.</li>
+<li>Notice that the <code>protected-b/</code> and <code>unclassified/</code> directories contain a <code>kustomization.yaml</code>, <code>manifest.yaml</code>, and <code>values.yaml</code> file,
+where:</li>
+<li><code>kustomization.yaml</code> contains kustomization specific to the corresponding <code>manifest.yaml</code> file in the <strong>same</strong> directory</li>
+<li><code>manifest.yaml</code> is the pure gitea manifest generated from the gitea helm chart <strong>see <code>helm build</code> in the <a href="./Makefile">Makefile</a></strong></li>
+<li><code>values.yaml</code> is the configuration file for the gitea helm chart</li>
 </ul>
-<h2 id="view-the-customized-manifest">View the customized manifest</h2>
-<p>Run the below command to generate the customized yaml.</p>
-<pre><code class="language-bash">make
+<h1 id="view-the-kustomized-manifests">View the Kustomized Manifests</h1>
+<p>Run the below command to generate the kustomized yaml, outputted to your terminal.</p>
+<pre><code class="language-bash">make kustomize
 </code></pre>
                 
               
