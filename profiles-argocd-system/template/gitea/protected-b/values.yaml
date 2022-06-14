@@ -22,7 +22,7 @@ resources:
 extraVolumes:
   - name: config-volume
     configMap:
-      name: gitea-banner
+      name: gitea-banner-protected-b
 
 extraVolumeMounts:
   - name: config-volume
@@ -35,7 +35,7 @@ gitea:
     password: password
   additionalConfigSources:
     - secret:
-        secretName: gitea-postgresql-secret
+        secretName: gitea-postgresql-secret-protected-b
 
   additionalConfigFromEnvs:
     - name: MY_POD_NAMESPACE
@@ -45,16 +45,16 @@ gitea:
       # TODO: this should be fixed upstream so that domain and prefix are two separate
       # environment variables. For now, we are just hard-coding the domain.
     - name: ENV_TO_INI__SERVER__ROOT_URL
-      value: "https://(kubeflow.aaw-dev.cloud.statcan.ca,kubeflow.aaw.cloud.statcan.ca)/gitea/$(MY_POD_NAMESPACE)/"
+      value: "https://(kubeflow.aaw-dev.cloud.statcan.ca,kubeflow.aaw.cloud.statcan.ca)/gitea-protected-b/$(MY_POD_NAMESPACE)/"
     - name: ENV_TO_INI__SERVER__STATIC_URL_PREFIX
-      value: "/gitea/$(MY_POD_NAMESPACE)/"
+      value: "/gitea-protected-b/$(MY_POD_NAMESPACE)/"
 
   config:
     server:
-      DOMAIN: gitea
+      DOMAIN: gitea-protected-b
       PROTOCOL: http
-      ROOT_URL: https://kubeflow.aaw-dev.cloud.statcan.ca/gitea/
-      SSH_DOMAIN: gitea
+      ROOT_URL: https://kubeflow.aaw-dev.cloud.statcan.ca/gitea-protected-b/
+      SSH_DOMAIN: gitea-protected-b
       ENABLE_PPROF: false
       HTTP_PORT: 3000
 

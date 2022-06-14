@@ -1,0 +1,83 @@
+image:
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: 1.16-dev
+  rootless: true # only possible when running 1.14 or later
+
+service:
+  http:
+    port: 80
+    clusterIP:
+  ssh:
+    port: 22
+    clusterIP:
+
+resources:
+  limits:
+    memory: 500Mi
+    cpu: 500m
+  requests:
+    memory: 500Mi
+    cpu: 500m
+
+extraVolumes:
+  - name: config-volume
+    configMap:
+      name: gitea-banner-unclassified
+
+extraVolumeMounts:
+  - name: config-volume
+    readOnly: false
+    mountPath: /custom
+
+gitea:
+  admin:
+    username: superuser
+    password: password
+  additionalConfigSources:
+    - secret:
+        secretName: gitea-postgresql-secret-unclassified
+
+  additionalConfigFromEnvs:
+    - name: MY_POD_NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+      # TODO: this should be fixed upstream so that domain and prefix are two separate
+      # environment variables. For now, we are just hard-coding the domain.
+    - name: ENV_TO_INI__SERVER__ROOT_URL
+      value: "https://(kubeflow.aaw-dev.cloud.statcan.ca,kubeflow.aaw.cloud.statcan.ca)/gitea-unclassified/$(MY_POD_NAMESPACE)/"
+    - name: ENV_TO_INI__SERVER__STATIC_URL_PREFIX
+      value: "/gitea-unclassified/$(MY_POD_NAMESPACE)/"
+
+  config:
+    server:
+      DOMAIN: gitea-unclassified
+      PROTOCOL: http
+      ROOT_URL: https://kubeflow.aaw-dev.cloud.statcan.ca/gitea-unclassified/
+      SSH_DOMAIN: gitea-unclassified
+      ENABLE_PPROF: false
+      HTTP_PORT: 3000
+
+  metrics:
+    enabled: false
+    serviceMonitor:
+      enabled: false
+
+memcached:
+  enabled: false
+  service:
+    port: 11211
+
+postgresql:
+  enabled: false
+  resources:
+    limits:
+      memory: 500Mi
+      cpu: 500m
+    requests:
+      memory: 500Mi
+      cpu: 500m
+  persistence:
+    size: 1Gi
+
+checkDeprecation: true
