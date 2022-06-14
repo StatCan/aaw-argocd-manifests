@@ -117,7 +117,9 @@ The REST endpoints accept a JSON payload that is described in the official elast
 
 ## Users and security groups
 
-Security role
+There is a comprehensive system of users and roles that allow fine grained to data, and while it can be done via the Kibana interface it is easier to script for a large number of users.
+
+Generating a new API key using the elastic API, the key will be returned if successful so make sure to copy it (it is not accessible later on).
 ```
 POST /_security/api_key
 {
@@ -153,6 +155,7 @@ POST /_security/api_key
 
 ```
 
+How to create a user using the *user* API:
 ```
 POST /_security/user/brendan.gadd
 {
