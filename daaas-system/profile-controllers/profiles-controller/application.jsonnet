@@ -92,7 +92,7 @@ local values = |||
       - name: GITEA_SOURCE_CONTROL_ENABLED_LABEL
         value: "sourcecontrol.statcan.gc.ca/enabled"
 
-    giteaProtectedb:
+    giteaProtectedB:
       envFrom:
         - secretRef:
             name: "gitea-postgres-connection-protected-b"
