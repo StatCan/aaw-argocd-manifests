@@ -4,8 +4,8 @@ This is the default installation manifest for gitea unclassified, and protected-
 # Deployment
 The [gitea helm chart](https://gitea.com/gitea/helm-chart) is templated as unclassified and protected-b manifests providing:
 [unclassified](./unclassified/manifest.yaml) and [protected-b](./protectedb/manifest.yaml) manifest files.
-Prior to deployment, patches should be applied to the each
-[unclassified](./unclassified/manifest.yaml) and [protected-b](./protectedb/manifest.yaml) manifest files via kustomiz.
+Prior to deployment, patches should be applied to each
+[unclassified](./unclassified/manifest.yaml) and [protected-b](./protectedb/manifest.yaml) manifest files via kustomize.
 
 Any kustomization common to the unclassified and protected-b gitea deployments is contained within the `base/` directory.
 Additional kustomization patches specific to application can be defined in the `unclassified/` or
@@ -49,7 +49,3 @@ Run the below command to generate the kustomized yaml, outputted to your termina
 ```bash
 make kustomize
 ```
-
-# Additional Notes
-Any commits to the project with trigger a git hook to rebuild the [gitea helm chart](https://gitea.com/gitea/helm-chart) for
-unclassified and protected-b.
