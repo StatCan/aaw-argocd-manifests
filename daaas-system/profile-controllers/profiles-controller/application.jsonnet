@@ -72,7 +72,7 @@ local values = |||
       - name: GITEA_CLASSIFICATION
         value: "unclassified"
       - name: GITEA_SERVICE_URL
-        value: "gitea-http-unclassified"
+        value: "gitea-unclassified-http"
       - name: GITEA_URL_PREFIX
         value: "gitea-unclassified"
       - name: GITEA_SERVICE_PORT
@@ -86,7 +86,7 @@ local values = |||
       - name: GITEA_ARGOCD_SOURCE_TARGET_REVISION
         value: "aaw-dev-cc-00"
       - name: GITEA_ARGOCD_SOURCE_PATH
-        value: "profiles-argocd-system/template/gitea"
+        value: "profiles-argocd-system/template/gitea/unclassified"
       - name: GITEA_ARGOCD_PROJECT
         value: "default"
       - name: GITEA_SOURCE_CONTROL_ENABLED_LABEL
@@ -100,7 +100,7 @@ local values = |||
       - name: GITEA_CLASSIFICATION
         value: "protected-b"
       - name: GITEA_SERVICE_URL
-        value: "gitea-http-protected-b"
+        value: "gitea-protected-b-http"
       - name: GITEA_URL_PREFIX
         value: "gitea-protected-b"
       - name: GITEA_SERVICE_PORT
@@ -114,7 +114,7 @@ local values = |||
       - name: GITEA_ARGOCD_SOURCE_TARGET_REVISION
         value: "aaw-dev-cc-00"
       - name: GITEA_ARGOCD_SOURCE_PATH
-        value: "profiles-argocd-system/template/gitea"
+        value: "profiles-argocd-system/template/gitea/protected-b"
       - name: GITEA_ARGOCD_PROJECT
         value: "default"
       - name: GITEA_SOURCE_CONTROL_ENABLED_LABEL
