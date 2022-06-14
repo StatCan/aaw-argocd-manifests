@@ -3,12 +3,12 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: gitea-inline-config
+  name: gitea-unclassified-inline-config
   labels:
     helm.sh/chart: gitea-5.0.4
     app: gitea
     app.kubernetes.io/name: gitea
-    app.kubernetes.io/instance: gitea
+    app.kubernetes.io/instance: gitea-unclassified
     app.kubernetes.io/version: "1.16-dev"
     version: "1.16-dev"
     app.kubernetes.io/managed-by: Helm
@@ -20,12 +20,12 @@ stringData:
   security: INSTALL_LOCK=true
   server: |-
     APP_DATA_PATH=/data
-    DOMAIN=gitea
+    DOMAIN=gitea-unclassified
     ENABLE_PPROF=false
     HTTP_PORT=3000
     PROTOCOL=http
-    ROOT_URL=https://kubeflow.aaw-dev.cloud.statcan.ca/gitea/
-    SSH_DOMAIN=gitea
+    ROOT_URL=https://kubeflow.aaw-dev.cloud.statcan.ca/gitea-unclassified/
+    SSH_DOMAIN=gitea-unclassified
     SSH_LISTEN_PORT=2222
     SSH_PORT=22
     START_SSH_SERVER=true
@@ -34,12 +34,12 @@ stringData:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: gitea
+  name: gitea-unclassified
   labels:
     helm.sh/chart: gitea-5.0.4
     app: gitea
     app.kubernetes.io/name: gitea
-    app.kubernetes.io/instance: gitea
+    app.kubernetes.io/instance: gitea-unclassified
     app.kubernetes.io/version: "1.16-dev"
     version: "1.16-dev"
     app.kubernetes.io/managed-by: Helm
@@ -199,12 +199,12 @@ stringData:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: gitea-init
+  name: gitea-unclassified-init
   labels:
     helm.sh/chart: gitea-5.0.4
     app: gitea
     app.kubernetes.io/name: gitea
-    app.kubernetes.io/instance: gitea
+    app.kubernetes.io/instance: gitea-unclassified
     app.kubernetes.io/version: "1.16-dev"
     version: "1.16-dev"
     app.kubernetes.io/managed-by: Helm
@@ -270,12 +270,12 @@ stringData:
 apiVersion: v1
 kind: Service
 metadata:
-  name: gitea-http
+  name: gitea-unclassified-http
   labels:
     helm.sh/chart: gitea-5.0.4
     app: gitea
     app.kubernetes.io/name: gitea
-    app.kubernetes.io/instance: gitea
+    app.kubernetes.io/instance: gitea-unclassified
     app.kubernetes.io/version: "1.16-dev"
     version: "1.16-dev"
     app.kubernetes.io/managed-by: Helm
@@ -289,18 +289,18 @@ spec:
     targetPort: 3000
   selector:
     app.kubernetes.io/name: gitea
-    app.kubernetes.io/instance: gitea
+    app.kubernetes.io/instance: gitea-unclassified
 ---
 # Source: gitea/templates/gitea/ssh-svc.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: gitea-ssh
+  name: gitea-unclassified-ssh
   labels:
     helm.sh/chart: gitea-5.0.4
     app: gitea
     app.kubernetes.io/name: gitea
-    app.kubernetes.io/instance: gitea
+    app.kubernetes.io/instance: gitea-unclassified
     app.kubernetes.io/version: "1.16-dev"
     version: "1.16-dev"
     app.kubernetes.io/managed-by: Helm
@@ -315,18 +315,18 @@ spec:
     protocol: TCP
   selector:
     app.kubernetes.io/name: gitea
-    app.kubernetes.io/instance: gitea
+    app.kubernetes.io/instance: gitea-unclassified
 ---
 # Source: gitea/templates/gitea/statefulset.yaml
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: gitea
+  name: gitea-unclassified
   labels:
     helm.sh/chart: gitea-5.0.4
     app: gitea
     app.kubernetes.io/name: gitea
-    app.kubernetes.io/instance: gitea
+    app.kubernetes.io/instance: gitea-unclassified
     app.kubernetes.io/version: "1.16-dev"
     version: "1.16-dev"
     app.kubernetes.io/managed-by: Helm
@@ -335,17 +335,17 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: gitea
-      app.kubernetes.io/instance: gitea
-  serviceName: gitea
+      app.kubernetes.io/instance: gitea-unclassified
+  serviceName: gitea-unclassified
   template:
     metadata:
       annotations:
-        checksum/config: b81451d39c943a098468d46939421692e1d0e1c8ac289d50f61c62aa7b432a3e
+        checksum/config: 08092ddd9971b1d9e0d1e8dc220706adfd2b10688ca3980d3ca65201514ec3a7
       labels:
         helm.sh/chart: gitea-5.0.4
         app: gitea
         app.kubernetes.io/name: gitea
-        app.kubernetes.io/instance: gitea
+        app.kubernetes.io/instance: gitea-unclassified
         app.kubernetes.io/version: "1.16-dev"
         version: "1.16-dev"
         app.kubernetes.io/managed-by: Helm
@@ -394,9 +394,9 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: ENV_TO_INI__SERVER__ROOT_URL
-              value: https://(kubeflow.aaw-dev.cloud.statcan.ca,kubeflow.aaw.cloud.statcan.ca)/gitea/$(MY_POD_NAMESPACE)/
+              value: https://(kubeflow.aaw-dev.cloud.statcan.ca,kubeflow.aaw.cloud.statcan.ca)/gitea-unclassified/$(MY_POD_NAMESPACE)/
             - name: ENV_TO_INI__SERVER__STATIC_URL_PREFIX
-              value: /gitea/$(MY_POD_NAMESPACE)/
+              value: /gitea-unclassified/$(MY_POD_NAMESPACE)/
           volumeMounts:
             - name: config
               mountPath: /usr/sbin
@@ -503,21 +503,21 @@ spec:
       volumes:
         - name: init
           secret:
-            secretName: gitea-init
+            secretName: gitea-unclassified-init
             defaultMode: 110
         - name: config
           secret:
-            secretName: gitea
+            secretName: gitea-unclassified
             defaultMode: 110
         - configMap:
-            name: gitea-banner
+            name: gitea-banner-unclassified
           name: config-volume
         - name: inline-config-sources
           secret:
-            secretName: gitea-inline-config
+            secretName: gitea-unclassified-inline-config
         - name: additional-config-sources-0
           secret:
-            secretName: gitea-postgresql-secret
+            secretName: gitea-postgresql-secret-unclassified
         - name: temp
           emptyDir: {}
   volumeClaimTemplates:
@@ -534,13 +534,13 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "gitea-test-connection"
+  name: "gitea-unclassified-test-connection"
   labels:
 
     helm.sh/chart: gitea-5.0.4
     app: gitea
     app.kubernetes.io/name: gitea
-    app.kubernetes.io/instance: gitea
+    app.kubernetes.io/instance: gitea-unclassified
     app.kubernetes.io/version: "1.16-dev"
     version: "1.16-dev"
     app.kubernetes.io/managed-by: Helm
@@ -551,5 +551,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args:  ['gitea-http:80']
+      args:  ['gitea-unclassified-http:80']
   restartPolicy: Never

@@ -1,19 +1,51 @@
 # Gitea Manifest
-This is the default installation manifest for gitea.
+This is the default installation manifest for gitea unclassified, and protected-b.
 
-Patches have been applied to the [gitea helm chart](https://gitea.com/gitea/helm-chart) via kustomize, in [kustomize.yaml](./kustomization.yaml).
+# Deployment
+The [gitea helm chart](https://gitea.com/gitea/helm-chart) is templated as unclassified and protected-b manifests providing:
+[unclassified](./unclassified/manifest.yaml) and [protected-b](./protectedb/manifest.yaml) manifest files.
+Prior to deployment, patches should be applied to each
+[unclassified](./unclassified/manifest.yaml) and [protected-b](./protectedb/manifest.yaml) manifest files via kustomize.
 
-## Install Locally
-- To test in a local cluster, run the following commands.
+Any kustomization common to the unclassified and protected-b gitea deployments is contained within the `base/` directory.
+Additional kustomization patches specific to application can be defined in the `unclassified/` or
+`protectedb/` directories.
+
+# Install Locally
+1. To regenerate [unclassified](./unclassified/manifest.yaml) and [protected-b](./protectedb/manifest.yaml) manifest files,
+run
+```bash
+make helm-build
+```
+
+2. To install kustomized manifests in a local cluster, run the following:
 
 ```bash
 make install
 ```
 
-- [manifest.yaml](./manifest.yaml) is the manifest generated from purely the [gitea helm chart](https://gitea.com/gitea/helm-chart).
-
-## View the customized manifest
-Run the below command to generate the customized yaml.
+# Project Structure
 ```bash
-make
+gitea
+├── Makefile
+├── protected-b
+│   ├── kustomization.yaml
+│   ├── manifest.yaml
+│   └── values.yaml
+├── README.md
+└── unclassified
+    ├── kustomization.yaml
+    ├── manifest.yaml
+    └── values.yaml
+```
+- Notice that the `protected-b/` and `unclassified/` directories contain a `kustomization.yaml`, `manifest.yaml`, and `values.yaml` file,
+where:
+  - `kustomization.yaml` contains kustomization specific to the corresponding `manifest.yaml` file in the **same** directory
+  - `manifest.yaml` is the pure gitea manifest generated from the gitea helm chart **see `helm build` in the [Makefile](./Makefile)**
+  - `values.yaml` is the configuration file for the gitea helm chart
+
+# View the Kustomized Manifests
+Run the below command to generate the kustomized yaml, outputted to your terminal.
+```bash
+make kustomize
 ```

@@ -1,0 +1,555 @@
+---
+# Source: gitea/templates/gitea/config.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gitea-protected-b-inline-config
+  labels:
+    helm.sh/chart: gitea-5.0.4
+    app: gitea
+    app.kubernetes.io/name: gitea
+    app.kubernetes.io/instance: gitea-protected-b
+    app.kubernetes.io/version: "1.16-dev"
+    version: "1.16-dev"
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+stringData:
+  _generals_: ""
+  metrics: ENABLED=false
+  repository: ROOT=/data/git/gitea-repositories
+  security: INSTALL_LOCK=true
+  server: |-
+    APP_DATA_PATH=/data
+    DOMAIN=gitea-protected-b
+    ENABLE_PPROF=false
+    HTTP_PORT=3000
+    PROTOCOL=http
+    ROOT_URL=https://kubeflow.aaw-dev.cloud.statcan.ca/gitea-protected-b/
+    SSH_DOMAIN=gitea-protected-b
+    SSH_LISTEN_PORT=2222
+    SSH_PORT=22
+    START_SSH_SERVER=true
+---
+# Source: gitea/templates/gitea/config.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gitea-protected-b
+  labels:
+    helm.sh/chart: gitea-5.0.4
+    app: gitea
+    app.kubernetes.io/name: gitea
+    app.kubernetes.io/instance: gitea-protected-b
+    app.kubernetes.io/version: "1.16-dev"
+    version: "1.16-dev"
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+stringData:
+  config_environment.sh: |-
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    function env2ini::log() {
+      printf "${1}\n"
+    }
+
+    function env2ini::read_config_to_env() {
+      local section="${1}"
+      local line="${2}"
+
+      if [[ -z "${line}" ]]; then
+        # skip empty line
+        return
+      fi
+
+      # 'xargs echo -n' trims all leading/trailing whitespaces and a trailing new line
+      local setting="$(awk -F '=' '{print $1}' <<< "${line}" | xargs echo -n)"
+
+      if [[ -z "${setting}" ]]; then
+        env2ini::log '  ! invalid setting'
+        exit 1
+      fi
+
+      local value=''
+      local regex="^${setting}(\s*)=(\s*)(.*)"
+      if [[ $line =~ $regex ]]; then
+        value="${BASH_REMATCH[3]}"
+      else
+        env2ini::log '  ! invalid setting'
+        exit 1
+      fi
+
+      env2ini::log "    + '${setting}'"
+
+      if [[ -z "${section}" ]]; then
+        export "ENV_TO_INI____${setting^^}=${value}"                           # '^^' makes the variable content uppercase
+        return
+      fi
+
+      local masked_section="${section//./_0X2E_}"                            # '//' instructs to replace all matches
+      masked_section="${masked_section//-/_0X2D_}"
+
+      export "ENV_TO_INI__${masked_section^^}__${setting^^}=${value}"        # '^^' makes the variable content uppercase
+    }
+
+    function env2ini::reload_preset_envs() {
+      env2ini::log "Reloading preset envs..."
+
+      while read -r line; do
+        if [[ -z "${line}" ]]; then
+          # skip empty line
+          return
+        fi
+
+        # 'xargs echo -n' trims all leading/trailing whitespaces and a trailing new line
+        local setting="$(awk -F '=' '{print $1}' <<< "${line}" | xargs echo -n)"
+
+        if [[ -z "${setting}" ]]; then
+          env2ini::log '  ! invalid setting'
+          exit 1
+        fi
+
+        local value=''
+        local regex="^${setting}(\s*)=(\s*)(.*)"
+        if [[ $line =~ $regex ]]; then
+          value="${BASH_REMATCH[3]}"
+        else
+          env2ini::log '  ! invalid setting'
+          exit 1
+        fi
+
+        env2ini::log "  + '${setting}'"
+
+        export "${setting^^}=${value}"                           # '^^' makes the variable content uppercase
+      done < "/tmp/existing-envs"
+
+      rm /tmp/existing-envs
+    }
+
+
+    function env2ini::process_config_file() {
+      local config_file="${1}"
+      local section="$(basename "${config_file}")"
+
+      if [[ $section == '_generals_' ]]; then
+        env2ini::log "  [ini root]"
+        section=''
+      else
+        env2ini::log "  ${section}"
+      fi
+
+      while read -r line; do
+        env2ini::read_config_to_env "${section}" "${line}"
+      done < <(awk 1 "${config_file}")                             # Helm .toYaml trims the trailing new line which breaks line processing; awk 1 ... adds it back while reading
+    }
+
+    function env2ini::load_config_sources() {
+      local path="${1}"
+
+      env2ini::log "Processing $(basename "${path}")..."
+
+      while read -d '' configFile; do
+        env2ini::process_config_file "${configFile}"
+      done < <(find "${path}" -type l -not -name '..data' -print0)
+
+      env2ini::log "\n"
+    }
+
+    function env2ini::generate_initial_secrets() {
+      # These environment variables will either be
+      #   - overwritten with user defined values,
+      #   - initially used to set up Gitea
+      # Anyway, they won't harm existing app.ini files
+
+      export ENV_TO_INI__SECURITY__INTERNAL_TOKEN=$(gitea generate secret INTERNAL_TOKEN)
+      export ENV_TO_INI__SECURITY__SECRET_KEY=$(gitea generate secret SECRET_KEY)
+      export ENV_TO_INI__OAUTH2__JWT_SECRET=$(gitea generate secret JWT_SECRET)
+
+      env2ini::log "...Initial secrets generated\n"
+    }
+
+    env | (grep ENV_TO_INI || [[ $? == 1 ]]) > /tmp/existing-envs
+
+    # MUST BE CALLED BEFORE OTHER CONFIGURATION
+    env2ini::generate_initial_secrets
+
+    env2ini::load_config_sources '/env-to-ini-mounts/inlines/'
+    env2ini::load_config_sources '/env-to-ini-mounts/additionals/'
+
+    # load existing envs to override auto generated envs
+    env2ini::reload_preset_envs
+
+    env2ini::log "=== All configuration sources loaded ===\n"
+
+    # safety to prevent rewrite of secret keys if an app.ini already exists
+    if [ -f ${GITEA_APP_INI} ]; then
+      env2ini::log 'An app.ini file already exists. To prevent overwriting secret keys, these settings are dropped and remain unchanged:'
+      env2ini::log '  - security.INTERNAL_TOKEN'
+      env2ini::log '  - security.SECRET_KEY'
+      env2ini::log '  - oauth2.JWT_SECRET'
+
+      unset ENV_TO_INI__SECURITY__INTERNAL_TOKEN
+      unset ENV_TO_INI__SECURITY__SECRET_KEY
+      unset ENV_TO_INI__OAUTH2__JWT_SECRET
+    fi
+
+    environment-to-ini -o $GITEA_APP_INI -p ENV_TO_INI
+---
+# Source: gitea/templates/gitea/init.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gitea-protected-b-init
+  labels:
+    helm.sh/chart: gitea-5.0.4
+    app: gitea
+    app.kubernetes.io/name: gitea
+    app.kubernetes.io/instance: gitea-protected-b
+    app.kubernetes.io/version: "1.16-dev"
+    version: "1.16-dev"
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+stringData:
+  init_directory_structure.sh: |-
+    #!/usr/bin/env bash
+
+    set -euo pipefail
+
+    set -x
+    mkdir -p /data/git/.ssh
+    chmod -R 700 /data/git/.ssh
+    [ ! -d /data/gitea ] && mkdir -p /data/gitea/conf
+
+    # prepare temp directory structure
+    mkdir -p "${GITEA_TEMP}"
+    chmod ug+rwx "${GITEA_TEMP}"
+
+  configure_gitea.sh: |-
+    #!/usr/bin/env bash
+
+    set -euo pipefail
+
+    echo '==== BEGIN GITEA CONFIGURATION ===='
+
+    { # try
+      gitea migrate
+    } || { # catch
+      echo "Gitea migrate might fail due to database connection...This init-container will try again in a few seconds"
+      exit 1
+    }
+    function configure_admin_user() {
+      local ACCOUNT_ID=$(gitea admin user list --admin | grep -e "\s\+${GITEA_ADMIN_USERNAME}\s\+" | awk -F " " "{printf \$1}")
+      if [[ -z "${ACCOUNT_ID}" ]]; then
+        echo "No admin user '${GITEA_ADMIN_USERNAME}' found. Creating now..."
+        gitea admin user create --admin --username "${GITEA_ADMIN_USERNAME}" --password "${GITEA_ADMIN_PASSWORD}" --email "gitea@local.domain" --must-change-password=false
+        echo '...created.'
+      else
+        echo "Admin account '${GITEA_ADMIN_USERNAME}' already exist. Running update to sync password..."
+        gitea admin user change-password --username "${GITEA_ADMIN_USERNAME}" --password "${GITEA_ADMIN_PASSWORD}"
+        echo '...password sync done.'
+      fi
+    }
+
+    configure_admin_user
+
+    function configure_ldap() {
+        echo 'no ldap configuration... skipping.'
+    }
+
+    configure_ldap
+
+    function configure_oauth() {
+        echo 'no oauth configuration... skipping.'
+    }
+
+    configure_oauth
+
+    echo '==== END GITEA CONFIGURATION ===='
+---
+# Source: gitea/templates/gitea/http-svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitea-protected-b-http
+  labels:
+    helm.sh/chart: gitea-5.0.4
+    app: gitea
+    app.kubernetes.io/name: gitea
+    app.kubernetes.io/instance: gitea-protected-b
+    app.kubernetes.io/version: "1.16-dev"
+    version: "1.16-dev"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    null
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: 3000
+  selector:
+    app.kubernetes.io/name: gitea
+    app.kubernetes.io/instance: gitea-protected-b
+---
+# Source: gitea/templates/gitea/ssh-svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitea-protected-b-ssh
+  labels:
+    helm.sh/chart: gitea-5.0.4
+    app: gitea
+    app.kubernetes.io/name: gitea
+    app.kubernetes.io/instance: gitea-protected-b
+    app.kubernetes.io/version: "1.16-dev"
+    version: "1.16-dev"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    null
+spec:
+  type: ClusterIP
+  ports:
+  - name: ssh
+    port: 22
+    targetPort: 2222
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: gitea
+    app.kubernetes.io/instance: gitea-protected-b
+---
+# Source: gitea/templates/gitea/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: gitea-protected-b
+  labels:
+    helm.sh/chart: gitea-5.0.4
+    app: gitea
+    app.kubernetes.io/name: gitea
+    app.kubernetes.io/instance: gitea-protected-b
+    app.kubernetes.io/version: "1.16-dev"
+    version: "1.16-dev"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gitea
+      app.kubernetes.io/instance: gitea-protected-b
+  serviceName: gitea-protected-b
+  template:
+    metadata:
+      annotations:
+        checksum/config: c1fa4871f559c2e62e44db11606b387aae1b41a545c7ded3a6396305583b1d15
+      labels:
+        helm.sh/chart: gitea-5.0.4
+        app: gitea
+        app.kubernetes.io/name: gitea
+        app.kubernetes.io/instance: gitea-protected-b
+        app.kubernetes.io/version: "1.16-dev"
+        version: "1.16-dev"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      securityContext:
+        fsGroup: 1000
+      initContainers:
+        - name: init-directories
+          image: "gitea/gitea:1.16-dev-rootless"
+          command: ["/usr/sbin/init_directory_structure.sh"]
+          env:
+            - name: GITEA_APP_INI
+              value: /data/gitea/conf/app.ini
+            - name: GITEA_CUSTOM
+              value: /data/gitea
+            - name: GITEA_WORK_DIR
+              value: /data
+            - name: GITEA_TEMP
+              value: /tmp/gitea
+          volumeMounts:
+            - name: init
+              mountPath: /usr/sbin
+            - name: temp
+              mountPath: /tmp
+            - name: data
+              mountPath: /data
+            - mountPath: /custom
+              name: config-volume
+              readOnly: false
+          securityContext:
+            {}
+        - name: init-app-ini
+          image: "gitea/gitea:1.16-dev-rootless"
+          command: ["/usr/sbin/config_environment.sh"]
+          env:
+            - name: GITEA_APP_INI
+              value: /data/gitea/conf/app.ini
+            - name: GITEA_CUSTOM
+              value: /data/gitea
+            - name: GITEA_WORK_DIR
+              value: /data
+            - name: GITEA_TEMP
+              value: /tmp/gitea
+            - name: MY_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: ENV_TO_INI__SERVER__ROOT_URL
+              value: https://(kubeflow.aaw-dev.cloud.statcan.ca,kubeflow.aaw.cloud.statcan.ca)/gitea-protected-b/$(MY_POD_NAMESPACE)/
+            - name: ENV_TO_INI__SERVER__STATIC_URL_PREFIX
+              value: /gitea-protected-b/$(MY_POD_NAMESPACE)/
+          volumeMounts:
+            - name: config
+              mountPath: /usr/sbin
+            - name: temp
+              mountPath: /tmp
+            - name: data
+              mountPath: /data
+            - name: inline-config-sources
+              mountPath: /env-to-ini-mounts/inlines/
+            - name: additional-config-sources-0
+              mountPath: "/env-to-ini-mounts/additionals/0/"
+            - mountPath: /custom
+              name: config-volume
+              readOnly: false
+          securityContext:
+            {}
+        - name: configure-gitea
+          image: "gitea/gitea:1.16-dev-rootless"
+          command: ["/usr/sbin/configure_gitea.sh"]
+          securityContext:
+            runAsUser: 1000
+          env:
+            - name: GITEA_APP_INI
+              value: /data/gitea/conf/app.ini
+            - name: GITEA_CUSTOM
+              value: /data/gitea
+            - name: GITEA_WORK_DIR
+              value: /data
+            - name: GITEA_TEMP
+              value: /tmp/gitea
+            - name: GITEA_ADMIN_USERNAME
+              value: "superuser"
+            - name: GITEA_ADMIN_PASSWORD
+              value: "password"
+          volumeMounts:
+            - name: init
+              mountPath: /usr/sbin
+            - name: temp
+              mountPath: /tmp
+            - name: data
+              mountPath: /data
+            - mountPath: /custom
+              name: config-volume
+              readOnly: false
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: gitea
+          image: "gitea/gitea:1.16-dev-rootless"
+          imagePullPolicy: Always
+          env:
+            # SSH Port values have to be set here as well for openssh configuration
+            - name: SSH_LISTEN_PORT
+              value: "2222"
+            - name: SSH_PORT
+              value: "22"
+            - name: GITEA_APP_INI
+              value: /data/gitea/conf/app.ini
+            - name: GITEA_CUSTOM
+              value: /data/gitea
+            - name: GITEA_WORK_DIR
+              value: /data
+            - name: GITEA_TEMP
+              value: /tmp/gitea
+            - name: TMPDIR
+              value: /tmp/gitea
+          ports:
+            - name: ssh
+              containerPort: 2222
+            - name: http
+              containerPort: 3000
+          livenessProbe:
+            failureThreshold: 10
+            initialDelaySeconds: 200
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: http
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: http
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 500Mi
+            requests:
+              cpu: 500m
+              memory: 500Mi
+          securityContext:
+            {}
+          volumeMounts:
+            - name: temp
+              mountPath: /tmp
+            - name: data
+              mountPath: /data
+            - mountPath: /custom
+              name: config-volume
+              readOnly: false
+      volumes:
+        - name: init
+          secret:
+            secretName: gitea-protected-b-init
+            defaultMode: 110
+        - name: config
+          secret:
+            secretName: gitea-protected-b
+            defaultMode: 110
+        - configMap:
+            name: gitea-banner-protected-b
+          name: config-volume
+        - name: inline-config-sources
+          secret:
+            secretName: gitea-protected-b-inline-config
+        - name: additional-config-sources-0
+          secret:
+            secretName: gitea-postgresql-secret-protected-b
+        - name: temp
+          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+            - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "10Gi"
+---
+# Source: gitea/templates/tests/test-http-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "gitea-protected-b-test-connection"
+  labels:
+
+    helm.sh/chart: gitea-5.0.4
+    app: gitea
+    app.kubernetes.io/name: gitea
+    app.kubernetes.io/instance: gitea-protected-b
+    app.kubernetes.io/version: "1.16-dev"
+    version: "1.16-dev"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:  ['gitea-protected-b-http:80']
+  restartPolicy: Never

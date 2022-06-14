@@ -64,11 +64,61 @@ local values = |||
           {"name": "standard-ro", "classification": "protected-b", "secretRef": "aawdevcc00samgstandard/azure-blob-csi-system", "capacity": "10Ti", "readOnly": true}
           {"name": "premium-ro", "classification": "protected-b", "secretRef": "aawdevcc00samgpremium/azure-blob-csi-system", "capacity": "10Ti", "readOnly": true}
           {"name": "protected-b", "classification": "protected-b", "secretRef": "aawdevcc00samgprotb/azure-blob-csi-system", "capacity": "10Ti", "readOnly": false}
-    gitea:
-      namespace: "profiles-argocd-system"
+    giteaUnclassified:
       envFrom:
         - secretRef:
             name: "gitea-postgres-connection-unclassified"
+      env:
+      - name: GITEA_CLASSIFICATION
+        value: "unclassified"
+      - name: GITEA_SERVICE_URL
+        value: "gitea-unclassified-http"
+      - name: GITEA_URL_PREFIX
+        value: "gitea-unclassified"
+      - name: GITEA_SERVICE_PORT
+        value: 80
+      - name: GITEA_BANNER_CONFIGMAP_NAME
+        value: "gitea-banner-unclassified"
+      - name: GITEA_ARGOCD_NAMESPACE
+        value: "profiles-argocd-system"
+      - name: GITEA_ARGOCD_SOURCE_REPO_URL
+        value: https://github.com/StatCan/aaw-argocd-manifests.git
+      - name: GITEA_ARGOCD_SOURCE_TARGET_REVISION
+        value: "aaw-dev-cc-00"
+      - name: GITEA_ARGOCD_SOURCE_PATH
+        value: "profiles-argocd-system/template/gitea/unclassified"
+      - name: GITEA_ARGOCD_PROJECT
+        value: "default"
+      - name: GITEA_SOURCE_CONTROL_ENABLED_LABEL
+        value: "sourcecontrol.statcan.gc.ca/enabled"
+
+    giteaProtectedB:
+      envFrom:
+        - secretRef:
+            name: "gitea-postgres-connection-protected-b"
+      env:
+      - name: GITEA_CLASSIFICATION
+        value: "protected-b"
+      - name: GITEA_SERVICE_URL
+        value: "gitea-protected-b-http"
+      - name: GITEA_URL_PREFIX
+        value: "gitea-protected-b"
+      - name: GITEA_SERVICE_PORT
+        value: 80
+      - name: GITEA_BANNER_CONFIGMAP_NAME
+        value: "gitea-banner-protected-b"
+      - name: GITEA_ARGOCD_NAMESPACE
+        value: "profiles-argocd-system"
+      - name: GITEA_ARGOCD_SOURCE_REPO_URL
+        value: https://github.com/StatCan/aaw-argocd-manifests.git
+      - name: GITEA_ARGOCD_SOURCE_TARGET_REVISION
+        value: "aaw-dev-cc-00"
+      - name: GITEA_ARGOCD_SOURCE_PATH
+        value: "profiles-argocd-system/template/gitea/protected-b"
+      - name: GITEA_ARGOCD_PROJECT
+        value: "default"
+      - name: GITEA_SOURCE_CONTROL_ENABLED_LABEL
+        value: "sourcecontrol.statcan.gc.ca/enabled"
     buckets:
       instances: %(instances)s
 ||| % {mount_path: vars.vault_path, instances: vars.buckets};
