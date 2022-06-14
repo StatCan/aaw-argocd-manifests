@@ -46,13 +46,8 @@ where:
 
 # View the Kustomized Manifests
 Run the below command to generate the kustomized yaml, outputted to your terminal.
-- unclassified
 ```bash
-make kustomize-unclassified
-```
-- protected-b
-```bash
-make kustomized-protectedb
+make kustomize
 ```
 
 # Additional Notes
