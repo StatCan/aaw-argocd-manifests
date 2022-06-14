@@ -1636,6 +1636,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1798,6 +1805,30 @@ developing custom profile controllers. The mechanisms are defined in the
 <p>The Gitea application <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/profiles-argocd-system/template/gitea/values.yaml#L37-L45">values.yaml file</a> makes use of <a href="https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/">pod fields as environment variables</a> and <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-interdependent-environment-variables/#define-an-environment-dependent-variable-for-a-container">dependent environment variables</a> to create a <code>ROOT_URL</code> that depends on the user's namespace. Additionally, an <a href="https://github.com/go-gitea/gitea/issues/6397">upstream gitea issue</a> indicates that it is possible to set multiple domains in the <code>ROOT_URL</code> environment variable by using the syntax <code>ROOT_URL=https://(domain1,domain2)/gitea/</code>, which is how the dev/prod domains are set without needing to check the deployment environment.</p>
 <p>To allow requests to reach the user's Gitea instance, a Network Policy is set in the user's namespace that allows ingress traffic from the kubeflow-gateway to be sent to any pods in the user's namespace that match the <code>app: gitea</code> label selector.</p>
 <p>[^5]: Istio icons provided by <a href="https://istio.io/latest/about/media-resources/">Istio Media Resources</a></p>
+<h4 id="configuration">Configuration</h4>
+<p>The Gitea controller is configurable to run in unclassified or protected-b mode. The configuration of the following
+parameters thus need set to run the controller:</p>
+<ul>
+<li><code>GITEA_CLASSIFICATION</code>: the classification the controller should be running against. Currently, <code>unclassified</code> and <code>protected-b</code> are supported
+as values.</li>
+<li><code>GITEA_PSQL_PORT</code>: port of the postgres instance the gitea application will connect to</li>
+<li><code>GITEA_PSQL_ADMIN_UNAME</code>: username of a priviledged user within the postgres instance</li>
+<li><code>GITEA_PSQL_ADMIN_PASSWD</code>: password for the above user</li>
+<li><code>GITEA_PSQL_MAINTENANCE_DB</code>: maintenance DB name in the postgres instance</li>
+<li><code>GITEA_SERVICE_URL</code>: internal Gitea URL is specified in
+  <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/profiles-argocd-system/template/gitea/manifest.yaml#L350">here</a></li>
+<li><code>GITEA_URL_PREFIX</code>: url prefix for redirecting gitea</li>
+<li><code>GITEA_SERVICE_PORT</code>: the port exposed by gitea service, as specified
+  <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/profiles-argocd-system/template/gitea/manifest.yaml#L365">here</a></li>
+<li><code>GITEA_BANNER_CONFIGMAP_NAME</code>: gitea banner configmap name (configmap which corresponds to the banner at the top of the gitea ui)</li>
+<li><code>GITEA_ARGOCD_NAMESPACE</code>:  namespace for arcocd instance that the controller will install applications into</li>
+<li><code>GITEA_ARGOCD_SOURCE_REPO_URL</code>: repository url containing the gitea deployment manifest</li>
+<li><code>GITEA_ARGOCD_SOURCE_TARGET_REVISION</code>: git branch to deploy from</li>
+<li><code>GITEA_ARGOCD_SOURCE_PATH</code>: path to the manifest from the root of the git source repo</li>
+<li><code>GITEA_ARGOCD_PROJECT</code>: argocd instances's project to deploy applications within</li>
+<li><code>GITEA_SOURCE_CONTROL_ENABLED_LABEL</code>: this label will be searched for within profiles to indicate if a user has opted in.</li>
+</ul>
+<p>Within AAW, these variables are defined in the <a href="https://github.com/StatCan/charts/blob/master/stable/profiles-controller/values.yaml">statcan charts repo</a>, and they are configured within the dev <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/profile-controllers/profiles-controller/application.jsonnet">argocd-manifests-repo</a> or prod <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-prod-cc-00/daaas-system/profile-controllers/profiles-controller/application.jsonnet">argocd-manifests-repo</a>.</p>
 <h3 id="limitrangego"><a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/limitrange.go">limitrange.go</a></h3>
 <p>Responsible for creating, removing and updating <code>LimitRange</code> resources for a given profile. <code>LimitRange</code> resources are generated to limit the cpu and memory resources for the kubeflow profile's default container. <code>LimitRange</code> resources require the implementation of a controller managing <code>ResourceQuotas</code>, which is provided in this package (see <a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/quotas.go">quotas.go</a>). Implementing <code>LimitRange</code> resources allows any Pod to run associated with the <code>Profile</code>, restricted by a <code>ResourceQuota</code>.</p>
 <h3 id="miniogo"><a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/minio.go">minio.go</a></h3>
