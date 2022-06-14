@@ -1606,6 +1606,19 @@
     blob-csi.go
   </a>
   
+    <nav class="md-nav" aria-label="blob-csi.go">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#local-development" class="md-nav__link">
+    Local Development
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -1740,7 +1753,7 @@
 <li>Depending on what a particular per-namespace application looks like, there may be a manual step required where a developer must build the manifests by, for example, templating a helm chart and saving the output in a <code>manifest.yaml</code> file. In this case, a PR must be made to either the <code>aaw-dev-cc-00</code> or <code>aaw-prod-cc-00</code> branches of the aaw-argocd-manifests repo with the newly build <code>manifest.yaml</code> file.</li>
 </ol>
 <h2 id="terminology">Terminology</h2>
-<p>Helpful links to k8s resources and other terminologies related to this project are provided below.</p>
+<p>Helpful links to k8s resources, technologies and other terminologies related to this project are provided below.</p>
 <ul>
 <li><a href="https://www.kubeflow.org/docs/components/multi-tenancy/getting-started/">Profile</a></li>
 <li><a href="https://istio.io/latest/docs/reference/config/security/authorization-policy/#Source">Istio AuthorizationPolicy</a></li>
@@ -1750,6 +1763,7 @@
 <li><a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/">Roles and RoleBinding (RBAC)</a></li>
 <li><a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">Labels</a></li>
 <li><a href="https://github.com/kubernetes-sigs/blob-csi-driver">Blob CSI Driver</a></li>
+<li><a href="https://www.openpolicyagent.org/">Open Policy Agent (OPA)</a></li>
 </ul>
 <h2 id="details">Details</h2>
 <p>The profiles controller uses <a href="https://github.com/kubernetes/client-go/tree/master/tools/cache">client-go library</a> extensively.
@@ -1769,7 +1783,10 @@ developing custom profile controllers. The mechanisms are defined in the
 <li>PVCs are ReadWriteMany or ReadOnlyMany, respectively</li>
 <li>Supports both protected-b and unclassified mounts.</li>
 </ul>
+<p>In addition, the controller is responsible for managing links from <code>PersistentVolume</code>'s to any buckets from Fair Data Infrasure (FDI) Section of DAaas.  This is accomplished by querying unclassified and protected-b <code>OPA</code> gateways which return <code>json</code> responses containing buckets along with permissions.</p>
 <p><em>This will deprecate the minio controller.</em></p>
+<h4 id="local-development">Local Development</h4>
+<p>The <a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/Taskfile.yml">Taskfile</a> includes task <code>blobcsi:dev</code> for preparing your local environment for development and testing. Due to the controller's dependency on Azure <a href="https://github.com/kubernetes-sigs/blob-csi-driver">blob-csi driver</a> a cluster with the <a href="https://github.com/kubernetes-sigs/blob-csi-driver">blob-csi driver</a> installed is required. As such, it is recommended to debug and test against the development k8s context for AAW. With the local environment configured, the Vscode Debugger can be used through <code>Run and Debug: blobcsi Controller</code> in the debug pane.</p>
 <h3 id="giteago"><a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/gitea.go">gitea.go</a></h3>
 <p>Responsible for deploying <a href="https://github.com/go-gitea/gitea">gitea</a> as <a href="https://github.com/argoproj/argo-cd">argocd</a> applications per <code>Profile</code>. Currently, <a href="https://github.com/argoproj/argo-cd">argocd</a> applications are deployed by the gitea controller based on the customized gitea manifest found <a href="https://github.com/StatCan/aaw-argocd-manifests/tree/aaw-dev-cc-00/profiles-argocd-system/template/gitea">here</a>.</p>
 <p>The diagram below highlights the key components involved with the Gitea controller[^5]</p>
