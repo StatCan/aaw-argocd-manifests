@@ -1,0 +1,57 @@
+{
+    "description": "fluentd-default",
+    "processors": [
+        {
+          "drop": {
+            "if": "ctx.containsKey('log') &&\r\nctx.kubernetes?.container_name == 'example'",
+            "ignore_failure": true
+          }
+        },
+        {
+          "json": {
+            "field": "log",
+            "target_field": "heartbeat",
+            "if": "ctx.containsKey('log') &&\r\nctx.kubernetes?.container_name == 'heartbeat'",
+            "tag": "heartbeat-json",
+            "ignore_failure": true
+          }
+        },
+        {
+          "json": {
+            "field": "log",
+            "target_field": "elasticsearch",
+            "if": "ctx.containsKey('log') &&\r\nctx.kubernetes?.container_name == 'elasticsearch'",
+            "tag": "json-elasticsearch",
+            "ignore_failure": true
+          }
+        },
+        {
+          "grok": {
+            "field": "log",
+            "patterns": [
+              "%{DATE} %{TIME} %{DATA:jupyter.action} %{DATA:jupyter.object_type} \"%{DATA:jupyter.object_name}\" for \"%{DATA:jupyter.namespace_name}\"",
+              "%{DATE} %{TIME} %{DATA:jupyter.action} %{DATA:jupyter.object_type} for \"%{DATA:jupyter.namespace_name}\""
+            ],
+            "if": "ctx.containsKey('log') &&\r\nctx.kubernetes?.labels?.app == 'jupyter-web-app'",
+            "ignore_failure": true
+          }
+        },
+        {
+          "grok": {
+            "field": "log",
+            "patterns": [
+              "%{TIMESTAMP_ISO8601}%{SPACE}%{LOGLEVEL:jupyter.log_level}%{SPACE}%{NOTSPACE:jupyter.object}%{SPACE}%{GREEDYDATA:jupyter.message}\t%{GREEDYDATA:juypter_json}"
+            ],
+            "if": "ctx.containsKey('log') &&\r\nctx.kubernetes?.labels?.app == 'notebook-controller' &&\r\nctx.kubernetes?.container_name == 'manager'",
+            "ignore_failure": true
+          }
+        },
+        {
+          "json": {
+            "field": "juypter_json",
+            "if": "ctx.containsKey('log') &&\r\nctx.kubernetes?.labels?.app == 'notebook-controller' &&\r\nctx.kubernetes?.container_name == 'manager'",
+            "ignore_failure": true
+          }
+        }
+      ]
+  }
