@@ -36,9 +36,9 @@ The elastic stack is made up of a number of components, which are described belo
 
 ## Data Flows & Ingresses
 
- The elasticsearch, kibana and beat modules are deployed by ArgoCD from the monitoring-system namespace. The Kibana interface is behind the istio authenticated gateway so that it can be safely accessed by users, while the elasticsearch services are only accessable from within the cluster, which is all that is necessary for it's job of data ingestion.
+ The elasticsearch, kibana and beat modules are deployed by ArgoCD from the monitoring-system namespace. The Kibana interface is behind the istio authenticated gateway so that it can be safely accessed by users, while the elasticsearch services are only accessable from within the cluster, which is all that is necessary for its job of data ingestion.
  
- The main source of data ingestion is done by Fluentd, which deploys an agent pod on each node in the cluster in the fluentd-system namespace. The agent periodically scrapes the logs from all pods in all configured namespaces on it's node and sends them to elasticsearch directly.
+ The main source of data ingestion is done by Fluentd, which deploys an agent pod on each node in the cluster in the fluentd-system namespace. The agent periodically scrapes the logs from all pods in all configured namespaces on its node and sends them to elasticsearch directly.
 
  Each namespace has a fluentd-config configmap, this is used to determine how the log data is scrapped from the namespace. The default configuration is setup like this:
 
@@ -48,7 +48,7 @@ The elastic stack is made up of a number of components, which are described belo
 </match>
  ```
 
-The way this config works is all logs are matched and they are sent to the 'default' plugin. The 'default' plugin is defined int he fluentd-config in the fluentd-system and in our case, sends the data to elasticsearch.
+The way this config works is all logs are matched and they are sent to the 'default' plugin. The 'default' plugin is defined in the fluentd-config in the fluentd-system and in our case, sends the data to elasticsearch.
 
 # Administrative tasks
 
