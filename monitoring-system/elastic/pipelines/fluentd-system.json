@@ -1,0 +1,11 @@
+  {
+    "description": "fluentd-system",
+    "processors": [
+        {
+          "drop": {
+            "if": "ctx.containsKey('log') &&\r\nctx.kubernetes?.container_name == 'example'",
+            "ignore_failure": true
+          }
+        }
+      ]
+  }
