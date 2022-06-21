@@ -173,7 +173,7 @@ local values = |||
     "source": {
       "repoURL": "https://statcan.github.io/charts",
       "chart": "profiles-controller",
-      "targetRevision": "0.4.2",
+      "targetRevision": "0.4.3",
       "helm": {
         "releaseName": "profiles-controller",
         "values": values
