@@ -17,7 +17,7 @@ local vars = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
 local values = |||
   image:
     repository: k8scc01covidacr.azurecr.io/profiles-controller
-    tag: 7a79bfdd7179467d9ac0fb9cb5b8096746bcfe03
+    tag: d05a5cc44b31f255d8d15ed0867a48ea9926c0e6
 
   extraEnv:
   - name: REQUEUE_TIME
@@ -64,6 +64,38 @@ local values = |||
           {"name": "standard-ro", "classification": "protected-b", "secretRef": "aawdevcc00samgstandard/azure-blob-csi-system", "capacity": "10Ti", "readOnly": true}
           {"name": "premium-ro", "classification": "protected-b", "secretRef": "aawdevcc00samgpremium/azure-blob-csi-system", "capacity": "10Ti", "readOnly": true}
           {"name": "protected-b", "classification": "protected-b", "secretRef": "aawdevcc00samgprotb/azure-blob-csi-system", "capacity": "10Ti", "readOnly": false}
+      envFrom:
+        - secretRef:
+            name: "azure-blob-csi-fdi-unclassified"
+        - secretRef:
+            name: "azure-blob-csi-fdi-protected-b"
+      env:
+      - name: BLOB_CSI_FDI_OPA_DAEMON_TICKER_MILLIS
+        value: 2000
+      - name: BLOB_CSI_FDI_UNCLASS_OPA_ENDPOINT
+        value: "http://minio-gateway-opa.fdi-gateway-unclassified-system.svc.cluster.local:8181/v1/data"
+      - name: BLOB_CSI_FDI_UNCLASS_SPN_SECRET_NAME
+        value: "azure-blob-csi-fdi-unclassified-spn"
+      - name: BLOB_CSI_FDI_UNCLASS_SPN_SECRET_NAMESPACE
+        value: "azure-blob-csi-system"
+      - name: BLOB_CSI_FDI_UNCLASS_PV_STORAGE_CAP
+        value: "100Gi"
+      - name: BLOB_CSI_FDI_UNCLASS_AZURE_STORAGE_AUTH_TYPE
+        value: "spn"
+      - name: BLOB_CSI_FDI_UNCLASS_AZURE_STORAGE_AAD_ENDPOINT
+        value: "https://login.microsoftonline.com"
+      - name: BLOB_CSI_FDI_PROTECTED_B_OPA_ENDPOINT
+        value: "http://minio-gateway-opa.fdi-gateway-protected-b-system.svc.cluster.local:8181/v1/data"
+      - name: BLOB_CSI_FDI_PROTECTED_B_SPN_SECRET_NAME
+        value: "azure-blob-csi-fdi-protected-b-spn"
+      - name: BLOB_CSI_FDI_PROTECTED_B_SPN_SECRET_NAMESPACE
+        value: "azure-blob-csi-system"
+      - name: BLOB_CSI_FDI_PROTECTED_B_PV_STORAGE_CAP
+        value: "100Gi"
+      - name: BLOB_CSI_FDI_PROTECTED_B_AZURE_STORAGE_AUTH_TYPE
+        value: "spn"
+      - name: BLOB_CSI_FDI_PROTECTED_B_AZURE_STORAGE_AAD_ENDPOINT
+        value: "https://login.microsoftonline.com"
     giteaUnclassified:
       envFrom:
         - secretRef:
