@@ -179,11 +179,6 @@ local values = |||
         "values": values
       }
     },
-    "syncPolicy": {
-      "automated": {
-        "prune": true,
-        "selfHeal": true
-      }
-    }
+    "syncPolicy": {}
   }
 }
