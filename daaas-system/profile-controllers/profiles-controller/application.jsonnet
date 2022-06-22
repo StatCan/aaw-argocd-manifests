@@ -59,11 +59,11 @@ local values = |||
         - 468415c1-d3c2-4c7c-a69d-38f3ce11d351
     blobcsi:
       config: |
-          {"name": "standard", "classification": "unclassified", "secretRef": "aawdevcc00samgstandard/azure-blob-csi-system", "capacity": "10Ti", "readOnly": false}
-          {"name": "premium", "classification": "unclassified", "secretRef": "aawdevcc00samgpremium/azure-blob-csi-system", "capacity": "10Ti", "readOnly": false}
-          {"name": "standard-ro", "classification": "protected-b", "secretRef": "aawdevcc00samgstandard/azure-blob-csi-system", "capacity": "10Ti", "readOnly": true}
-          {"name": "premium-ro", "classification": "protected-b", "secretRef": "aawdevcc00samgpremium/azure-blob-csi-system", "capacity": "10Ti", "readOnly": true}
-          {"name": "protected-b", "classification": "protected-b", "secretRef": "aawdevcc00samgprotb/azure-blob-csi-system", "capacity": "10Ti", "readOnly": false}
+          {"name": "standard", "classification": "unclassified", "secretRef": "aawdevcc00samgstandard/azure-blob-csi-system", "capacity": "10Ti", "readOnly": false, "owner": "AAW"}
+          {"name": "premium", "classification": "unclassified", "secretRef": "aawdevcc00samgpremium/azure-blob-csi-system", "capacity": "10Ti", "readOnly": false, "owner": "AAW"}
+          {"name": "standard-ro", "classification": "protected-b", "secretRef": "aawdevcc00samgstandard/azure-blob-csi-system", "capacity": "10Ti", "readOnly": true, "owner": "AAW"}
+          {"name": "premium-ro", "classification": "protected-b", "secretRef": "aawdevcc00samgpremium/azure-blob-csi-system", "capacity": "10Ti", "readOnly": true, "owner": "AAW"}
+          {"name": "protected-b", "classification": "protected-b", "secretRef": "aawdevcc00samgprotb/azure-blob-csi-system", "capacity": "10Ti", "readOnly": false, "owner": "AAW"}
       envFrom:
         - secretRef:
             name: "azure-blob-csi-fdi-unclassified"
