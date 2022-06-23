@@ -1934,6 +1934,7 @@ as values.</li>
 <li><code>GITEA_ARGOCD_SOURCE_PATH</code>: path to the manifest from the root of the git source repo</li>
 <li><code>GITEA_ARGOCD_PROJECT</code>: argocd instances's project to deploy applications within</li>
 <li><code>GITEA_SOURCE_CONTROL_ENABLED_LABEL</code>: this label will be searched for within profiles to indicate if a user has opted in.</li>
+<li><code>GITEA_KUBEFLOW_ROOT_URL</code>: the url for kubeflow's central dashboard (for dev: https://kubeflow.aaw-dev.cloud.statcan.ca, for production: https://kubeflow.aaw.cloud.statcan.ca)</li>
 </ul>
 <p>Within AAW, these variables are defined in the <a href="https://github.com/StatCan/charts/blob/master/stable/profiles-controller/values.yaml">statcan charts repo</a>, and they are configured within the dev <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/daaas-system/profile-controllers/profiles-controller/application.jsonnet">argocd-manifests-repo</a> or prod <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-prod-cc-00/daaas-system/profile-controllers/profiles-controller/application.jsonnet">argocd-manifests-repo</a>.</p>
 <h3 id="limitrangego"><a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/limitrange.go">limitrange.go</a></h3>
