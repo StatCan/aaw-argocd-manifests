@@ -17,7 +17,7 @@ local vars = if std.extVar('targetRevision') == "aaw-prod-cc-00" then
 local values = |||
   image:
     repository: k8scc01covidacr.azurecr.io/profiles-controller
-    tag: 97fd95c9d753358b5dfb7bef24be118db5e26101
+    tag: cd23663d28bc4070b2a7994e18167fad71f2c162
 
   extraEnv:
   - name: REQUEUE_TIME
@@ -123,7 +123,8 @@ local values = |||
         value: "default"
       - name: GITEA_SOURCE_CONTROL_ENABLED_LABEL
         value: "sourcecontrol.statcan.gc.ca/enabled"
-
+      - name: GITEA_KUBEFLOW_ROOT_URL
+        value: "https://kubeflow.aaw-dev.cloud.statcan.ca"
     giteaProtectedB:
       envFrom:
         - secretRef:
@@ -151,6 +152,8 @@ local values = |||
         value: "default"
       - name: GITEA_SOURCE_CONTROL_ENABLED_LABEL
         value: "sourcecontrol.statcan.gc.ca/enabled"
+      - name: GITEA_KUBEFLOW_ROOT_URL
+        value: "https://kubeflow.aaw-dev.cloud.statcan.ca"
     buckets:
       instances: %(instances)s
 ||| % {mount_path: vars.vault_path, instances: vars.buckets};
@@ -173,7 +176,7 @@ local values = |||
     "source": {
       "repoURL": "https://statcan.github.io/charts",
       "chart": "profiles-controller",
-      "targetRevision": "0.4.3",
+      "targetRevision": "0.4.4",
       "helm": {
         "releaseName": "profiles-controller",
         "values": values
