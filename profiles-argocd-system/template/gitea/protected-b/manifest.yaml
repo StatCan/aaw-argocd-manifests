@@ -61,7 +61,7 @@ stringData:
         # skip empty line
         return
       fi
-
+      
       # 'xargs echo -n' trims all leading/trailing whitespaces and a trailing new line
       local setting="$(awk -F '=' '{print $1}' <<< "${line}" | xargs echo -n)"
 
@@ -169,7 +169,7 @@ stringData:
     }
 
     env | (grep ENV_TO_INI || [[ $? == 1 ]]) > /tmp/existing-envs
-
+    
     # MUST BE CALLED BEFORE OTHER CONFIGURATION
     env2ini::generate_initial_secrets
 
@@ -394,7 +394,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: ENV_TO_INI__SERVER__ROOT_URL
-              value: https://(kubeflow.aaw-dev.cloud.statcan.ca,kubeflow.aaw.cloud.statcan.ca)/gitea-protected-b/$(MY_POD_NAMESPACE)/
+              value: https://kubeflow.aaw-dev.cloud.statcan.ca/gitea-protected-b/$(MY_POD_NAMESPACE)/
             - name: ENV_TO_INI__SERVER__STATIC_URL_PREFIX
               value: /gitea-protected-b/$(MY_POD_NAMESPACE)/
           volumeMounts:
