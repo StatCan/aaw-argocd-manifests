@@ -394,7 +394,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: ENV_TO_INI__SERVER__ROOT_URL
-              value: https://(kubeflow.aaw-dev.cloud.statcan.ca,kubeflow.aaw.cloud.statcan.ca)/gitea-unclassified/$(MY_POD_NAMESPACE)/
+              value: https://kubeflow.aaw-dev.cloud.statcan.ca/gitea-unclassified/$(MY_POD_NAMESPACE)/
             - name: ENV_TO_INI__SERVER__STATIC_URL_PREFIX
               value: /gitea-unclassified/$(MY_POD_NAMESPACE)/
           volumeMounts:
