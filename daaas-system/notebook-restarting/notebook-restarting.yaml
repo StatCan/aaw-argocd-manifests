@@ -1,0 +1,66 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: notebook-restart-cluster-role
+rules:
+  - apiGroups: [""]
+    resources: ["statefulsets", "pods"]
+    verbs: ["get", "update", "list"]
+# Pods are used as they contain the `notebook-name` label 
+# Pods also used to get the statefulset name by using .metadata.OwnerReferences[].name
+# Statefulsets are what we need to restart
+---
+#Service Account
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: notebook-restart-sa
+  namespace: notebook-cleanup-system
+---
+# RoleBinding, specifically for Clusterroles
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: notebook-restart-crb
+subjects:
+- kind: ServiceAccount
+  name: notebook-restart-sa
+  namespace: notebook-cleanup-system
+roleRef:
+  kind: ClusterRole
+  name: notebook-restart-cluster-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: notebook-restart-cronjob
+  namespace: notebook-cleanup-system
+spec:
+  # 1 AM on Saturday
+  schedule: "0 1 * * 6"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: notebook-restart-sa
+          automountServiceAccountToken: true
+          restartPolicy: OnFailure
+          containers:
+          - name: notebook-restart-job
+            image: k8scc01covidacr.azurecr.io/notebook-restart:04eab57523f97ba96b9dfba22ef68a3ac0b198db
+            command: ["/bin/bash"]
+            args: ["/home/nonroot/0-the-co-ordinate.sh dry-run"]
+            imagePullPolicy: IfNotPresent
+            env:
+              - name: ACR_READ_METADATA_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: acr-metadata-read-secret
+                    key: acr_metadata_read_username
+              - name: ACR_READ_METADATA_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: acr-metadata-read-secret
+                    key: acr_metadata_read_password
