@@ -81,6 +81,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://statcan.github.io/aaw-argocd-manifests/daaas-system/notebook-restarting/</loc>
+         <lastmod>2022-06-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://statcan.github.io/aaw-argocd-manifests/daaas-system/notebook-scanning/</loc>
          <lastmod>2022-06-24</lastmod>
          <changefreq>daily</changefreq>
