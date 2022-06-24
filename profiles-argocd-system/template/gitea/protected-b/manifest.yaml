@@ -336,6 +336,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: gitea
       app.kubernetes.io/instance: gitea-protected-b
+      data.statcan.gc.ca/classification: protected-b
   serviceName: gitea-protected-b
   template:
     metadata:
@@ -349,6 +350,7 @@ spec:
         app.kubernetes.io/version: "1.16-dev"
         version: "1.16-dev"
         app.kubernetes.io/managed-by: Helm
+        data.statcan.gc.ca/classification: protected-b
     spec:
       securityContext:
         fsGroup: 1000
@@ -523,6 +525,8 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
+        labels:
+          data.statcan.gc.ca/classification: protected-b
       spec:
         accessModes:
             - "ReadWriteOnce"
