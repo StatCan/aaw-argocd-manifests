@@ -29,6 +29,14 @@ extraVolumeMounts:
     readOnly: false
     mountPath: /custom
 
+statefulset:
+  labels:
+    data.statcan.gc.ca/classification: protected-b
+
+persistence:
+  labels:
+    data.statcan.gc.ca/classification: protected-b
+
 gitea:
   admin:
     username: superuser
