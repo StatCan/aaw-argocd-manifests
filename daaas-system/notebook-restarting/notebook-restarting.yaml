@@ -49,9 +49,9 @@ spec:
           restartPolicy: OnFailure
           containers:
           - name: notebook-restart-job
-            image: k8scc01covidacr.azurecr.io/notebook-restart:04eab57523f97ba96b9dfba22ef68a3ac0b198db
+            image: k8scc01covidacr.azurecr.io/notebook-restart:2e525424f3c49370a5886efc53d0b0eb206ad516
             command: ["/bin/bash"]
-            args: ["/home/nonroot/0-the-co-ordinate.sh dry-run"]
+            args: ["/home/nonroot/0-the-co-ordinate.sh", "dry-run"]
             imagePullPolicy: IfNotPresent
             env:
               - name: ACR_READ_METADATA_USERNAME
