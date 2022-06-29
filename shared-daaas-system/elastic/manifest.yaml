@@ -24,6 +24,14 @@ spec:
           traffic.sidecar.istio.io/excludeOutboundPorts: "9300"
           traffic.sidecar.istio.io/excludeInboundPorts: "9300"
       spec:
+        affinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: agentpool
+                operator: In
+                values:
+                - generaltemp
         automountServiceAccountToken: true
         containers:
         - name: elasticsearch
