@@ -4,7 +4,7 @@ kind: ClusterRole
 metadata:
   name: notebook-restart-cluster-role
 rules:
-  - apiGroups: [""]
+  - apiGroups: ["apps"]
     resources: ["statefulsets", "pods"]
     verbs: ["get", "update", "list"]
 # Pods are used as they contain the `notebook-name` label 
@@ -51,7 +51,7 @@ spec:
           - name: notebook-restart-job
             image: k8scc01covidacr.azurecr.io/notebook-restart:2e525424f3c49370a5886efc53d0b0eb206ad516
             command: ["/bin/bash"]
-            args: ["/home/jovyan/0-the-co-ordinate.sh", "dry-run"]
+            args: ["/home/jovyan/0-the-co-ordinate.sh", "execute"]
             imagePullPolicy: IfNotPresent
             env:
               - name: ACR_READ_METADATA_USERNAME
