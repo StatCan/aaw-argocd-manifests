@@ -5,8 +5,11 @@ metadata:
   name: notebook-restart-cluster-role
 rules:
   - apiGroups: ["apps"]
-    resources: ["statefulsets", "pods"]
-    verbs: ["get", "update", "list"]
+    resources: ["statefulsets"]
+    verbs: ["get", "update", "list", "patch"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
 # Pods are used as they contain the `notebook-name` label 
 # Pods also used to get the statefulset name by using .metadata.OwnerReferences[].name
 # Statefulsets are what we need to restart
