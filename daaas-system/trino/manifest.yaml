@@ -21,3 +21,21 @@ spec:
         request:
           add:
             x-forwarded-proto: "https"
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: allow-postgresql-hive
+  namespace: hive-system
+spec:
+  exportTo:
+    - .
+  hosts:
+    - aawhive.postgres.database.azure.com
+  ports:
+    - name: tcp-pgsql
+      number: 5432
+      protocol: TCP
+  resolution: DNS
+  
