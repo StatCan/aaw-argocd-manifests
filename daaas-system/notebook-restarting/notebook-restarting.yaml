@@ -54,7 +54,7 @@ spec:
           - name: notebook-restart-job
             image: k8scc01covidacr.azurecr.io/notebook-restart:69602259cac9201a06754377b1104d8b2229871b
             command: ["/bin/bash"]
-            args: ["/home/jovyan/0-the-co-ordinate.sh", "execute"]
+            args: ["/home/jovyan/0-the-co-ordinate.sh", "dry-run"]
             imagePullPolicy: IfNotPresent
             env:
               - name: ACR_READ_METADATA_USERNAME
