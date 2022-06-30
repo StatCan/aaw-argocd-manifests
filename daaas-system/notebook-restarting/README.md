@@ -13,4 +13,4 @@ A kubernetes secret in the cluster under the `notebook-cleanup-system` namespace
 
 Any other relevant information can be found in the [readmes](https://github.com/StatCan/aaw-contrib-containers/tree/feat-notebook-restart/notebook-restart#patch-notebook-sts) for this specific image.
 
-This muust be ran with the argument `execute` to not invoke a dry run. For now we are doing dry-runs only
+This must be ran with the argument `execute` to not invoke a dry run. For now we are doing dry-runs only
