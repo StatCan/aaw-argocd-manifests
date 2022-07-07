@@ -15,7 +15,7 @@ spec:
       listener:
         filterChain:
           filter:
-            name: "envoy.http_connection_manager"
+            name: "envoy.filters.network.http_connection_manager"
             subFilter:
               name: "envoy.filters.http.jwt_authn"
     patch:
@@ -23,7 +23,7 @@ spec:
       value:
         name: envoy.ext_authz
         typed_config:
-          "@type": type.googleapis.com/envoy.config.filter.http.ext_authz.v2.ExtAuthz
+          "@type": type.googleapis.com/extensions.filters.http.ext_authz.v3.ExtAuthz
           http_service:
             server_uri:
               uri: http://oauth2-proxy.oauth2-proxy-system.svc.cluster.local:4180
