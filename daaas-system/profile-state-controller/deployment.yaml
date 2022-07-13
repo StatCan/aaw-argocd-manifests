@@ -15,7 +15,7 @@ spec:
       serviceAccountName: profile-state-controller
       containers:
         - name: profile-state-controller
-          image: k8scc01covidacr.azurecr.io/profile-state-controller:9ab98683f3381decb77cde2116617082bada7121
+          image: k8scc01covidacr.azurecr.io/profile-state-controller:97a2c3d41815ab7cf387aa1d225a127c8923310d
           resources:
             limits:
               memory: "1Gi"
