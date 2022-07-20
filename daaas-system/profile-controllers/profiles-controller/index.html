@@ -1879,6 +1879,9 @@
 <p>[^1]: Gitlab icons provided by <a href="https://about.gitlab.com/press/press-kit/">Gitlab Press Kit</a>.
 [^2]: Github icons provided by <a href="https://github.com/logos">Github logos</a>.
 [^3]: Argo icon provided by <a href="https://cncf-branding.netlify.app/projects/argo/">CNCF branding</a>.</p>
+<p>[^5]: Terraform icon provided by <a href="https://www.hashicorp.com/brand">hashicorp</a>
+[^6]: Kubeflow icon provided by <a href="https://www.kubeflow.org/images/logo.svg">kubeflow</a>
+[^7]: Istio icons provided by <a href="https://istio.io/latest/about/media-resources/">Istio Media Resources</a></p>
 <h3 id="how-to-create-a-controller">How to Create a Controller</h3>
 <p><strong>Note</strong>: Modifying a controller is a subset of these steps; if you are only updating an existing controller, ignore the steps that don't apply.</p>
 <ol>
@@ -1944,12 +1947,23 @@ where value is a secret registered under the protected-b FDI service principal.<
 <li><code>BLOB_CSI_FDI_PROTECTED_B_AZURE_STORAGE_AUTH_TYPE</code>: for the current implementation, only <code>spn</code> auth type is supported</li>
 <li><code>BLOB_CSI_FDI_PROTECTED_B_AZURE_STORAGE_AAD_ENDPOINT</code>: the azure active directory endpoint</li>
 </ul>
+<p>For more context on the blob-csi system as a whole (from deployment of infrastructure to azure containers), see this <a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/docs/diagrams/blobcsi_system.png">diagram</a>.
+  - Legend:
+    - Line types:
+      - Solid lines follow the paths of the deployment or provisioning of resources.
+      - Dashed lines outline the paths for connectivity.
+    - Line Colours:
+      - Navy blue lines are used for edges connecting nodes within the kubernetes cluster.
+      - Light green lines are assiciated with kubeflow from a users perspective.
+      - Yellow lines are associated with argocd.
+      - Purple lines are associated with terraform.
+      - Light blue lines are associated with edges that connect from nodes anywhere in the diagram to an azure resource.</p>
 <p><em>This will deprecate the minio controller.</em></p>
 <h4 id="local-development">Local Development</h4>
 <p>The <a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/Taskfile.yml">Taskfile</a> includes task <code>blobcsi:dev</code> for preparing your local environment for development and testing. Due to the controller's dependency on Azure <a href="https://github.com/kubernetes-sigs/blob-csi-driver">blob-csi driver</a> a cluster with the <a href="https://github.com/kubernetes-sigs/blob-csi-driver">blob-csi driver</a> installed is required. As such, it is recommended to debug and test against the development k8s context for AAW. With the local environment configured, the Vscode Debugger can be used through <code>Run and Debug: blobcsi Controller</code> in the debug pane.</p>
 <h3 id="giteago"><a href="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/cmd/gitea.go">gitea.go</a></h3>
 <p>Responsible for deploying <a href="https://github.com/go-gitea/gitea">gitea</a> as <a href="https://github.com/argoproj/argo-cd">argocd</a> applications per <code>Profile</code>. Currently, <a href="https://github.com/argoproj/argo-cd">argocd</a> applications are deployed by the gitea controller based on the customized gitea manifest found <a href="https://github.com/StatCan/aaw-argocd-manifests/tree/aaw-dev-cc-00/profiles-argocd-system/template/gitea">here</a>.</p>
-<p>The diagram below highlights the key components involved with the Gitea controller[^5]</p>
+<p>The diagram below highlights the key components involved with the Gitea controller</p>
 <p><img alt="Gitea Controller Diagram" src="https://raw.githubusercontent.com/StatCan/aaw-kubeflow-profiles-controller/main/docs/diagrams/gitea_controller.png" /></p>
 <h4 id="gitea-user-interface">Gitea User Interface</h4>
 <p>The unclassified Gitea user interface is embedded within the <a href="https://github.com/StatCan/aaw-kubeflow-manifests/blob/aaw-dev-cc-00/kustomize/apps/centraldashboard/base/centraldashboard-config.yaml">Kubeflow dashboard</a>'s user interface, rendered by an iframe. Protected-b gitea is setup to be accessible only through a protected-b node, and thus the user is expected to access their protected-b gitea instance within an AAW ubuntu VM, or through the CLI in a protected-b notebook.</p>
@@ -1957,7 +1971,6 @@ where value is a secret registered under the protected-b FDI service principal.<
 <p>The <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/profiles-argocd-system/template/gitea/">Gitea application server</a> sets the <code>ROOT_URL</code> environment variable to contain the Kubeflow base URL with the <code>/gitea-unclassified/&lt;user-namespace&gt;/</code>. This is required as it is the application's responsibility to establish the URLS that will be used in the browser to retrieve static assets and send requests to application endpoints.</p>
 <p>The Gitea application <a href="https://github.com/StatCan/aaw-argocd-manifests/blob/aaw-dev-cc-00/profiles-argocd-system/template/gitea/values.yaml#L37-L45">values.yaml file</a> makes use of <a href="https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/">pod fields as environment variables</a> and <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-interdependent-environment-variables/#define-an-environment-dependent-variable-for-a-container">dependent environment variables</a> to create a <code>ROOT_URL</code> that depends on the user's namespace. Additionally, an <a href="https://github.com/go-gitea/gitea/issues/6397">upstream gitea issue</a> indicates that it is possible to set multiple domains in the <code>ROOT_URL</code> environment variable by using the syntax <code>ROOT_URL=https://(domain1,domain2)/gitea/</code>, which is how the dev/prod domains are set without needing to check the deployment environment.</p>
 <p>To allow requests to reach the user's Gitea instance, a Network Policy is set in the user's namespace that allows ingress traffic from the kubeflow-gateway to be sent to any pods in the user's namespace that match the <code>app: gitea &amp;&amp; app.kubernetes.io/instance: gitea-unclassified</code> label selector.</p>
-<p>[^5]: Istio icons provided by <a href="https://istio.io/latest/about/media-resources/">Istio Media Resources</a></p>
 <h4 id="configuration_1">Configuration</h4>
 <p>The Gitea controller is configurable to run in unclassified or protected-b mode. The configuration of the following
 parameters thus need set to run the controller:</p>
