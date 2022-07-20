@@ -39,6 +39,14 @@ patchesJson6902:
       value:
         - /bin/bash
     - op: add
+      path: /spec/template/metadata/annotations
+      value:
+        traffic.sidecar.istio.io/excludeOutboundIPRanges: 0.0.0.0/0
+    - op: add
+      path: /spec/template/metadata/annotations
+      value:
+        traffic.sidecar.istio.io/excludeOutboundPorts: "5432"
+    - op: add
       path: /spec/template/spec/containers/0/args
       value:
         - -c
