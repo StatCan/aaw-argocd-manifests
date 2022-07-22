@@ -44,7 +44,7 @@ metadata:
   namespace: statcan-system
 data:
   ns-conf.yaml: |
-    bigCPUnamespaces: 
+    bigCPUns: 
       - sy-test
 ---
 apiVersion: apps/v1
