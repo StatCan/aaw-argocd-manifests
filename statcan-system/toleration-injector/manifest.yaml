@@ -72,7 +72,7 @@ spec:
       serviceAccountName: toleration-injector
       containers:
       - name: toleration-injector
-        image: statcan/daaas-aaw-toleration-injector:364a11d7c2fc88a26c667fc5ce7d59282600cb39
+        image: statcan/daaas-aaw-toleration-injector:f53cdddfc25f122bd6328dcdc59dbb75138f6bd6
         resources:
           limits:
             memory: "128Mi"
