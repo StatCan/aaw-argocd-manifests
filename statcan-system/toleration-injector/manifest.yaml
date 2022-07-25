@@ -37,6 +37,16 @@ spec:
     name: toleration-injector-issuer
     kind: Issuer
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ns-conf
+  namespace: statcan-system
+data:
+  ns-conf.yaml: |
+    bigCPUns: 
+      - sy-test
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -62,7 +72,7 @@ spec:
       serviceAccountName: toleration-injector
       containers:
       - name: toleration-injector
-        image: statcan/daaas-aaw-toleration-injector:364a11d7c2fc88a26c667fc5ce7d59282600cb39
+        image: statcan/daaas-aaw-toleration-injector:f53cdddfc25f122bd6328dcdc59dbb75138f6bd6
         resources:
           limits:
             memory: "128Mi"
@@ -74,10 +84,16 @@ spec:
         - name: certs
           mountPath: /certs
           readOnly: true
+        - name: ns-vol
+          mountPath: /app
+          subpath: ns-conf.yaml
       volumes:
       - name: certs
         secret:
           secretName: toleration-injector-tls
+      - name: ns-conf-vol
+        configMap:
+          name: ns-conf
 ---
 apiVersion: v1
 kind: Service
