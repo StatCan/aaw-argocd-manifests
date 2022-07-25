@@ -72,7 +72,7 @@ spec:
       serviceAccountName: toleration-injector
       containers:
       - name: toleration-injector
-        image: statcan/daaas-aaw-toleration-injector:f53cdddfc25f122bd6328dcdc59dbb75138f6bd6
+        image: statcan/daaas-aaw-toleration-injector:9d2b3a9635b801d88973ff6214c2a8732718e549
         resources:
           limits:
             memory: "128Mi"
@@ -84,14 +84,13 @@ spec:
         - name: certs
           mountPath: /certs
           readOnly: true
-        - name: ns-vol
+        - name: ns-conf
           mountPath: /app
-          subpath: ns-conf.yaml
       volumes:
       - name: certs
         secret:
           secretName: toleration-injector-tls
-      - name: ns-conf-vol
+      - name: ns-conf
         configMap:
           name: ns-conf
 ---
