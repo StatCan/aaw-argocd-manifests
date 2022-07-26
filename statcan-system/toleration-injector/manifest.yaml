@@ -62,7 +62,7 @@ spec:
       serviceAccountName: toleration-injector
       containers:
       - name: toleration-injector
-        image: statcan/daaas-aaw-toleration-injector:364a11d7c2fc88a26c667fc5ce7d59282600cb39
+        image: statcan/daaas-aaw-toleration-injector:9d2b3a9635b801d88973ff6214c2a8732718e549
         resources:
           limits:
             memory: "128Mi"
@@ -74,10 +74,15 @@ spec:
         - name: certs
           mountPath: /certs
           readOnly: true
+        - name: ns-conf
+          mountPath: /app
       volumes:
       - name: certs
         secret:
           secretName: toleration-injector-tls
+      - name: ns-conf
+        configMap:
+          name: ns-conf
 ---
 apiVersion: v1
 kind: Service
