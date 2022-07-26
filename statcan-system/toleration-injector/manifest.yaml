@@ -37,16 +37,6 @@ spec:
     name: toleration-injector-issuer
     kind: Issuer
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: ns-conf
-  namespace: statcan-system
-data:
-  ns-conf.yaml: |
-    bigCPUns: 
-      - sy-test
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
