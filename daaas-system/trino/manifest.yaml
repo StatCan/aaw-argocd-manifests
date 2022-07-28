@@ -1,0 +1,41 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: trino
+  namespace: trino-system
+spec:
+  gateways:
+  - ingress-general-system/general-istio-ingress-gateway-https
+  hosts:
+  - trino.aaw.cloud.statcan.ca
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: trino.trino-system.svc.cluster.local
+        port:
+          number: 8080
+      headers:
+        request:
+          add:
+            x-forwarded-proto: "https"
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: allow-postgresql-hive
+  namespace: hive-system
+spec:
+  exportTo:
+    - .
+  hosts:
+    - aawhive.postgres.database.azure.com
+  ports:
+    - name: tcp-pgsql
+      number: 5432
+      protocol: TCP
+  resolution: DNS
+  

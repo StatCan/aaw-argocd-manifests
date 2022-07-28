@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: trino
+  namespace: daaas-system
+spec:
+  project: platform
+  destination:
+    namespace: trino-system
+    name: in-cluster
+  source:
+    repoURL: 'https://github.com/StatCan/aaw-trino'
+    path: trino-deploy
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+        - values.yaml
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hive-metastore
+  namespace: daaas-system
+spec:
+  project: platform
+  destination:
+    namespace: hive-system
+    name: in-cluster
+  source:
+    repoURL: 'https://github.com/StatCan/aaw-trino'
+    path: trino-deploy/hive-metastore
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+        - values.yaml
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
